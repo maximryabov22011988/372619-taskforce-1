@@ -1,7 +1,7 @@
 # Личный проект «TaskForce»
 
 * Студент: [Макс Рябов](https://up.htmlacademy.ru/nodejs-2-individual/1/user/372619).
-* Наставник: `Неизвестно`.
+* Наставник: [Роман Решетников](https://htmlacademy.ru/profile/id1919895).
 
 ---
 
