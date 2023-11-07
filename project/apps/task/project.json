@@ -1,0 +1,50 @@
+{
+  "name": "task",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/task/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/task",
+        "main": "apps/task/src/main.ts",
+        "tsConfig": "apps/task/tsconfig.app.json",
+        "assets": ["apps/task/src/assets"],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/task/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "task:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "task:build:development"
+        },
+        "production": {
+          "buildTarget": "task:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/task/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

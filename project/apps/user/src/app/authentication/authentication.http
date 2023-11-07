@@ -1,0 +1,28 @@
+### Регистрация нового пользователя
+POST http://localhost:3000/api/v1/auth/register HTTP/1.1
+Content-Type: application/json
+
+{
+  "firstname": "John",
+  "lastname": "Doe",
+  "email": "john@doe.com",
+  "city": "Saint Petersburg",
+  "role": "customer",
+  "password": "123456",
+  "birthDate": "1977-11-11T08:55:00.000Z"
+}
+
+
+### Логин пользователя в систему
+POST http://localhost:3000/api/v1/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "john@doe.com",
+  "password": "123456"
+}
+
+
+### Выход из авторизованной зоны
+POST  http://localhost:3000/api/v1/auth/logout HTTP/1.1
+Content-Type: application/json
