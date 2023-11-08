@@ -1,4 +1,4 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import dayjs from 'dayjs';
 import { DateTimeService, DAYJS_REGISTER_NAME } from '@project/services';
 import { UsersModule } from '../users/users.module';
@@ -6,7 +6,7 @@ import { AuthenticationController } from './authentication.controller';
 import { AuthenticationService } from './authentication.service';
 
 @Module({
-  imports: [forwardRef(() => UsersModule)],
+  imports: [UsersModule],
   controllers: [AuthenticationController],
   providers: [
     AuthenticationService,
@@ -16,6 +16,5 @@ import { AuthenticationService } from './authentication.service';
       useValue: dayjs,
     },
   ],
-  exports: [AuthenticationService],
 })
 export class AuthenticationModule {}

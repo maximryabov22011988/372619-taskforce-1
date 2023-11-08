@@ -5,13 +5,11 @@ import {
   HttpException,
   HttpStatus,
   Patch,
-  HttpCode,
   Body,
 } from '@nestjs/common';
 import { User, UserRole } from '@project/libs/shared-types';
 import { fillObject } from '@project/libs/utils-core';
 import { UsersService } from './users.service';
-import { ChangePasswordDto } from './dto/change-password.dto';
 import { ChangeProfileDto } from './dto/change-profile.dto';
 import { ContractorUserRdo } from './rdo/contractor-user.rdo';
 import { CustomerUserRdo } from './rdo/customer-user.rdo';
@@ -29,15 +27,6 @@ export class UsersController {
   ): Promise<ContractorUserRdo | CustomerUserRdo> {
     const user = await this.usersService.findById(userId);
     return this.getUserDataByRole(user);
-  }
-
-  @Patch(':userId/password')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  public async changePassword(
-    @Param('userId') userId: string,
-    @Body() dto: ChangePasswordDto
-  ): Promise<void> {
-    await this.usersService.changePassword(dto, userId);
   }
 
   @Patch(':userId/profile')

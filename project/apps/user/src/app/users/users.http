@@ -3,15 +3,6 @@ GET http://localhost:3000/api/v1/users/e781a119-ecda-4dc0-8256-14ebd9e8c2e3 HTTP
 Content-Type: application/json
 
 
-### Изменение пользовательского пароля
-PATCH  http://localhost:3000/api/v1/users/e781a119-ecda-4dc0-8256-14ebd9e8c2e3/password HTTP/1.1
-Content-Type: application/json
-
-{
-  "oldPassword": "123456",
-  "newPassword": "567890"
-}
-
 
 ### Изменение информации профиля
 PATCH  http://localhost:3000/api/v1/users/e781a119-ecda-4dc0-8256-14ebd9e8c2e3/profile HTTP/1.1

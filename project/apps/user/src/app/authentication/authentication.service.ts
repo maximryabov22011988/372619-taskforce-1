@@ -6,17 +6,20 @@ import {
 } from '@nestjs/common';
 import { DateTimeService } from '@project/services';
 import { User, Tokens } from '@project/libs/shared-types';
-import { UserRepository } from '../users/users.repository';
+import { UsersRepository } from '../users/users.repository';
+import { UsersService } from '../users/users.service';
 import { UserEntity } from '../users/users.entity';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { LogoutUserDto } from './dto/logout-user.dto';
-import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
+import { UpdateTokensDto } from './dto/update-tokens.dto';
 
 @Injectable()
 export class AuthenticationService {
   constructor(
-    private readonly userRepository: UserRepository,
+    private readonly userRepository: UsersRepository,
+    private readonly usersService: UsersService,
     private readonly dateTime: DateTimeService
   ) {}
 
@@ -32,8 +35,8 @@ export class AuthenticationService {
       avatar,
     } = dto;
 
-    const isUserExists = await this.userRepository.findByEmail(email);
-    if (isUserExists) {
+    const user = await this.userRepository.findByEmail(email);
+    if (user) {
       throw new ConflictException('User already exists');
     }
 
@@ -56,12 +59,12 @@ export class AuthenticationService {
 
   public async verifyUser(dto: LoginUserDto): Promise<User> {
     const { email, password } = dto;
-    const isUserExists = await this.userRepository.findByEmail(email);
-    if (!isUserExists) {
+    const user = await this.userRepository.findByEmail(email);
+    if (user === null) {
       throw new NotFoundException('User was not found');
     }
 
-    const userEntity = new UserEntity(isUserExists);
+    const userEntity = new UserEntity(user);
     if (!(await userEntity.comparePassword(password))) {
       throw new UnauthorizedException('Incorrect login or password');
     }
@@ -69,9 +72,25 @@ export class AuthenticationService {
     return userEntity.toObject();
   }
 
+  public async changePassword(dto: ChangePasswordDto, userId: string) {
+    const { oldPassword, newPassword } = dto;
+    const user = await this.usersService.findById(userId);
+
+    await this.verifyUser({
+      email: user.email,
+      password: oldPassword,
+    });
+
+    const userEntity = await new UserEntity({
+      ...user,
+    }).setPassword(newPassword);
+
+    return this.userRepository.update(userId, userEntity.toObject());
+  }
+
   public async logout(dto: LogoutUserDto): Promise<void> {}
 
-  public async refreshToken(dto: RefreshTokenDto): Promise<Tokens> {
+  public async updateTokens(dto: UpdateTokensDto): Promise<Tokens> {
     return { accessToken: '', refreshToken: '' };
   }
 }

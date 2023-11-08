@@ -1,12 +1,21 @@
-import { Controller, Body, Post, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Body,
+  Post,
+  HttpCode,
+  HttpStatus,
+  Patch,
+  Param,
+} from '@nestjs/common';
 import { fillObject } from '@project/libs/utils-core';
 import { AuthenticationService } from './authentication.service';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { LogoutUserDto } from './dto/logout-user.dto';
-import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
+import { UpdateTokensDto } from './dto/update-tokens.dto';
 import { LoggedUserRdo } from './rdo/logged-user.rdo';
-import { RefreshTokenRdo } from './rdo/refresh-token.rdo';
+import { UpdatedTokensRdo } from './rdo/updated-tokens.rdo';
 
 @Controller({
   path: 'auth',
@@ -33,12 +42,21 @@ export class AuthenticationController {
     await this.authService.logout(dto);
   }
 
-  @Post('/token')
+  @Patch('/password/:userId')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  public async changePassword(
+    @Param('userId') userId: string,
+    @Body() dto: ChangePasswordDto
+  ): Promise<void> {
+    await this.authService.changePassword(dto, userId);
+  }
+
+  @Post('/tokens')
   @HttpCode(HttpStatus.OK)
-  public async refreshToken(
-    @Body() dto: RefreshTokenDto
-  ): Promise<RefreshTokenRdo> {
-    const tokens = await this.authService.refreshToken(dto);
-    return fillObject(RefreshTokenRdo, tokens);
+  public async updateTokens(
+    @Body() dto: UpdateTokensDto
+  ): Promise<UpdatedTokensRdo> {
+    const tokens = await this.authService.updateTokens(dto);
+    return fillObject(UpdatedTokensRdo, tokens);
   }
 }

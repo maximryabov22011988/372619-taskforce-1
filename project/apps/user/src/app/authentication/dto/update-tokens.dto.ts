@@ -1,3 +1,3 @@
-export class RefreshTokenDto {
+export class UpdateTokensDto {
   public refreshToken: string;
 }
