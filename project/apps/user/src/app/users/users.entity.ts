@@ -30,10 +30,6 @@ export class UserEntity implements User {
     this.fillEntity(user);
   }
 
-  public fillEntity(user: Omit<User, 'passwordHash'>) {
-    Object.assign(this, user);
-  }
-
   public toObject() {
     return { ...this };
   }
@@ -46,5 +42,9 @@ export class UserEntity implements User {
 
   public comparePassword(password: string): Promise<boolean> {
     return compare(password, this.passwordHash);
+  }
+
+  private fillEntity(user: Omit<User, 'passwordHash'>) {
+    Object.assign(this, user);
   }
 }
