@@ -18,7 +18,7 @@ import { UpdateTokensDto } from './dto/update-tokens.dto';
 @Injectable()
 export class AuthenticationService {
   constructor(
-    private readonly userRepository: UsersRepository,
+    private readonly usersRepository: UsersRepository,
     private readonly usersService: UsersService,
     private readonly dateTime: DateTimeService
   ) {}
@@ -35,7 +35,7 @@ export class AuthenticationService {
       avatar,
     } = dto;
 
-    const user = await this.userRepository.findByEmail(email);
+    const user = await this.usersRepository.findByEmail(email);
     if (user) {
       throw new ConflictException('User already exists');
     }
@@ -54,12 +54,12 @@ export class AuthenticationService {
       createdAt: this.dateTime.getDateTimeLocale(DateTimeService.UTC_FORMAT),
     }).setPassword(password);
 
-    await this.userRepository.create(userEntity.toObject());
+    await this.usersRepository.create(userEntity.toObject());
   }
 
   public async verifyUser(dto: LoginUserDto): Promise<User> {
     const { email, password } = dto;
-    const user = await this.userRepository.findByEmail(email);
+    const user = await this.usersRepository.findByEmail(email);
     if (user === null) {
       throw new NotFoundException('User was not found');
     }
@@ -85,7 +85,7 @@ export class AuthenticationService {
       ...user,
     }).setPassword(newPassword);
 
-    return this.userRepository.update(userId, userEntity.toObject());
+    return this.usersRepository.update(userId, userEntity.toObject());
   }
 
   public async logout(dto: LogoutUserDto): Promise<void> {}
