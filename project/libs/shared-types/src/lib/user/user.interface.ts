@@ -1,9 +1,8 @@
+import { AvailableCity, DateString } from '../shared';
 import { UserRole } from './user-role.enum';
-import { AvailableCity } from './available-city.enum';
 
 export type Email = string;
 export type Password = string;
-export type DateString = string;
 export type ImageUrl = string;
 
 export interface User {
