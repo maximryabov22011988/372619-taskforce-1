@@ -1,7 +1,15 @@
-import { Password } from '@project/libs/shared-types';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class ChangePasswordDto {
-  public oldPassword: Password;
+  @ApiProperty({
+    description: 'Old password',
+    example: '123456',
+  })
+  public oldPassword: string;
 
-  public newPassword: Password;
+  @ApiProperty({
+    description: 'New password',
+    example: '456789',
+  })
+  public newPassword: string;
 }
