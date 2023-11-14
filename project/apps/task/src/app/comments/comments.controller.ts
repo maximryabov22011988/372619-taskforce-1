@@ -22,21 +22,6 @@ import { CommentRdo } from './rdo/comment.rdo';
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
-  @Get(':taskId')
-  @ApiOperation({ summary: 'Getting task comment list' })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Comment list',
-    type: CommentRdo,
-    isArray: true,
-  })
-  public async getCommentList(
-    @Param('taskId') taskId: string
-  ): Promise<CommentRdo[]> {
-    const comments = await this.commentsService.getComments(taskId);
-    return comments.map((comment) => fillObject(CommentRdo, comment));
-  }
-
   @Post('/')
   @ApiOperation({ summary: 'Creating new comment' })
   @ApiResponse({
@@ -53,6 +38,21 @@ export class CommentsController {
   ): Promise<CommentRdo> {
     const comment = await this.commentsService.createComment(dto);
     return fillObject(CommentRdo, comment);
+  }
+
+  @Get(':taskId')
+  @ApiOperation({ summary: 'Getting task comment list' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Comment list',
+    type: CommentRdo,
+    isArray: true,
+  })
+  public async getCommentList(
+    @Param('taskId') taskId: string
+  ): Promise<CommentRdo[]> {
+    const comments = await this.commentsService.getComments(taskId);
+    return comments.map((comment) => fillObject(CommentRdo, comment));
   }
 
   @Delete(':taskId/:commentId')

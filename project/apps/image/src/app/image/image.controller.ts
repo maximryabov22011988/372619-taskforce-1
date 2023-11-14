@@ -21,6 +21,21 @@ import { UploadedImageFileRdo } from './rdo/uploaded-image-file.rdo';
 export class ImageController {
   constructor(private readonly imageService: ImageService) {}
 
+  @Post('/upload')
+  @ApiOperation({ summary: 'Uploading image file' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Image file is successfully uploaded',
+    type: UploadedImageFileRdo,
+  })
+  @UseInterceptors(FileInterceptor('file'))
+  public async uploadImage(
+    @UploadedFile() imageFile: Express.Multer.File
+  ): Promise<UploadedImageFileRdo> {
+    const image = this.imageService.saveImageFile(imageFile);
+    return fillObject(UploadedImageFileRdo, image);
+  }
+
   @Get('/:fileId')
   @ApiOperation({ summary: 'Getting image file' })
   @ApiResponse({
@@ -37,20 +52,5 @@ export class ImageController {
   ): Promise<UploadedImageFileRdo> {
     const imageFile = await this.imageService.getImageFile(fileId);
     return fillObject(UploadedImageFileRdo, imageFile);
-  }
-
-  @Post('/upload')
-  @ApiOperation({ summary: 'Uploading image file' })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Image file is successfully uploaded',
-    type: UploadedImageFileRdo,
-  })
-  @UseInterceptors(FileInterceptor('file'))
-  public async uploadImage(
-    @UploadedFile() imageFile: Express.Multer.File
-  ): Promise<UploadedImageFileRdo> {
-    const image = this.imageService.saveImageFile(imageFile);
-    return fillObject(UploadedImageFileRdo, image);
   }
 }
