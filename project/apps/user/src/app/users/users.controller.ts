@@ -35,7 +35,7 @@ export class UsersController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Contractor or customer user information',
-    schema: { anyOf: refs(ContractorUserRdo, CustomerUserRdo) },
+    schema: { oneOf: refs(ContractorUserRdo, CustomerUserRdo) },
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
@@ -54,7 +54,7 @@ export class UsersController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Contractor or customer user information',
-    schema: { anyOf: refs(ContractorUserRdo, CustomerUserRdo) },
+    schema: { oneOf: refs(ContractorUserRdo, CustomerUserRdo) },
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,

@@ -3,12 +3,14 @@ import { Express } from 'express';
 import { ImageFile } from '@project/libs/shared-types';
 import { ImageFileEntity } from './image.entity';
 import { ImageRepository } from './image.repository';
+import { join } from 'path';
+import * as process from 'process';
 
 @Injectable()
 export class ImageService {
   constructor(private readonly imageRepository: ImageRepository) {}
 
-  public async getImageFile(fileId: string): Promise<ImageFile> {
+  public async getImageFileById(fileId: string): Promise<ImageFile> {
     const image = await this.imageRepository.findById(fileId);
 
     if (!image) {
@@ -22,12 +24,8 @@ export class ImageService {
     imageFile: Express.Multer.File
   ): Promise<ImageFile> {
     const imageFileEntity = new ImageFileEntity({
-      id: '5843re8543fie8543j',
-      originalName: 'filename.jpg',
-      path: '/2023/11/8787eacc-a172-44cd-906a-ad1e52527114.png',
-      hashName: '87a5eacc-a172-44cd-906a-ad1e52527114',
-      mimetype: 'image/png',
-      size: 393115,
+      name: imageFile.filename,
+      originalName: imageFile.originalname,
     });
 
     return this.imageRepository.create(imageFileEntity);
