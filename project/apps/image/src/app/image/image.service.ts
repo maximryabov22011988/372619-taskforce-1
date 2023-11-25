@@ -1,10 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Express } from 'express';
 import { ImageFile } from '@project/libs/shared-types';
 import { ImageFileEntity } from './image.entity';
 import { ImageRepository } from './image.repository';
-import { join } from 'path';
-import * as process from 'process';
 
 @Injectable()
 export class ImageService {
