@@ -2,7 +2,6 @@ import {
   Controller,
   Get,
   Post,
-  Param,
   UploadedFile,
   UseInterceptors,
   HttpStatus,
@@ -23,7 +22,7 @@ import { ImageService } from './image.service';
 import { UploadedImageFileRdo } from './rdo/uploaded-image-file.rdo';
 
 const storage = diskStorage({
-  destination: './uploads',
+  destination: `./${process.env.STATIC_PATH}`,
   filename(_, file, callback) {
     const parsedPath = parse(file.originalname);
     const filename = `${parsedPath.name.replace(/\s/g, '')}-${makeUuid()}`;
