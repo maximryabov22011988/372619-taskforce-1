@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { getMongooseOptions } from './get-mongoose-options';
-import appConfig from './config/app.config';
-import dbConfig from './config/db.config';
+import { default as appConfig } from './config/app.config';
+import { default as dbConfig } from './config/db.config';
 
 const ENV_IMAGE_FILE_PATH = 'apps/image/.image.env';
 

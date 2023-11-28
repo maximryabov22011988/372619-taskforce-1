@@ -23,4 +23,12 @@ export class UploadedImageFileRdo {
   })
   @Expose()
   public originalName: string;
+
+  @ApiProperty({
+    description: 'Path to image',
+    example:
+      '/api/static/specification-1a9f2b32-7f87-490c-9c56-0c4a78b89791.jpg',
+  })
+  @Expose()
+  public path: string;
 }

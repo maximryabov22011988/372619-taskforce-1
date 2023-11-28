@@ -27,4 +27,14 @@ export class AppEnv {
   @Min(MIN_PORT)
   @Max(MAX_PORT)
   public port: number;
+
+  @IsString({
+    message: `Environment is required. Example: "uploads"`,
+  })
+  public staticPath: string;
+
+  @IsString({
+    message: `Environment is required. Example: "/api/static"`,
+  })
+  public staticServePath: string;
 }

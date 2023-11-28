@@ -22,9 +22,8 @@ import { fillObject } from '@project/libs/utils-core';
 import { ImageService } from './image.service';
 import { UploadedImageFileRdo } from './rdo/uploaded-image-file.rdo';
 
-const destination = 'apps/image/uploads';
 const storage = diskStorage({
-  destination: `./${destination}`,
+  destination: './uploads',
   filename(_, file, callback) {
     const parsedPath = parse(file.originalname);
     const filename = `${parsedPath.name.replace(/\s/g, '')}-${makeUuid()}`;
@@ -68,24 +67,6 @@ export class ImageController {
     @UploadedFile() file: Express.Multer.File
   ): Promise<UploadedImageFileRdo> {
     const imageFile = await this.imageService.saveImageFile(file);
-    return fillObject(UploadedImageFileRdo, imageFile);
-  }
-
-  @Get('/:fileId')
-  @ApiOperation({ summary: 'Getting image file' })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Image file is successfully received',
-    type: UploadedImageFileRdo,
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  public async getImage(
-    @Param('fileId') fileId: string
-  ): Promise<UploadedImageFileRdo> {
-    const imageFile = await this.imageService.getImageFileById(fileId);
     return fillObject(UploadedImageFileRdo, imageFile);
   }
 }

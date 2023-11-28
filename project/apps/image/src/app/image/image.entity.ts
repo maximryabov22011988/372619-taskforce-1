@@ -3,6 +3,7 @@ import { ImageFile } from '@project/libs/shared-types';
 export class ImageFileEntity implements ImageFile {
   public name: string;
   public originalName: string;
+  public path: string;
 
   constructor(imageFile: ImageFile) {
     this.fillEntity(imageFile);

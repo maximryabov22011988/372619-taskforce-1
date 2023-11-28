@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { getMongoConnection } from '@project/libs/utils-core';
 
 export const getMongooseOptions = (): MongooseModuleAsyncOptions => ({
+  inject: [ConfigService],
   useFactory: async (config: ConfigService) => ({
     uri: getMongoConnection({
       username: config.get<string>('db.user'),
@@ -13,5 +14,4 @@ export const getMongooseOptions = (): MongooseModuleAsyncOptions => ({
       authDatabase: config.get<string>('db.authBase'),
     }),
   }),
-  inject: [ConfigService],
 });

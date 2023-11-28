@@ -16,7 +16,7 @@ export interface DbConfig {
 
 export default registerAs('db', (): DbConfig => {
   const config: DbConfig = {
-    name: process.env.MONGO_DB_NAME,
+    name: process.env.MONGO_DB,
     host: process.env.MONGO_HOST,
     port: parseInt(process.env.MONGO_PORT ?? DEFAULT_MONGO_PORT.toString(), 10),
     user: process.env.MONGO_USER,

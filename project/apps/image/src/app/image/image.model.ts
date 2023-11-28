@@ -16,6 +16,11 @@ export class ImageModel extends Document implements ImageFile {
     required: true,
   })
   public originalName: string;
+
+  @Prop({
+    required: true,
+  })
+  public path: string;
 }
 
 export const ImageSchema = SchemaFactory.createForClass(ImageModel);

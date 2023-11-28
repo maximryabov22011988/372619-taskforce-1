@@ -8,12 +8,16 @@ const DEFAULT_PORT = 3001;
 export interface AppConfig {
   environment: string;
   port: number;
+  staticPath: string;
+  staticServePath: string;
 }
 
 export default registerAs('app', (): AppConfig => {
   const config: AppConfig = {
     environment: process.env.NODE_ENV,
     port: parseInt(process.env.PORT || DEFAULT_PORT.toString(), 10),
+    staticPath: process.env.STATIC_PATH,
+    staticServePath: process.env.STATIC_SERVE_PATH,
   };
 
   const appEnv = plainToInstance(AppEnv, config, {
