@@ -12,6 +12,7 @@ services:
       - 27017:27017
     volumes:
       - taskforce.image:/data/db
+
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/taskforce-image --quiet
       interval: 10s
