@@ -45,6 +45,6 @@ project/apps/**/*.http
 *.env
 
 # Db
-database
-database-data
+apps/image/database
+apps/image/database-data
 uploads
