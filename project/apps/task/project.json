@@ -44,7 +44,56 @@
       "options": {
         "lintFilePatterns": ["apps/task/**/*.ts"]
       }
+    },
+    "db:migrate:make": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} knex migrate:make --knexfile ./src/db/knexfile.ts",
+        "cwd": "apps/task"
+      }
+    },
+    "db:migrate:run": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} knex migrate:latest --knexfile ./src/db/knexfile.ts",
+        "cwd": "apps/task",
+      }
+    },
+    "db:migrate:up": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} knex migrate:up --knexfile ./src/db/knexfile.ts",
+        "cwd": "apps/task"
+      }
+    },
+    "db:migrate:down": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} knex migrate:down --knexfile ./src/db/knexfile.ts",
+        "cwd": "apps/task"
+      }
+    },
+    "db:migrate:rollback": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} knex migrate:rollback --knexfile ./src/db/knexfile.ts",
+        "cwd": "apps/task"
+      }
+    },
+    "db:seed:make": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} knex seed:make --knexfile ./src/db/knexfile.ts",
+        "cwd": "apps/task"
+      }
+    },
+    "db:seed:run": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} knex seed:run --knexfile ./src/db/knexfile.ts",
+        "cwd": "apps/task"
+      }
     }
   },
-  "tags": []
+  "tags": [],
 }

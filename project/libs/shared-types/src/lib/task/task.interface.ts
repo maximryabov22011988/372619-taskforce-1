@@ -19,4 +19,5 @@ export interface Task {
   contractorId: string;
   customerId: string;
   createdAt: DateString;
+  updatedAt: DateString;
 }
