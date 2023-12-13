@@ -24,22 +24,6 @@ import { TaskRdo } from './rdo/task.rdo';
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
-  @Get('/:taskId')
-  @ApiOperation({ summary: 'Getting detailed information about task' })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Task details',
-    type: TaskRdo,
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  public async getTask(@Param('taskId') taskId: string): Promise<TaskRdo> {
-    const task = await this.tasksService.findById(taskId);
-    return fillObject(TaskRdo, task);
-  }
-
   @Get('/')
   @ApiOperation({ summary: 'Getting task list' })
   @ApiResponse({
@@ -66,6 +50,22 @@ export class TasksController {
   })
   public async createTask(@Body() dto: CreateTaskDto): Promise<TaskRdo> {
     const task = await this.tasksService.createTask(dto);
+    return fillObject(TaskRdo, task);
+  }
+
+  @Get('/:taskId')
+  @ApiOperation({ summary: 'Getting detailed information about task' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Task details',
+    type: TaskRdo,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Not found',
+  })
+  public async getTask(@Param('taskId') taskId: string): Promise<TaskRdo> {
+    const task = await this.tasksService.findById(taskId);
     return fillObject(TaskRdo, task);
   }
 

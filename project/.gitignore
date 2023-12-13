@@ -40,3 +40,11 @@ Thumbs.db
 
 .nx/cache
 project/apps/**/*.http
+
+# Environments
+*.env
+
+# Db
+database
+database-data
+uploads

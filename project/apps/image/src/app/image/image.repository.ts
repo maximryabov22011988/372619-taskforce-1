@@ -1,16 +1,19 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model, HydratedDocument } from 'mongoose';
 import { ImageFile } from '@project/libs/shared-types';
 import { ImageFileEntity } from './image.entity';
+import { ImageModel } from './image.model';
 
 @Injectable()
 export class ImageRepository {
-  constructor() {}
+  constructor(
+    @InjectModel(ImageModel.name)
+    private readonly imageFileModel: Model<HydratedDocument<ImageModel>>
+  ) {}
 
-  public async create(imageFile: ImageFileEntity): Promise<ImageFile> {
-    return imageFile;
-  }
-
-  public async findById(fileId: string): Promise<ImageFile | null> {
-    return null;
+  public async create(item: ImageFileEntity): Promise<ImageFile> {
+    const file = new this.imageFileModel(item);
+    return file.save();
   }
 }

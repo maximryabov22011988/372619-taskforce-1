@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@project/config": ["libs/config/src/index.ts"],
       "@project/libs/shared-types": ["libs/shared-types/src/index.ts"],
       "@project/libs/utils-core": ["libs/utils/utils-core/src/index.ts"],
       "@project/libs/utils-types": ["libs/utils/utils-types/src/index.ts"],

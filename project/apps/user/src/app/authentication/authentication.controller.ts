@@ -40,28 +40,6 @@ export class AuthenticationController {
     await this.authService.register(dto);
   }
 
-  @Patch('/password/:userId')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({ summary: 'Change password' })
-  @ApiResponse({
-    status: HttpStatus.NO_CONTENT,
-    description: 'Password has been changed successfully',
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  public async changePassword(
-    @Param('userId') userId: string,
-    @Body() dto: ChangePasswordDto
-  ): Promise<void> {
-    await this.authService.changePassword(dto, userId);
-  }
-
   @Post('/login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Login user' })
@@ -115,5 +93,27 @@ export class AuthenticationController {
   ): Promise<UpdatedTokensRdo> {
     const tokens = await this.authService.updateTokens(dto);
     return fillObject(UpdatedTokensRdo, tokens);
+  }
+
+  @Patch('/password/:userId')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Change password' })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: 'Password has been changed successfully',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Not found',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+  })
+  public async changePassword(
+    @Param('userId') userId: string,
+    @Body() dto: ChangePasswordDto
+  ): Promise<void> {
+    await this.authService.changePassword(dto, userId);
   }
 }
