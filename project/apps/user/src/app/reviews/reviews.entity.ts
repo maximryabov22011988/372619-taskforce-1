@@ -1,9 +1,9 @@
-import { Review } from '@project/libs/shared-types';
+import { Review, Entity } from '@project/libs/shared-types';
 
-export class ReviewEntity implements Review {
-  public id?: string;
+export class ReviewEntity implements Entity<ReviewEntity>, Review {
+  public id?: number;
   public text: string;
-  public taskId: string;
+  public taskId: number;
   public rating: number;
 
   constructor(review: Review) {
@@ -14,7 +14,7 @@ export class ReviewEntity implements Review {
     return { ...this };
   }
 
-  private fillEntity(review: Review) {
+  public fillEntity(review: Review) {
     Object.assign(this, review);
   }
 }

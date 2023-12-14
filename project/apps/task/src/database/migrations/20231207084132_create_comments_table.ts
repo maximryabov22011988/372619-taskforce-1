@@ -7,6 +7,9 @@ export async function up(knex: Knex) {
     table.increments('id').primary();
     table.string('text', 300).notNullable();
     table.integer('task_id').notNullable();
+    table.uuid('user_id');
+    table.string('created_at').defaultTo(null);
+    table.string('updated_at').defaultTo(null);
 
     table
       .foreign('task_id')

@@ -1,9 +1,8 @@
-import { DateString } from '../shared';
-
 export interface Comment {
-  id?: string;
+  id?: number;
   text: string;
-  taskId: string;
-  authorId: string;
-  createdAt: DateString;
+  taskId: number;
+  userId: string;
+  createdAt?: string;
+  updatedAt?: string;
 }

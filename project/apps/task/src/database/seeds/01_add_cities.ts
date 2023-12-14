@@ -3,7 +3,6 @@ import { Knex } from 'knex';
 const tableName = 'cities';
 
 export async function seed(knex: Knex): Promise<any> {
-  await knex(tableName).truncate();
   await knex(tableName).insert([
     {
       id: 1,

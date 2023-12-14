@@ -5,14 +5,14 @@ import {
   UserRole,
   Email,
   Password,
-  DateString,
   ImageUrl,
   Specialization,
+  Entity,
 } from '@project/libs/shared-types';
 
 const SALT_ROUNDS = 10;
 
-export class UserEntity implements User {
+export class UserEntity implements Entity<UserEntity>, User {
   public id: string;
   public firstname: string;
   public lastname: string;
@@ -21,8 +21,8 @@ export class UserEntity implements User {
   public passwordHash: Password;
   public specialization: Specialization[];
   public role: UserRole;
-  public birthDate: DateString;
-  public createdAt: DateString;
+  public birthDate: string;
+  public createdAt: string;
   public info: string;
   public avatar?: ImageUrl;
 
@@ -34,6 +34,10 @@ export class UserEntity implements User {
     return { ...this };
   }
 
+  public fillEntity(user: Omit<User, 'passwordHash'>) {
+    Object.assign(this, user);
+  }
+
   public async setPassword(password: string): Promise<UserEntity> {
     const salt = await genSalt(SALT_ROUNDS);
     this.passwordHash = await hash(password, salt);
@@ -42,9 +46,5 @@ export class UserEntity implements User {
 
   public comparePassword(password: string): Promise<boolean> {
     return compare(password, this.passwordHash);
-  }
-
-  private fillEntity(user: Omit<User, 'passwordHash'>) {
-    Object.assign(this, user);
   }
 }

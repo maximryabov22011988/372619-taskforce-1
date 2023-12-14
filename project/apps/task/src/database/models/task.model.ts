@@ -3,6 +3,9 @@ import { Uuid } from '@project/libs/shared-types';
 import { BaseModel } from './base.model';
 import { TagModel } from './tag.model';
 import { CommentModel } from './comment.model';
+import { CityModel } from './city.model';
+import { StatusModel } from './status.model';
+import { CategoryModel } from './category.model';
 
 export class TaskModel extends BaseModel {
   public static get tableName() {
@@ -16,24 +19,16 @@ export class TaskModel extends BaseModel {
   public readonly title: string;
   public readonly description: string;
   public readonly price: number;
-  public readonly execution_date: Date;
-  public readonly image_url: string;
+  public readonly executionDate: string;
+  public readonly imageUrl: string;
   public readonly address: string;
-  public readonly category_id: number;
-  public readonly city_id: number;
-  public readonly status_id: number;
-  public readonly contractor_id: Uuid;
-  public readonly customer_id: Uuid;
-  public created_at: Date;
-  public updated_at: Date;
-
-  public $beforeInsert() {
-    this.created_at = new Date();
-  }
-
-  public $beforeUpdate() {
-    this.updated_at = new Date();
-  }
+  public readonly categoryId: number;
+  public readonly cityId: number;
+  public readonly statusId: number;
+  public readonly contractorId: Uuid;
+  public readonly customerId: Uuid;
+  public readonly createdAt: string;
+  public readonly updatedAt: string;
 
   public static get jsonSchema() {
     return {
@@ -41,12 +36,12 @@ export class TaskModel extends BaseModel {
       required: [
         'title',
         'description',
-        'category_id',
-        'city_id',
-        'status_id',
-        'customer_id',
-        'created_at',
-        'updated_at',
+        'categoryId',
+        'cityId',
+        'statusId',
+        'customerId',
+        'createdAt',
+        'updatedAt',
       ],
       properties: {
         id: {
@@ -65,10 +60,10 @@ export class TaskModel extends BaseModel {
         price: {
           type: 'integer',
         },
-        execution_date: {
-          type: 'date',
+        executionDate: {
+          type: 'string',
         },
-        image_url: {
+        imageUrl: {
           type: 'string',
         },
         address: {
@@ -76,50 +71,74 @@ export class TaskModel extends BaseModel {
           minLength: 1,
           maxLength: 255,
         },
-        category_id: {
+        categoryId: {
           type: 'integer',
         },
-        city_id: {
+        cityId: {
           type: 'integer',
         },
-        status_id: {
+        statusId: {
           type: 'integer',
         },
-        contractor_id: {
+        contractorId: {
           type: ['string', 'null'],
         },
-        customer_id: {
+        customerId: {
           type: 'string',
         },
-        created_at: {
-          type: 'date',
+        createdAt: {
+          type: 'string',
         },
-        updated_at: {
-          type: 'date',
+        updatedAt: {
+          type: 'string',
         },
       },
     };
   }
 
   public static relationMappings = {
+    status: {
+      relation: Model.HasOneRelation,
+      modelClass: StatusModel,
+      join: {
+        from: 'tasks.statusId',
+        to: 'statuses.id',
+      },
+    },
+    category: {
+      relation: Model.HasOneRelation,
+      modelClass: CategoryModel,
+      join: {
+        from: 'tasks.categoryId',
+        to: 'categories.id',
+      },
+    },
+    city: {
+      relation: Model.HasOneRelation,
+      modelClass: CityModel,
+      join: {
+        from: 'tasks.cityId',
+        to: 'cities.id',
+      },
+    },
     comments: {
       relation: Model.HasManyRelation,
       modelClass: CommentModel,
       join: {
-        from: `${TaskModel.tableName}.${TaskModel.idColumn}`,
-        to: `${CommentModel.tableName}.task_id`,
+        from: 'tasks.id',
+        to: 'comments.taskId',
       },
     },
     tags: {
       relation: Model.ManyToManyRelation,
       modelClass: TagModel,
       join: {
-        from: `${TaskModel.tableName}.${TaskModel.idColumn}`,
+        from: 'tasks.id',
         through: {
-          from: 'tasks_tags.task_id',
-          to: 'tasks_tags.tag_id',
+          from: 'tasksTags.taskId',
+          to: 'tasksTags.tagId',
         },
-        to: `${TagModel.tableName}.${TagModel.idColumn}`,
+        to: 'tags.id',
       },
     },
   };

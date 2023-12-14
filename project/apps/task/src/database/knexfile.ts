@@ -1,5 +1,4 @@
 import { Knex } from 'knex';
-import { knexSnakeCaseMappers } from 'objection';
 import { config } from 'dotenv';
 
 config({ path: '../../.task.env' });
@@ -7,11 +6,11 @@ config({ path: '../../.task.env' });
 const baseConfig: Knex.Config = {
   client: 'pg',
   connection: {
-    host: process.env.DB_HOST || 'localhost',
-    port: Number(process.env.DB_PORT) || 5432,
-    database: process.env.DB_NAME || 'postgres',
-    user: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD || 'postgres',
+    host: process.env.TASK_DB_HOST || 'localhost',
+    port: Number(process.env.TASK_DB_PORT) || 5432,
+    database: process.env.TASK_DB_NAME || 'postgres',
+    user: process.env.TASK_DB_USER || 'postgres',
+    password: process.env.TASK_DB_PASSWORD || 'postgres',
   },
   migrations: {
     extension: 'ts',
@@ -24,7 +23,6 @@ const baseConfig: Knex.Config = {
     directory: 'seeds',
     stub: './seed.stub',
   },
-  ...knexSnakeCaseMappers(),
 };
 
 export const knexConfig: { [key: string]: Knex.Config } = {

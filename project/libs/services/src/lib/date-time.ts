@@ -7,9 +7,9 @@ export const DAYJS_REGISTER_NAME = 'dayjs';
 
 @Injectable()
 export class DateTimeService {
-  static UTC_FORMAT = 'YYYY-MM-DDTHH:mm:ss.SSS[Z]';
+  public static UTC_FORMAT = 'YYYY-MM-DDTHH:mm:ss.SSS[Z]';
 
-  static HUMAN_FORMAT = 'DD.MM.YYYY HH:mm';
+  public static HUMAN_FORMAT = 'DD.MM.YYYY HH:mm';
 
   constructor(
     @Inject(DAYJS_REGISTER_NAME) private readonly dateTime: typeof dayjs
@@ -18,10 +18,9 @@ export class DateTimeService {
     dayjs.extend(timezone);
   }
 
-  getDateTimeLocale(
-    format = DateTimeService.HUMAN_FORMAT,
-    date?: string
-  ): string {
-    return this.dateTime.utc(date).format(format);
+  public getDateTimeLocale(format?: string, date?: string): string {
+    return this.dateTime
+      .utc(date)
+      .format(format ?? DateTimeService.HUMAN_FORMAT);
   }
 }

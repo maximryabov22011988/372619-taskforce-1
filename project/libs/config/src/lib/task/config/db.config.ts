@@ -3,7 +3,7 @@ import { validateSync } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
 import { DbEnv } from '../dv.env';
 
-const DEFAULT_MONGO_PORT = 27017;
+const DEFAULT_POSTGRESQL_PORT = 5432;
 
 export interface DbConfig {
   host: string;
@@ -11,20 +11,18 @@ export interface DbConfig {
   port: number;
   user: string;
   password: string;
-  authBase: string;
 }
 
 export default registerAs('db', (): DbConfig => {
   const config: DbConfig = {
-    name: process.env.IMAGE_DB_NAME,
-    host: process.env.IMAGE_DB_HOST,
+    name: process.env.TASK_DB_NAME,
+    host: process.env.TASK_DB_HOST,
     port: parseInt(
-      process.env.IMAGE_DB_PORT ?? DEFAULT_MONGO_PORT.toString(),
+      process.env.TASK_DB_PORT ?? DEFAULT_POSTGRESQL_PORT.toString(),
       10
     ),
-    user: process.env.IMAGE_DB_USER,
-    password: process.env.IMAGE_DB_PASSWORD,
-    authBase: process.env.IMAGE_DB_AUTH_BASE,
+    user: process.env.TASK_DB_USER,
+    password: process.env.TASK_DB_PASSWORD,
   };
 
   const dbEnv = plainToInstance(DbEnv, config, {

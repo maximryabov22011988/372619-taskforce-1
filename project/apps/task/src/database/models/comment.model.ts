@@ -13,23 +13,15 @@ export class CommentModel extends BaseModel {
   }
 
   public readonly text: string;
-  public readonly task_id: number;
-  public readonly customer_id: Uuid;
-  public created_at: Date;
-  public updated_at: Date;
-
-  public $beforeInsert() {
-    this.created_at = new Date();
-  }
-
-  public $beforeUpdate() {
-    this.updated_at = new Date();
-  }
+  public readonly taskId: number;
+  public readonly userId: Uuid;
+  public readonly createdAt: string;
+  public readonly updatedAt: string;
 
   public static get jsonSchema() {
     return {
       type: 'object',
-      required: ['text', 'task_id', 'user_id'],
+      required: ['text', 'taskId', 'userId'],
       properties: {
         id: {
           type: 'integer',
@@ -39,17 +31,17 @@ export class CommentModel extends BaseModel {
           minLength: 1,
           maxLength: 300,
         },
-        task_id: {
+        taskId: {
           type: 'integer',
         },
-        user_id: {
+        userId: {
           type: 'string',
         },
-        created_at: {
-          type: 'date',
+        createdAt: {
+          type: 'string',
         },
-        updated_at: {
-          type: 'date',
+        updatedAt: {
+          type: 'string',
         },
       },
     };
@@ -60,8 +52,8 @@ export class CommentModel extends BaseModel {
       relation: Model.BelongsToOneRelation,
       modelClass: TaskModel,
       join: {
-        from: `${CommentModel.tableName}.task_id`,
-        to: `${TaskModel.tableName}.${TaskModel.idColumn}`,
+        from: 'comments.taskId',
+        to: 'tasks.id',
       },
     },
   };

@@ -4,8 +4,8 @@ const tableName = 'tasks_tags';
 
 export async function up(knex: Knex) {
   await knex.schema.createTable(tableName, (table) => {
-    table.integer('task_id');
-    table.integer('tag_id');
+    table.integer('task_id').nullable();
+    table.integer('tag_id').nullable();
     table.primary(['task_id', 'tag_id']);
 
     table

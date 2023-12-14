@@ -1,12 +1,12 @@
 import {
   Controller,
-  Get,
   Post,
   Delete,
   Body,
   Param,
   HttpCode,
   HttpStatus,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { fillObject } from '@project/libs/utils-core';
@@ -40,43 +40,7 @@ export class CommentsController {
     return fillObject(CommentRdo, comment);
   }
 
-  @Get(':taskId')
-  @ApiOperation({ summary: 'Getting task comment list' })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Comment list',
-    type: CommentRdo,
-    isArray: true,
-  })
-  public async getCommentList(
-    @Param('taskId') taskId: string
-  ): Promise<CommentRdo[]> {
-    const comments = await this.commentsService.getComments(taskId);
-    return comments.map((comment) => fillObject(CommentRdo, comment));
-  }
-
-  @Delete(':taskId/:commentId')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({ summary: 'Deleting all comments belonging to the task' })
-  @ApiResponse({
-    status: HttpStatus.NO_CONTENT,
-    description: 'All comments has been successfully deleted',
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  public async deleteComment(
-    @Param('commentId') commentId: string
-  ): Promise<void> {
-    await this.commentsService.deleteComment(commentId);
-  }
-
-  @Delete(':taskId/')
+  @Delete('/:commentId')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Deleting existing comment' })
   @ApiResponse({
@@ -91,7 +55,9 @@ export class CommentsController {
     status: HttpStatus.UNAUTHORIZED,
     description: 'Unauthorized',
   })
-  public async deleteComments(@Param('taskId') taskId: string): Promise<void> {
-    await this.commentsService.deleteComments(taskId);
+  public async deleteComment(
+    @Param('commentId', ParseIntPipe) commentId: number
+  ): Promise<void> {
+    await this.commentsService.deleteComment(commentId);
   }
 }

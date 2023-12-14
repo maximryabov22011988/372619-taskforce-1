@@ -5,12 +5,12 @@ Content-Type: application/json
 {
   "title": "Task title",
   "description": "Task's extended description",
-  "category": "engineering",
-  "city": "Moscow",
-  "price": "1000",
+  "categoryId": 1,
+  "cityId": 1,
+  "statusId": 1,
+  "price": 1000,
   "executionDate": "2023-23-04T08:55:00.000Z",
-  "address": "Moscow, Presnenskaya embankment, 12, office No. 2",
-  "tags": ["engineering", "moscow"]
+  "address": "Moscow, Presnenskaya embankment, 12, office No. 2"
 }
 
 
@@ -22,13 +22,13 @@ Content-Type: application/json
 
 
 ### Получение детальной информации о задаче
-GET  http://localhost:3002/api/v1/tasks/3154d38b-a3ae-440e-96db-8465d99411c3 HTTP/1.1
+GET  http://localhost:3002/api/v1/tasks/1 HTTP/1.1
 Content-Type: application/json
 
 
 
 ### Обновление данных по задаче
-PATCH  http://localhost:3002/api/v1/tasks/3154d38b-a3ae-440e-96db-8465d99411c3 HTTP/1.1
+PATCH  http://localhost:3002/api/v1/tasks/1 HTTP/1.1
 Content-Type: application/json
 
 {
@@ -39,5 +39,5 @@ Content-Type: application/json
 
 
 ### Удаление существующей задачи
-DELETE  http://localhost:3002/api/v1/tasks/3154d38b-a3ae-440e-96db-8465d99411c3 HTTP/1.1
+DELETE  http://localhost:3002/api/v1/tasks/1 HTTP/1.1
 Content-Type: application/json

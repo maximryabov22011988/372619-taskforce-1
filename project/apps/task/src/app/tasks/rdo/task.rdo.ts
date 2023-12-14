@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { Expose, Transform } from 'class-transformer';
 import { AvailableCity, TaskStatus } from '@project/libs/shared-types';
 
 export class TaskRdo {
@@ -29,6 +29,7 @@ export class TaskRdo {
     example: 'Engineering',
   })
   @Expose()
+  @Transform(({ obj }) => obj.category.name)
   public category: string;
 
   @ApiProperty({
@@ -40,7 +41,7 @@ export class TaskRdo {
 
   @ApiProperty({
     description: 'Date of completion task',
-    example: '2023-23-04T08:55:00.000Z',
+    example: '2023-12-13T21:06:44.253Z',
   })
   @Expose()
   public executionDate: string;
@@ -50,7 +51,7 @@ export class TaskRdo {
     example: 'example.png',
   })
   @Expose()
-  public image: string;
+  public imageUrl: string;
 
   @ApiProperty({
     description: 'The address where the task should be performed',
@@ -74,6 +75,7 @@ export class TaskRdo {
     example: AvailableCity.Moscow,
   })
   @Expose()
+  @Transform(({ obj }) => obj.city.name)
   public city: AvailableCity;
 
   @ApiProperty({
@@ -82,19 +84,34 @@ export class TaskRdo {
     example: TaskStatus.New,
   })
   @Expose()
+  @Transform(({ obj }) => obj.status.name)
   public status: TaskStatus;
 
   @ApiProperty({
     description: "Task's customer",
-    example: '84tu5fd6-9ac2-4aad-8b79-5adfb2faed8d',
+    example: 'da7f1411-dd49-4689-a2de-cda2f0e9bf85',
   })
   @Expose()
   public customerId: string;
 
   @ApiProperty({
     description: "Task's contractor",
-    example: '432446g6-9ac2-4aad-8b79-5adfb2faed8d',
+    example: 'da7f1411-dd49-4689-a2de-cda2f0e9bf85',
   })
   @Expose()
   public contractorId: string;
+
+  @ApiProperty({
+    description: 'Date of creation task',
+    example: '2023-12-13T21:06:44.253Z',
+  })
+  @Expose()
+  public createdAt: string;
+
+  @ApiProperty({
+    description: 'Task update date',
+    example: '2023-12-13T21:06:44.253Z',
+  })
+  @Expose()
+  public updatedAt: string;
 }

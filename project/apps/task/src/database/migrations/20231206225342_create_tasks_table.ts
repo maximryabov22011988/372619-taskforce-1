@@ -8,7 +8,7 @@ export async function up(knex: Knex) {
     table.string('title', 50).notNullable();
     table.string('description', 1024).notNullable();
     table.integer('price');
-    table.date('execution_date');
+    table.string('execution_date');
     table.text('image_url');
     table.string('address', 255);
     table.integer('category_id').notNullable();
@@ -16,14 +16,8 @@ export async function up(knex: Knex) {
     table.integer('status_id').notNullable();
     table.uuid('contractor_id');
     table.uuid('customer_id');
-    table
-      .dateTime('created_at')
-      .notNullable()
-      .defaultTo(knex.raw('CURRENT_TIMESTAMP'));
-    table
-      .dateTime('updated_at')
-      .notNullable()
-      .defaultTo(knex.raw('CURRENT_TIMESTAMP'));
+    table.string('created_at').defaultTo(null);
+    table.string('updated_at').defaultTo(null);
 
     table
       .foreign('category_id')
