@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { v4 as makeUuid } from 'uuid';
 import { DateTimeService } from '@project/services';
 import { Task, TaskStatus } from '@project/libs/shared-types';
 import { TasksRepository } from './tasks.repository';
@@ -13,9 +14,8 @@ export class TasksService {
     private readonly dateTime: DateTimeService
   ) {}
 
-  public async findById(taskId: string): Promise<Task> {
+  public async findById(taskId: number): Promise<Task> {
     const task = await this.tasksRepository.findById(taskId);
-
     if (!task) {
       throw new NotFoundException('Task was not found');
     }
@@ -23,34 +23,46 @@ export class TasksService {
     return task;
   }
 
-  public async getTaskList(): Promise<Task[]> {
+  public async findAll(): Promise<Task[]> {
     return this.tasksRepository.findAll();
   }
 
   public async createTask(dto: CreateTaskDto): Promise<Task> {
     const task = {
-      ...dto,
+      title: dto.title,
+      description: dto.description,
+      category: dto.category,
+      city: dto.city,
       price: dto.price ?? 0,
       executionDate: dto.executionDate ?? null,
-      image: dto.image ?? '',
-      address: dto.address ?? '',
-      tags: dto.tags ?? [],
-      createdAt: this.dateTime.getDateTimeLocale(DateTimeService.UTC_FORMAT),
+      imageUrl: dto.imageUrl ?? '',
+      address: dto.address ?? null,
+      tags: dto.tags ?? null,
       status: TaskStatus.New,
-      contractorId: '',
-      customerId: '',
+      categoryId: 1,
+      cityId: 1,
+      statusId: 1,
+      customerId: makeUuid(),
+      contractorId: makeUuid(),
+      createdAt: this.dateTime.getDateTimeLocale(DateTimeService.UTC_FORMAT),
+      updatedAt: this.dateTime.getDateTimeLocale(DateTimeService.UTC_FORMAT),
     };
     const taskEntity = new TaskEntity(task);
 
     return this.tasksRepository.create(taskEntity);
   }
 
-  public async updateTask(taskId: string, dto: UpdateTaskDto): Promise<Task> {
+  public async updateTask(taskId: number, dto: UpdateTaskDto): Promise<Task> {
     const task = await this.findById(taskId);
-    return this.tasksRepository.update(taskId, { ...task, ...dto });
+    const taskEntity = new TaskEntity({
+      ...task,
+      ...dto,
+    });
+
+    return this.tasksRepository.update(taskId, taskEntity);
   }
 
-  public async deleteTask(taskId: string): Promise<void> {
+  public async deleteTask(taskId: number): Promise<void> {
     await this.findById(taskId);
     await this.tasksRepository.delete(taskId);
   }

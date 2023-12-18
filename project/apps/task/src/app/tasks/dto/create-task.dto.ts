@@ -43,7 +43,7 @@ export class CreateTaskDto {
     description: 'Picture',
     example: 'example.png',
   })
-  public image?: string;
+  public imageUrl?: string;
 
   @ApiProperty({
     description: 'The address where the task should be performed',

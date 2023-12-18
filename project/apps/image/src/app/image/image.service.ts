@@ -1,9 +1,11 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { ImageFile } from '@project/libs/shared-types';
-import { appConfig } from '@project/config';
+import { ImageConfig } from '@project/config';
 import { ImageFileEntity } from './image.entity';
 import { ImageRepository } from './image.repository';
+
+const { appConfig } = ImageConfig;
 
 @Injectable()
 export class ImageService {

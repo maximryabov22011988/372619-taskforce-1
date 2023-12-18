@@ -1,21 +1,22 @@
-import { Comment, DateString } from '@project/libs/shared-types';
+import { Comment, Entity } from '@project/libs/shared-types';
 
-export class CommentEntity implements Comment {
-  public id?: string;
+export class CommentEntity implements Entity<CommentEntity>, Comment {
+  public id?: number;
   public text: string;
-  public taskId: string;
-  public authorId: string;
-  public createdAt: DateString;
+  public taskId: number;
+  public userId: string;
+  public createdAt?: string;
+  public updatedAt?: string;
 
   constructor(task: Comment) {
     this.fillEntity(task);
   }
 
-  public toObject() {
+  public toObject(): CommentEntity {
     return { ...this };
   }
 
-  private fillEntity(comment: Comment) {
+  public fillEntity(comment: Comment) {
     Object.assign(this, comment);
   }
 }

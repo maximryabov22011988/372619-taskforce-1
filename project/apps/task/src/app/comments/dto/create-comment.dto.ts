@@ -9,7 +9,7 @@ export class CreateCommentDto {
 
   @ApiProperty({
     description: 'Task identifier',
-    example: 'fbc55fd6-9ac2-4aad-8b79-5adfb2faed8d',
+    example: 1,
   })
-  public taskId: string;
+  public taskId: number;
 }

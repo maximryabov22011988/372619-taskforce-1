@@ -12,40 +12,38 @@ export class CommentsService {
     private readonly dateTime: DateTimeService
   ) {}
 
-  public async findById(id: string): Promise<Comment> {
-    const comment = await this.commentsRepository.findById(id);
-
-    if (!comment) {
-      throw new NotFoundException('Comment was not found');
-    }
-
-    return comment;
-  }
-
-  public async getComments(taskId: string): Promise<Comment[]> {
-    const comments = await this.commentsRepository.findAll();
-    return comments.filter((comment) => comment.taskId === taskId);
-  }
-
   public async createComment(dto: CreateCommentDto): Promise<Comment> {
     const { text, taskId } = dto;
 
     const commentEntity = new CommentEntity({
       text,
       taskId,
+      userId: '833a6872-29dd-4869-af2e-7df28a82aa6c',
       createdAt: this.dateTime.getDateTimeLocale(DateTimeService.UTC_FORMAT),
-      authorId: '833a6872-29dd-4869-af2e-7df28a82aa6c',
+      updatedAt: this.dateTime.getDateTimeLocale(DateTimeService.UTC_FORMAT),
     });
 
     return this.commentsRepository.create(commentEntity);
   }
 
-  public async deleteComment(commentId: string): Promise<void> {
+  public async deleteComment(commentId: number): Promise<void> {
     await this.findById(commentId);
     await this.commentsRepository.delete(commentId);
   }
+  public async findAllForTask(taskId: number): Promise<Comment[]> {
+    return this.commentsRepository.findAllForTask(taskId);
+  }
 
-  public async deleteComments(taskId: string): Promise<void> {
-    await this.commentsRepository.deleteComments(taskId);
+  public async deleteAllForTask(taskId: number): Promise<void> {
+    await this.commentsRepository.deleteAllForTask(taskId);
+  }
+
+  private async findById(commentId: number): Promise<Comment> {
+    const comment = await this.commentsRepository.findById(commentId);
+    if (!comment) {
+      throw new NotFoundException('Comment was not found');
+    }
+
+    return comment;
   }
 }

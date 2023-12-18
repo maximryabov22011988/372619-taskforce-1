@@ -21,7 +21,7 @@ export class CommentRdo {
     example: 'fbc55fd6-9ac2-4aad-8b79-5adfb2faed8d',
   })
   @Expose()
-  public authorId: string;
+  public userId: string;
 
   @ApiProperty({
     description: 'Task identifier',
@@ -29,4 +29,18 @@ export class CommentRdo {
   })
   @Expose()
   public taskId: string;
+
+  @ApiProperty({
+    description: 'Date of creation comment',
+    example: '2023-12-13T21:06:44.253Z',
+  })
+  @Expose()
+  public createdAt: string;
+
+  @ApiProperty({
+    description: 'Comment update date',
+    example: '2023-12-13T21:06:44.253Z',
+  })
+  @Expose()
+  public updatedAt: string;
 }

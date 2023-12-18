@@ -4,6 +4,18 @@ import { CRUDRepository } from '@project/libs/utils-types';
 export class MemoryRepository<E, R> implements CRUDRepository<E, string, R> {
   protected repository: { [key: string]: R } = {};
 
+  public async findAll(): Promise<R[]> {
+    return Object.values(this.repository);
+  }
+
+  public async findById(id: string): Promise<R | null> {
+    if (this.repository[id]) {
+      return { ...this.repository[id] };
+    }
+
+    return null;
+  }
+
   public async create(item: E): Promise<R> {
     const id = makeUuid();
     const entry = {
@@ -27,13 +39,5 @@ export class MemoryRepository<E, R> implements CRUDRepository<E, string, R> {
     };
 
     return this.findById(id);
-  }
-
-  public async findById(id: string): Promise<R | null> {
-    if (this.repository[id]) {
-      return { ...this.repository[id] };
-    }
-
-    return null;
   }
 }

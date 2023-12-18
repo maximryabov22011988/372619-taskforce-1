@@ -4,23 +4,23 @@ Content-Type: application/json
 
 {
   "text": "Some comment text",
-  "taskId": "627a6872-29dd-4869-af2e-7df28a82aa6c"
+  "taskId": 1
 }
 
 
 
-### Получение списка комментариев
-GET  http://localhost:3002/api/v1/comments/627a6872-29dd-4869-af2e-7df28a82aa6c HTTP/1.1
+### Удаление комментария
+DELETE  http://localhost:3002/api/v1/comments/13 HTTP/1.1
 Content-Type: application/json
 
 
 
-### Удаление комментария
-DELETE  http://localhost:3002/api/v1/comments/627a6872-29dd-4869-af2e-7df28a82aa6c/ HTTP/1.1
+### Получение списка комментариев для определенного задания
+GET  http://localhost:3002/api/v1/tasks/1/comments HTTP/1.1
 Content-Type: application/json
 
 
 
 ### Удаление всех комментариев задания
-DELETE  http://localhost:3002/api/v1/comments/627a6872-29dd-4869-af2e-7df28a82aa6c/8b2cf84d-ee35-4d94-91c5-ffc227b0e019 HTTP/1.1
+DELETE  http://localhost:3002/api/v1/tasks/1/comments HTTP/1.1
 Content-Type: application/json

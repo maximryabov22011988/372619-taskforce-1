@@ -16,12 +16,15 @@ export interface DbConfig {
 
 export default registerAs('db', (): DbConfig => {
   const config: DbConfig = {
-    name: process.env.MONGO_DB,
-    host: process.env.MONGO_HOST,
-    port: parseInt(process.env.MONGO_PORT ?? DEFAULT_MONGO_PORT.toString(), 10),
-    user: process.env.MONGO_USER,
-    password: process.env.MONGO_PASSWORD,
-    authBase: process.env.MONGO_AUTH_BASE,
+    name: process.env.IMAGE_DB_NAME,
+    host: process.env.IMAGE_DB_HOST,
+    port: parseInt(
+      process.env.IMAGE_DB_PORT ?? DEFAULT_MONGO_PORT.toString(),
+      10
+    ),
+    user: process.env.IMAGE_DB_USER,
+    password: process.env.IMAGE_DB_PASSWORD,
+    authBase: process.env.IMAGE_DB_AUTH_BASE,
   };
 
   const dbEnv = plainToInstance(DbEnv, config, {

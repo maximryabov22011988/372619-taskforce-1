@@ -1,4 +1,4 @@
-import { AvailableCity, DateString } from '../shared';
+import { AvailableCity } from '../shared';
 import { UserRole } from './user-role.enum';
 
 export type Email = string;
@@ -13,7 +13,7 @@ export interface User {
   city: AvailableCity;
   passwordHash: Password;
   role: UserRole;
-  birthDate: DateString;
-  createdAt?: DateString;
+  birthDate: string;
+  createdAt?: string;
   avatar?: ImageUrl;
 }
