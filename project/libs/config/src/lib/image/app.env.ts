@@ -31,10 +31,10 @@ export class AppEnv {
   @IsString({
     message: `Environment is required. Example: "uploads"`,
   })
-  public staticPath: string;
+  public uploadDirectory: string;
 
   @IsString({
     message: `Environment is required. Example: "/api/static"`,
   })
-  public staticServePath: string;
+  public uploadServePath: string;
 }

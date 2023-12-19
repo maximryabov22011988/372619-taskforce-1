@@ -23,4 +23,8 @@ export class DateTimeService {
       .utc(date)
       .format(format ?? DateTimeService.HUMAN_FORMAT);
   }
+
+  public getDate(format: string, date: Date): string {
+    return this.dateTime.utc(date).format(format);
+  }
 }

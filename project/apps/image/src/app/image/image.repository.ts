@@ -16,4 +16,8 @@ export class ImageRepository {
     const file = new this.imageFileModel(item);
     return file.save();
   }
+
+  public async findById(id: string): Promise<ImageFile | null> {
+    return this.imageFileModel.findOne({ _id: id }).exec();
+  }
 }

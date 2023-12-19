@@ -11,6 +11,13 @@ export class UploadedImageFileRdo {
   public id: string;
 
   @ApiProperty({
+    description: 'Original image file name',
+    example: 'specification.jpg',
+  })
+  @Expose()
+  public originalName: string;
+
+  @ApiProperty({
     description: 'Image file name',
     example: 'specification-1a9f2b32-7f87-490c-9c56-0c4a78b89791.jpg',
   })
@@ -18,11 +25,11 @@ export class UploadedImageFileRdo {
   public name: string;
 
   @ApiProperty({
-    description: 'Original image file name',
-    example: 'specification.jpg',
+    description: 'Image mimetype.',
+    example: 'image/png',
   })
   @Expose()
-  public originalName: string;
+  public mimetype: string;
 
   @ApiProperty({
     description: 'Path to image',
@@ -31,4 +38,11 @@ export class UploadedImageFileRdo {
   })
   @Expose()
   public path: string;
+
+  @ApiProperty({
+    description: 'Image file size',
+    example: '393035',
+  })
+  @Expose()
+  public size: number;
 }

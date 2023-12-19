@@ -48,3 +48,4 @@ project/apps/**/*.http
 apps/image/database
 apps/image/database-data
 uploads
+!.gitkeep

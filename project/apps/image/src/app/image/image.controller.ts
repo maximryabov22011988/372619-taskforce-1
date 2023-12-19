@@ -5,7 +5,10 @@ import {
   UploadedFile,
   UseInterceptors,
   HttpStatus,
+  Param,
+  Inject,
 } from '@nestjs/common';
+import { ConfigType } from '@nestjs/config';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiOperation,
@@ -14,29 +17,25 @@ import {
   ApiBody,
 } from '@nestjs/swagger';
 import { Express } from 'express';
-import { diskStorage } from 'multer';
-import { v4 as makeUuid } from 'uuid';
-import { parse } from 'path';
+import assign from 'lodash/assign';
 import { fillObject } from '@project/libs/utils-core';
+import { ImageConfig } from '@project/config';
 import { ImageService } from './image.service';
 import { UploadedImageFileRdo } from './rdo/uploaded-image-file.rdo';
 
-const storage = diskStorage({
-  destination: `./${process.env.STATIC_PATH}`,
-  filename(_, file, callback) {
-    const parsedPath = parse(file.originalname);
-    const filename = `${parsedPath.name.replace(/\s/g, '')}-${makeUuid()}`;
-    const extension = parsedPath.ext;
-    callback(null, `${filename}${extension}`);
-  },
-});
+const { appConfig } = ImageConfig;
 
 @Controller({
   path: 'image',
   version: '1',
 })
 export class ImageController {
-  constructor(private readonly imageService: ImageService) {}
+  constructor(
+    private readonly imageService: ImageService,
+
+    @Inject(appConfig.KEY)
+    private readonly applicationConfig: ConfigType<typeof appConfig>
+  ) {}
 
   @Post('/upload')
   @ApiOperation({ summary: 'Uploading image file' })
@@ -57,15 +56,39 @@ export class ImageController {
     type: UploadedImageFileRdo,
   })
   @ApiConsumes('multipart/form-data')
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage,
-    })
-  )
+  @UseInterceptors(FileInterceptor('file'))
   public async uploadImage(
     @UploadedFile() file: Express.Multer.File
   ): Promise<UploadedImageFileRdo> {
-    const imageFile = await this.imageService.saveImageFile(file);
-    return fillObject(UploadedImageFileRdo, imageFile);
+    const newImageFile = await this.imageService.saveFile(file);
+
+    return fillObject(
+      UploadedImageFileRdo,
+      assign(newImageFile, {
+        path: `${this.applicationConfig.uploadServePath}${newImageFile.path}`,
+      })
+    );
+  }
+
+  @Get(':fileId')
+  @ApiOperation({ summary: 'Getting image file' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Image file is successfully received',
+    type: UploadedImageFileRdo,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Not found',
+  })
+  public async getImageFile(@Param('fileId') fileId: string) {
+    const imageFile = await this.imageService.getFile(fileId);
+
+    return fillObject(
+      UploadedImageFileRdo,
+      assign(imageFile, {
+        path: `${this.applicationConfig.uploadServePath}${imageFile.path}`,
+      })
+    );
   }
 }
