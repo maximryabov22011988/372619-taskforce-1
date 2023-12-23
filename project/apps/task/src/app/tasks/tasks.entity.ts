@@ -1,28 +1,21 @@
-import {
-  AvailableCity,
-  Category,
-  Tag,
-  Task,
-  TaskStatus,
-  Entity,
-} from '@project/libs/shared-types';
+import { Tag, Task, Entity, Uuid } from '@project/libs/shared-types';
 
-export class TaskEntity implements Entity<TaskEntity>, Task {
+export class TaskEntity
+  implements Entity<TaskEntity>, Omit<Task, 'category' | 'city' | 'status'>
+{
   public id?: number;
   public title: string;
   public description: string;
-  public category: Category;
-  public city: AvailableCity;
   public price: number;
   public executionDate: string;
   public imageUrl: string;
   public address: string;
+  public categoryId: number;
+  public cityId: number;
+  public statusId: number;
   public tags: Tag[];
-  public status: TaskStatus;
-  public contractorId: string;
-  public customerId: string;
-  public createdAt: string;
-  public updatedAt: string;
+  public contractorId: Uuid;
+  public customerId: Uuid;
 
   constructor(task: Task) {
     this.fillEntity(task);

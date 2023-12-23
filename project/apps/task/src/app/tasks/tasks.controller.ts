@@ -11,7 +11,10 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import assign from 'lodash/assign';
+import { DateTimeService } from '@project/services';
 import { fillObject } from '@project/libs/utils-core';
+import { Task } from '@project/libs/shared-types';
 import { CommentsService } from '../comments/comments.service';
 import { CommentRdo } from '../comments/rdo/comment.rdo';
 import { TasksService } from './tasks.service';
@@ -27,20 +30,21 @@ import { TaskRdo } from './rdo/task.rdo';
 export class TasksController {
   constructor(
     private readonly tasksService: TasksService,
-    private readonly commentsService: CommentsService
+    private readonly commentsService: CommentsService,
+    private readonly dateTimeService: DateTimeService
   ) {}
 
   @Get('/')
   @ApiOperation({ summary: 'Getting task list' })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Tasks list',
+    description: 'Task list',
     type: TaskRdo,
     isArray: true,
   })
   public async findAll(): Promise<TaskRdo[]> {
     const tasks = await this.tasksService.findAll();
-    return tasks.map((task) => fillObject(TaskRdo, task));
+    return tasks.map((task) => this.getTaskRdo(task));
   }
 
   @Get('/:taskId')
@@ -58,7 +62,7 @@ export class TasksController {
     @Param('taskId', ParseIntPipe) taskId: number
   ): Promise<TaskRdo> {
     const task = await this.tasksService.findById(taskId);
-    return fillObject(TaskRdo, task);
+    return this.getTaskRdo(task);
   }
 
   @Post('/')
@@ -74,14 +78,14 @@ export class TasksController {
   })
   public async createTask(@Body() dto: CreateTaskDto): Promise<TaskRdo> {
     const task = await this.tasksService.createTask(dto);
-    return fillObject(TaskRdo, task);
+    return this.getTaskRdo(task);
   }
 
   @Patch('/:taskId')
   @ApiOperation({ summary: 'Update existing task' })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Task details',
+    description: 'Task has been successfully updated',
     type: TaskRdo,
   })
   @ApiResponse({
@@ -93,7 +97,7 @@ export class TasksController {
     @Body() dto: UpdateTaskDto
   ): Promise<TaskRdo> {
     const task = await this.tasksService.updateTask(taskId, dto);
-    return fillObject(TaskRdo, task);
+    return this.getTaskRdo(task);
   }
 
   @Delete('/:taskId')
@@ -151,5 +155,14 @@ export class TasksController {
     @Param('taskId', ParseIntPipe) taskId: number
   ): Promise<void> {
     await this.commentsService.deleteAllForTask(taskId);
+  }
+
+  private getTaskRdo(task: Task): TaskRdo {
+    return fillObject(
+      TaskRdo,
+      assign(task, {
+        executionDate: this.dateTimeService.formatDate(task.executionDate),
+      })
+    );
   }
 }

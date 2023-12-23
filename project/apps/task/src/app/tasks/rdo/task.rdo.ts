@@ -5,10 +5,10 @@ import { AvailableCity, TaskStatus } from '@project/libs/shared-types';
 export class TaskRdo {
   @ApiProperty({
     description: 'Unique identifier',
-    example: '4ff6e921-36c4-4f80-ae41-919c06c0c5c3',
+    example: 1,
   })
   @Expose()
-  public id?: string;
+  public id?: number;
 
   @ApiProperty({
     description: "Task's title",
@@ -41,14 +41,14 @@ export class TaskRdo {
 
   @ApiProperty({
     description: 'Date of completion task',
-    example: '2023-12-13T21:06:44.253Z',
+    example: '2023-12-25T00:00:00.000Z',
   })
   @Expose()
   public executionDate: string;
 
   @ApiProperty({
     description: 'Picture',
-    example: 'example.png',
+    example: '/api/static/example-1a9f2b32-7f87-490c-9c56-0c4a78b89791.jpg',
   })
   @Expose()
   public imageUrl: string;
@@ -107,11 +107,4 @@ export class TaskRdo {
   })
   @Expose()
   public createdAt: string;
-
-  @ApiProperty({
-    description: 'Task update date',
-    example: '2023-12-13T21:06:44.253Z',
-  })
-  @Expose()
-  public updatedAt: string;
 }

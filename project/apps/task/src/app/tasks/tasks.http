@@ -9,7 +9,7 @@ Content-Type: application/json
   "cityId": 1,
   "statusId": 1,
   "price": 1000,
-  "executionDate": "2023-23-04T08:55:00.000Z",
+  "executionDate": "2023-12-25T00:00:00.000Z",
   "address": "Moscow, Presnenskaya embankment, 12, office No. 2"
 }
 

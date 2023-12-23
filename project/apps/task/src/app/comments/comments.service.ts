@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DateTimeService } from '@project/services';
+import { v4 as makeUuid } from 'uuid';
 import { Comment } from '@project/libs/shared-types';
 import { CommentsRepository } from './comments.repository';
 import { CommentEntity } from './comments.entity';
@@ -7,20 +7,13 @@ import { CreateCommentDto } from './dto/create-comment.dto';
 
 @Injectable()
 export class CommentsService {
-  constructor(
-    private readonly commentsRepository: CommentsRepository,
-    private readonly dateTime: DateTimeService
-  ) {}
+  constructor(private readonly commentsRepository: CommentsRepository) {}
 
   public async createComment(dto: CreateCommentDto): Promise<Comment> {
-    const { text, taskId } = dto;
-
     const commentEntity = new CommentEntity({
-      text,
-      taskId,
-      userId: '833a6872-29dd-4869-af2e-7df28a82aa6c',
-      createdAt: this.dateTime.getDateTimeLocale(DateTimeService.UTC_FORMAT),
-      updatedAt: this.dateTime.getDateTimeLocale(DateTimeService.UTC_FORMAT),
+      text: dto.text,
+      taskId: dto.taskId,
+      userId: makeUuid(),
     });
 
     return this.commentsRepository.create(commentEntity);
@@ -30,6 +23,7 @@ export class CommentsService {
     await this.findById(commentId);
     await this.commentsRepository.delete(commentId);
   }
+
   public async findAllForTask(taskId: number): Promise<Comment[]> {
     return this.commentsRepository.findAllForTask(taskId);
   }

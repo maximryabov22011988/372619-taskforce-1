@@ -35,13 +35,14 @@ export class CreateTaskDto {
 
   @ApiProperty({
     description: 'Date of completion task',
-    example: '2023-23-04T08:55:00.000Z',
+    example: '2023-12-25T00:00:00.000Z',
   })
   public executionDate?: string;
 
   @ApiProperty({
     description: 'Picture',
-    example: 'example.png',
+    example:
+      '/api/static/specification-1a9f2b32-7f87-490c-9c56-0c4a78b89791.jpg',
   })
   public imageUrl?: string;
 

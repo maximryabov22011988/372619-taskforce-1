@@ -4,8 +4,8 @@ const tableName = 'tasks_tags';
 
 export async function up(knex: Knex) {
   await knex.schema.createTable(tableName, (table) => {
-    table.integer('task_id').nullable();
-    table.integer('tag_id').nullable();
+    table.integer('task_id').unsigned().notNullable();
+    table.integer('tag_id').unsigned().notNullable();
     table.primary(['task_id', 'tag_id']);
 
     table
@@ -13,14 +13,14 @@ export async function up(knex: Knex) {
       .references('id')
       .inTable('tasks')
       .onUpdate('CASCADE')
-      .onDelete('SET NULL');
+      .onDelete('CASCADE');
 
     table
       .foreign('tag_id')
       .references('id')
       .inTable('tags')
       .onUpdate('CASCADE')
-      .onDelete('SET NULL');
+      .onDelete('CASCADE');
   });
 }
 

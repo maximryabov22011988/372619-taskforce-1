@@ -15,8 +15,8 @@ export class CommentModel extends BaseModel {
   public readonly text: string;
   public readonly taskId: number;
   public readonly userId: Uuid;
-  public readonly createdAt: string;
-  public readonly updatedAt: string;
+  public readonly createdAt: number;
+  public readonly updatedAt: number;
 
   public static get jsonSchema() {
     return {
@@ -26,7 +26,7 @@ export class CommentModel extends BaseModel {
         id: {
           type: 'integer',
         },
-        name: {
+        text: {
           type: 'string',
           minLength: 1,
           maxLength: 300,
@@ -36,12 +36,13 @@ export class CommentModel extends BaseModel {
         },
         userId: {
           type: 'string',
+          format: 'uuid',
         },
         createdAt: {
-          type: 'string',
+          type: 'integer',
         },
         updatedAt: {
-          type: 'string',
+          type: 'integer',
         },
       },
     };

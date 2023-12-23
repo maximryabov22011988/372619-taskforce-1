@@ -2,12 +2,12 @@ import { Knex } from 'knex';
 
 const tableName = '';
 
-export async function seed(knex: Knex): Promise<any> {
-  await knex(tableName)
-      .del()
-      .insert([
-        {
-          id: 1,
-        },
-      ]);
+export async function seed(knex: Knex): Promise<void> {
+  await knex(tableName).del();
+
+  await knex(tableName).insert([
+    {
+      id: 1,
+    },
+  ]);
 }

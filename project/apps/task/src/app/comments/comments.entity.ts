@@ -5,8 +5,6 @@ export class CommentEntity implements Entity<CommentEntity>, Comment {
   public text: string;
   public taskId: number;
   public userId: string;
-  public createdAt?: string;
-  public updatedAt?: string;
 
   constructor(task: Comment) {
     this.fillEntity(task);

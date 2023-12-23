@@ -41,7 +41,7 @@ export class UploadedImageFileRdo {
 
   @ApiProperty({
     description: 'Image file size',
-    example: '393035',
+    example: 393035,
   })
   @Expose()
   public size: number;

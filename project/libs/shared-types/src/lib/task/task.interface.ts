@@ -18,6 +18,5 @@ export interface Task {
   status: TaskStatus;
   contractorId: string;
   customerId: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
 }

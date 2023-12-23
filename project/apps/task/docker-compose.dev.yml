@@ -13,7 +13,7 @@ services:
       - taskforce-task:/var/lib/postgresql/data
 
     healthcheck:
-      test: [ 'CMD-SHELL', 'pg_isready -U admin -d test' ]
+      test: [ 'CMD-SHELL', 'pg_isready -U admin -d taskforce-task' ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -29,10 +29,11 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@academy.org
       PGADMIN_DEFAULT_PASSWORD: test
+      PGADMIN_CONFIG_SESSION_COOKIE_NAME: '"taskforce_task_cookie"'
     ports:
       - '8082:80'
     volumes:
-      - taskforce-pgadmin:/var/lib/pgadmin
+      - task-pgadmin:/var/lib/pgadmin
 
     networks:
       - taskforce-task
@@ -44,4 +45,4 @@ networks:
 
 volumes:
   taskforce-task:
-  taskforce-pgadmin:
+  task-pgadmin:
