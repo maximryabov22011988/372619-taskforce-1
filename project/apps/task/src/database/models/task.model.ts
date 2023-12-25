@@ -1,15 +1,11 @@
 import { Model } from 'objection';
-import { Task, Uuid } from '@project/libs/shared-types';
+import { Uuid } from '@project/libs/shared-types';
 import { BaseModel } from './base.model';
 import { TagModel } from './tag.model';
 import { CommentModel } from './comment.model';
 import { CityModel } from './city.model';
 import { StatusModel } from './status.model';
 import { CategoryModel } from './category.model';
-
-export type ITaskModel = Omit<Task, 'executionDate'> & {
-  executionDate: Date;
-};
 
 export class TaskModel extends BaseModel {
   public static get tableName() {

@@ -1,17 +1,18 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { Task } from '@project/libs/shared-types';
 import { CRUDRepository } from '@project/libs/utils-types';
-import { ITaskModel, TaskModel } from '../../database/models/task.model';
+import { TaskModel } from '../../database/models/task.model';
 import { TaskEntity } from './tasks.entity';
 
 @Injectable()
 export class TasksRepository
-  implements CRUDRepository<TaskEntity, number, ITaskModel>
+  implements CRUDRepository<TaskEntity, number, Task>
 {
   constructor(
     @Inject(TaskModel) private readonly taskModel: typeof TaskModel
   ) {}
 
-  public async findAll(): Promise<ITaskModel[]> {
+  public async findAll(): Promise<Task[]> {
     return this.taskModel
       .query()
       .withGraphFetched('tags')
@@ -19,10 +20,10 @@ export class TasksRepository
       .withGraphFetched('status')
       .withGraphFetched('category')
       .returning('*')
-      .castTo<ITaskModel[]>();
+      .castTo<Task[]>();
   }
 
-  public async findById(id: number): Promise<ITaskModel> {
+  public async findById(id: number): Promise<Task> {
     return this.taskModel
       .query()
       .where({ id })
@@ -32,10 +33,10 @@ export class TasksRepository
       .withGraphFetched('category')
       .returning('*')
       .first()
-      .castTo<ITaskModel>();
+      .castTo<Task>();
   }
 
-  public async create(item: TaskEntity): Promise<ITaskModel> {
+  public async create(item: TaskEntity): Promise<Task> {
     return this.taskModel
       .query()
       .insert(item.toObject())
@@ -44,10 +45,10 @@ export class TasksRepository
       .withGraphFetched('status')
       .withGraphFetched('category')
       .returning('*')
-      .castTo<ITaskModel>();
+      .castTo<Task>();
   }
 
-  public async update(id: number, item: TaskEntity): Promise<ITaskModel> {
+  public async update(id: number, item: TaskEntity): Promise<Task> {
     return this.taskModel
       .query()
       .patchAndFetchById(id, item.toObject())
@@ -56,7 +57,7 @@ export class TasksRepository
       .withGraphFetched('status')
       .withGraphFetched('category')
       .returning('*')
-      .castTo<ITaskModel>();
+      .castTo<Task>();
   }
 
   public async delete(id: number): Promise<void> {

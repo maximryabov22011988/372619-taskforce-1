@@ -3,7 +3,6 @@ import { v4 as makeUuid } from 'uuid';
 import pick from 'lodash/pick';
 import { DateTimeService } from '@project/services';
 import { Task, TaskStatus } from '@project/libs/shared-types';
-import { ITaskModel } from '../../database/models/task.model';
 import { TasksRepository } from './tasks.repository';
 import { TaskEntity } from './tasks.entity';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -17,17 +16,16 @@ export class TasksService {
   ) {}
 
   public async findById(taskId: number): Promise<Task> {
-    const taskModel = await this.tasksRepository.findById(taskId);
-    if (!taskModel) {
+    const task = await this.tasksRepository.findById(taskId);
+    if (!task) {
       throw new NotFoundException('Task was not found');
     }
 
-    return this.getTask(taskModel);
+    return task;
   }
 
   public async findAll(): Promise<Task[]> {
-    const taskModels = await this.tasksRepository.findAll();
-    return taskModels.map((taskModel) => this.getTask(taskModel));
+    return this.tasksRepository.findAll();
   }
 
   public async createTask(dto: CreateTaskDto): Promise<Task> {
@@ -42,9 +40,8 @@ export class TasksService {
       customerId: makeUuid(),
       contractorId: null,
     });
-    const taskModel = await this.tasksRepository.create(taskEntity);
 
-    return this.getTask(taskModel);
+    return this.tasksRepository.create(taskEntity);
   }
 
   public async updateTask(taskId: number, dto: UpdateTaskDto): Promise<Task> {
@@ -66,21 +63,13 @@ export class TasksService {
       status: dto.status ?? task.status,
       contractorId: dto.contractorId ?? task.contractorId,
     });
-    const taskModel = await this.tasksRepository.update(taskId, taskEntity);
 
-    return this.getTask(taskModel);
+    return this.tasksRepository.update(taskId, taskEntity);
   }
 
   public async deleteTask(taskId: number): Promise<void> {
     await this.findById(taskId);
     await this.tasksRepository.delete(taskId);
-  }
-
-  private getTask(task: ITaskModel) {
-    return {
-      ...task,
-      executionDate: this.getExecutionDate(task.executionDate),
-    };
   }
 
   private getExecutionDate(date: Date | string | null): string | null {
