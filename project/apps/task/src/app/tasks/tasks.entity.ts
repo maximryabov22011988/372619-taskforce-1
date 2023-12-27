@@ -1,8 +1,7 @@
-import { Tag, Task, Entity, Uuid } from '@project/libs/shared-types';
+import { Tag, Entity, Uuid } from '@project/libs/shared-types';
+import { TaskModelProperties } from '../../database/models/task.model';
 
-export class TaskEntity
-  implements Entity<TaskEntity>, Omit<Task, 'category' | 'city' | 'status'>
-{
+export class TaskEntity implements Entity<TaskEntity> {
   public id?: number;
   public title: string;
   public description: string;
@@ -13,11 +12,10 @@ export class TaskEntity
   public categoryId: number;
   public cityId: number;
   public statusId: number;
-  public tags: Tag[];
   public contractorId: Uuid;
   public customerId: Uuid;
 
-  constructor(task: Task) {
+  constructor(task: TaskModelProperties) {
     this.fillEntity(task);
   }
 
@@ -25,7 +23,7 @@ export class TaskEntity
     return { ...this };
   }
 
-  public fillEntity(task: Task) {
+  public fillEntity(task: TaskModelProperties) {
     Object.assign(this, task);
   }
 }

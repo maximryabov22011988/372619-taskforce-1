@@ -11,12 +11,13 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import assign from 'lodash/assign';
 import { DateTimeService } from '@project/services';
-import { fillObject } from '@project/libs/utils-core';
-import { Task } from '@project/libs/shared-types';
+import { Comment, Task } from '@project/libs/shared-types';
+import { TaskModel } from '../../database/models/task.model';
 import { CommentsService } from '../comments/comments.service';
 import { CommentRdo } from '../comments/rdo/comment.rdo';
+import { mapToComment } from 'apps/task/src/app/comments/comments.mapper';
+import { mapToTask } from 'apps/task/src/app/tasks/tasks.mapper';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -42,9 +43,9 @@ export class TasksController {
     type: TaskRdo,
     isArray: true,
   })
-  public async findAll(): Promise<TaskRdo[]> {
-    const tasks = await this.tasksService.findAll();
-    return tasks.map((task) => this.getTaskRdo(task));
+  public async findAll(): Promise<Task[]> {
+    const tasksModels = await this.tasksService.findAll();
+    return tasksModels.map(this.getTaskRdo);
   }
 
   @Get('/:taskId')
@@ -60,9 +61,9 @@ export class TasksController {
   })
   public async findById(
     @Param('taskId', ParseIntPipe) taskId: number
-  ): Promise<TaskRdo> {
-    const task = await this.tasksService.findById(taskId);
-    return this.getTaskRdo(task);
+  ): Promise<Task> {
+    const taskModel = await this.tasksService.findById(taskId);
+    return this.getTaskRdo(taskModel);
   }
 
   @Post('/')
@@ -76,9 +77,9 @@ export class TasksController {
     status: HttpStatus.UNAUTHORIZED,
     description: 'Unauthorized',
   })
-  public async createTask(@Body() dto: CreateTaskDto): Promise<TaskRdo> {
-    const task = await this.tasksService.createTask(dto);
-    return this.getTaskRdo(task);
+  public async createTask(@Body() dto: CreateTaskDto): Promise<Task> {
+    const taskModel = await this.tasksService.createTask(dto);
+    return this.getTaskRdo(taskModel);
   }
 
   @Patch('/:taskId')
@@ -95,9 +96,9 @@ export class TasksController {
   public async updateTask(
     @Param('taskId', ParseIntPipe) taskId: number,
     @Body() dto: UpdateTaskDto
-  ): Promise<TaskRdo> {
-    const task = await this.tasksService.updateTask(taskId, dto);
-    return this.getTaskRdo(task);
+  ): Promise<Task> {
+    const taskModel = await this.tasksService.updateTask(taskId, dto);
+    return this.getTaskRdo(taskModel);
   }
 
   @Delete('/:taskId')
@@ -131,9 +132,9 @@ export class TasksController {
   })
   public async findAllForTask(
     @Param('taskId', ParseIntPipe) taskId: number
-  ): Promise<CommentRdo[]> {
-    const comments = await this.commentsService.findAllForTask(taskId);
-    return comments.map((comment) => fillObject(CommentRdo, comment));
+  ): Promise<Comment[]> {
+    const commentsModels = await this.commentsService.findAllForTask(taskId);
+    return commentsModels.map(mapToComment);
   }
 
   @Delete('/:taskId/comments')
@@ -157,12 +158,10 @@ export class TasksController {
     await this.commentsService.deleteAllForTask(taskId);
   }
 
-  private getTaskRdo(task: Task): TaskRdo {
-    return fillObject(
-      TaskRdo,
-      assign(task, {
-        executionDate: this.dateTimeService.formatDate(task.executionDate),
-      })
+  private getTaskRdo = (taskModel: TaskModel): Task => {
+    return mapToTask(
+      taskModel,
+      this.dateTimeService.formatDate(taskModel.executionDate)
     );
-  }
+  };
 }

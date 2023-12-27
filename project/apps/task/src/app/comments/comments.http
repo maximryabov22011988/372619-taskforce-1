@@ -10,7 +10,7 @@ Content-Type: application/json
 
 
 ### Удаление комментария
-DELETE  http://localhost:3002/api/v1/comments/2 HTTP/1.1
+DELETE  http://localhost:3002/api/v1/comments/5 HTTP/1.1
 Content-Type: application/json
 
 

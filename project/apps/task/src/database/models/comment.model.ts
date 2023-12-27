@@ -1,7 +1,8 @@
 import { Model } from 'objection';
-import { Uuid } from '@project/libs/shared-types';
 import { BaseModel } from './base.model';
 import { TaskModel } from './task.model';
+
+export type CommentModelProperties = Pick<CommentModel, 'text' | 'taskId'>;
 
 export class CommentModel extends BaseModel {
   public static get tableName() {
@@ -14,14 +15,13 @@ export class CommentModel extends BaseModel {
 
   public readonly text: string;
   public readonly taskId: number;
-  public readonly userId: Uuid;
   public readonly createdAt: number;
   public readonly updatedAt: number;
 
   public static get jsonSchema() {
     return {
       type: 'object',
-      required: ['text', 'taskId', 'userId'],
+      required: ['text', 'taskId'],
       properties: {
         id: {
           type: 'integer',
@@ -33,10 +33,6 @@ export class CommentModel extends BaseModel {
         },
         taskId: {
           type: 'integer',
-        },
-        userId: {
-          type: 'string',
-          format: 'uuid',
         },
         createdAt: {
           type: 'integer',

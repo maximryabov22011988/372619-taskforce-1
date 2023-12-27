@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Comment } from '@project/libs/shared-types';
 import { CommentModel } from '../../database/models/comment.model';
 import { CommentEntity } from './comments.entity';
 
@@ -9,29 +8,20 @@ export class CommentsRepository {
     @Inject(CommentModel) private readonly commentModel: typeof CommentModel
   ) {}
 
-  public async findById(commentId: number) {
+  public async findById(commentId: number): Promise<CommentModel> {
     return this.commentModel
       .query()
       .where({ id: commentId })
       .returning('*')
-      .first()
-      .castTo<Comment>();
+      .first();
   }
 
-  public async create(item: CommentEntity): Promise<Comment> {
-    return this.commentModel
-      .query()
-      .insert(item.toObject())
-      .returning('*')
-      .castTo<Comment>();
+  public async create(item: CommentEntity): Promise<CommentModel> {
+    return this.commentModel.query().insert(item.toObject()).returning('*');
   }
 
-  public async findAllForTask(taskId: number): Promise<Comment[]> {
-    return this.commentModel
-      .query()
-      .where({ taskId })
-      .returning('*')
-      .castTo<Comment[]>();
+  public async findAllForTask(taskId: number): Promise<CommentModel[]> {
+    return this.commentModel.query().where({ taskId }).returning('*');
   }
 
   public async deleteAllForTask(taskId: number): Promise<void> {

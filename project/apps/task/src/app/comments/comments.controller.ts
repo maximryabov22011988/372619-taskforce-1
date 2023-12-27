@@ -9,7 +9,8 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { fillObject } from '@project/libs/utils-core';
+import { Comment } from '@project/libs/shared-types';
+import { mapToComment } from 'apps/task/src/app/comments/comments.mapper';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { CommentRdo } from './rdo/comment.rdo';
@@ -33,11 +34,9 @@ export class CommentsController {
     status: HttpStatus.UNAUTHORIZED,
     description: 'Unauthorized',
   })
-  public async createComment(
-    @Body() dto: CreateCommentDto
-  ): Promise<CommentRdo> {
-    const comment = await this.commentsService.createComment(dto);
-    return fillObject(CommentRdo, comment);
+  public async createComment(@Body() dto: CreateCommentDto): Promise<Comment> {
+    const commentModel = await this.commentsService.createComment(dto);
+    return mapToComment(commentModel);
   }
 
   @Delete('/:commentId')

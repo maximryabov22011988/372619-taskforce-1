@@ -1,12 +1,12 @@
-import { Comment, Entity } from '@project/libs/shared-types';
+import { Entity } from '@project/libs/shared-types';
+import { CommentModelProperties } from '../../database/models/comment.model';
 
-export class CommentEntity implements Entity<CommentEntity>, Comment {
+export class CommentEntity implements Entity<CommentEntity> {
   public id?: number;
   public text: string;
   public taskId: number;
-  public userId: string;
 
-  constructor(task: Comment) {
+  constructor(task: CommentModelProperties) {
     this.fillEntity(task);
   }
 
@@ -14,7 +14,7 @@ export class CommentEntity implements Entity<CommentEntity>, Comment {
     return { ...this };
   }
 
-  public fillEntity(comment: Comment) {
+  public fillEntity(comment: CommentModelProperties) {
     Object.assign(this, comment);
   }
 }

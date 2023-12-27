@@ -106,5 +106,5 @@ export class TaskRdo {
     example: '2023-12-13T21:06:44.253Z',
   })
   @Expose()
-  public createdAt: string;
+  public createdAt: number;
 }

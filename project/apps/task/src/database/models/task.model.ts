@@ -7,6 +7,21 @@ import { CityModel } from './city.model';
 import { StatusModel } from './status.model';
 import { CategoryModel } from './category.model';
 
+export type TaskModelProperties = Pick<
+  TaskModel,
+  | 'title'
+  | 'description'
+  | 'price'
+  | 'executionDate'
+  | 'imageUrl'
+  | 'address'
+  | 'categoryId'
+  | 'cityId'
+  | 'statusId'
+  | 'contractorId'
+  | 'customerId'
+>;
+
 export class TaskModel extends BaseModel {
   public static get tableName() {
     return 'tasks';

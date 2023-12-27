@@ -13,5 +13,5 @@ export class UpdateTaskDto {
     enum: TaskStatus,
     example: TaskStatus.New,
   })
-  public status?: TaskStatus;
+  public statusId?: number;
 }

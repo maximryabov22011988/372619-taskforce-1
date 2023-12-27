@@ -9,14 +9,14 @@ export interface Task {
   title: string;
   description: string;
   category: Category;
-  city: AvailableCity;
   price: number;
   executionDate: string;
   imageUrl: string;
   address: string;
   tags: Tag[];
+  city: AvailableCity;
   status: TaskStatus;
-  contractorId: string;
   customerId: string;
-  createdAt?: string;
+  contractorId: string;
+  createdAt?: number;
 }

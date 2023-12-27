@@ -17,13 +17,6 @@ export class CommentRdo {
   public text: string;
 
   @ApiProperty({
-    description: "Comment's author",
-    example: 'fbc55fd6-9ac2-4aad-8b79-5adfb2faed8d',
-  })
-  @Expose()
-  public userId: string;
-
-  @ApiProperty({
     description: 'Task identifier',
     example: 1,
   })
