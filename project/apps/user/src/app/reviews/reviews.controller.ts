@@ -1,7 +1,8 @@
 import { Controller, Post, Body, HttpStatus } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { fillObject } from '@project/libs/utils-core';
+import { Review } from '@project/libs/shared-types';
 import { ReviewsService } from './reviews.service';
+import { mapToReview } from './reviews.mapper';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { ReviewRdo } from './rdo/review.rdo';
 
@@ -24,8 +25,8 @@ export class ReviewsController {
     status: HttpStatus.UNAUTHORIZED,
     description: 'Unauthorized',
   })
-  public async createReview(@Body() dto: CreateReviewDto): Promise<ReviewRdo> {
-    const review = await this.reviewsService.createReview(dto);
-    return fillObject(ReviewRdo, review);
+  public async createReview(@Body() dto: CreateReviewDto): Promise<Review> {
+    const reviewModel = await this.reviewsService.createReview(dto);
+    return mapToReview(reviewModel);
   }
 }

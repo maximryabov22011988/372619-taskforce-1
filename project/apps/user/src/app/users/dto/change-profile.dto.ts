@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Specialization } from '@project/libs/shared-types';
+import { Expose } from 'class-transformer';
 
 export class ChangeProfileDto {
   @ApiProperty({
@@ -15,7 +15,7 @@ export class ChangeProfileDto {
   public lastname?: string;
 
   @ApiProperty({
-    description: "User's city",
+    description: "User's birth date",
     example: '1977-11-11T08:55:00.000Z',
   })
   public birthDate?: string;
@@ -27,8 +27,9 @@ export class ChangeProfileDto {
   public info?: string;
 
   @ApiProperty({
-    description: 'User specialization list',
-    example: ['frontend', 'backend'],
+    description: "User's city id",
+    example: 1,
   })
-  public specialization?: Specialization[];
+  @Expose()
+  public cityId?: number;
 }

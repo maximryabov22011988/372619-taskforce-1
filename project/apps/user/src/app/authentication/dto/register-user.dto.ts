@@ -48,8 +48,8 @@ export class RegisterUserDto {
 
   @ApiProperty({
     description: "User's avatar",
-    example: 'avatar.png',
+    example: '/api/static/avatar.png',
     required: false,
   })
-  public avatar?: string;
+  public avatarUrl?: string;
 }

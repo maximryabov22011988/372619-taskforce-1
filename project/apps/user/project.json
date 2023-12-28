@@ -45,18 +45,53 @@
         "lintFilePatterns": ["apps/user/**/*.ts"]
       }
     },
-    "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+    "db:migrate:make": {
+      "executor": "nx:run-commands",
       "options": {
-        "jestConfig": "apps/user/jest.config.ts",
-        "passWithNoTests": true
-      },
-      "configurations": {
-        "ci": {
-          "ci": true,
-          "codeCoverage": true
-        }
+        "command": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} knex migrate:make --knexfile ./src/database/knexfile.ts",
+        "cwd": "apps/user"
+      }
+    },
+    "db:migrate:run": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} knex migrate:latest --knexfile ./src/database/knexfile.ts",
+        "cwd": "apps/user",
+      }
+    },
+    "db:migrate:up": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} knex migrate:up --knexfile ./src/database/knexfile.ts",
+        "cwd": "apps/user"
+      }
+    },
+    "db:migrate:down": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} knex migrate:down --knexfile ./src/database/knexfile.ts",
+        "cwd": "apps/user"
+      }
+    },
+    "db:migrate:rollback": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} knex migrate:rollback --knexfile ./src/database/knexfile.ts",
+        "cwd": "apps/user"
+      }
+    },
+    "db:seed:make": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} knex seed:make --knexfile ./src/database/knexfile.ts",
+        "cwd": "apps/user"
+      }
+    },
+    "db:seed:run": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} knex seed:run --knexfile ./src/database/knexfile.ts",
+        "cwd": "apps/user"
       }
     }
   },

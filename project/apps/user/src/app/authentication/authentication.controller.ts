@@ -57,8 +57,8 @@ export class AuthenticationController {
     description: 'Unauthorized',
   })
   public async login(@Body() dto: LoginUserDto): Promise<LoggedUserRdo> {
-    const user = await this.authService.verifyUser(dto);
-    return fillObject(LoggedUserRdo, user);
+    const userModel = await this.authService.verifyUser(dto);
+    return fillObject(LoggedUserRdo, userModel);
   }
 
   @Post('/logout')

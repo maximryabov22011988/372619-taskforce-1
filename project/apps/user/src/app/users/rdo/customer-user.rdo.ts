@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
-import { AvailableCity, UserRole } from '@project/libs/shared-types';
+import { Expose, Transform } from 'class-transformer';
+import { UserRole } from '@project/libs/shared-types';
 
 export class CustomerUserRdo {
   @ApiProperty({
@@ -25,19 +25,11 @@ export class CustomerUserRdo {
   public lastname: string;
 
   @ApiProperty({
-    description: 'Registration date',
-    example: '1977-11-11T08:55:00.000Z',
+    description: "User's city id",
+    example: 1,
   })
   @Expose()
-  public createdAt: string;
-
-  @ApiProperty({
-    description: "User's city",
-    enum: AvailableCity,
-    example: AvailableCity.Moscow,
-  })
-  @Expose()
-  public city: AvailableCity;
+  public cityId: number;
 
   @ApiProperty({
     description: "User's role",
@@ -45,6 +37,7 @@ export class CustomerUserRdo {
     example: UserRole.Customer,
   })
   @Expose()
+  @Transform(({ obj }) => obj.role.name)
   public role: UserRole;
 
   @ApiProperty({
@@ -55,16 +48,9 @@ export class CustomerUserRdo {
   public email: string;
 
   @ApiProperty({
-    description: "User's published tasks count",
-    example: 10,
+    description: 'Registration date',
+    example: '1977-11-11T08:55:00.000Z',
   })
   @Expose()
-  public publishedTasksCount: number;
-
-  @ApiProperty({
-    description: "User's new tasks count",
-    example: 10,
-  })
-  @Expose()
-  public newTasksCount: number;
+  public createdAt: number;
 }

@@ -1,25 +1,51 @@
-import { Injectable } from '@nestjs/common';
-import { User } from '@project/libs/shared-types';
+import { Inject, Injectable } from '@nestjs/common';
+import { CRUDRepository } from '@project/libs/utils-types';
+import { UserModel } from '../../database/models/user.model';
 import { UserEntity } from './users.entity';
 
-import { MemoryRepository } from '@project/services';
-
 @Injectable()
-export class UsersRepository extends MemoryRepository<
-  Omit<
-    UserEntity,
-    'toObject' | 'fillEntity' | 'comparePassword' | 'setPassword'
-  >,
-  User
-> {
-  public async findByEmail(email: string): Promise<User> {
-    const user = Object.values(this.repository).find(
-      (item) => item.email === email
-    );
-    if (user) {
-      return { ...user };
-    }
+export class UsersRepository
+  implements CRUDRepository<UserEntity, string, UserModel>
+{
+  constructor(
+    @Inject(UserModel) private readonly userModel: typeof UserModel
+  ) {}
 
-    return null;
+  public async findById(id: string): Promise<UserModel> {
+    return this.userModel
+      .query()
+      .where({ id })
+      .withGraphFetched('role')
+      .returning('*')
+      .first();
+  }
+
+  public async findByEmail(email: string): Promise<UserModel> {
+    return this.userModel
+      .query()
+      .where({ email })
+      .withGraphFetched('role')
+      .returning('*')
+      .first();
+  }
+
+  public async create(item: UserEntity): Promise<UserModel> {
+    return this.userModel
+      .query()
+      .insert(item.toObject())
+      .withGraphFetched('role')
+      .returning('*');
+  }
+
+  public async update(id: string, item: UserEntity): Promise<UserModel> {
+    return this.userModel
+      .query()
+      .patchAndFetchById(id, item.toObject())
+      .withGraphFetched('role')
+      .returning('*');
+  }
+
+  public async delete(id: string): Promise<void> {
+    await this.userModel.query().where({ id }).delete();
   }
 }

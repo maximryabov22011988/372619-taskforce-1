@@ -4,8 +4,10 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { v4 as makeUuid } from 'uuid';
 import { DateTimeService } from '@project/services';
-import { User, Tokens } from '@project/libs/shared-types';
+import { Tokens } from '@project/libs/shared-types';
+import { UserModel } from '../../database/models/user.model';
 import { UsersRepository } from '../users/users.repository';
 import { UsersService } from '../users/users.service';
 import { UserEntity } from '../users/users.entity';
@@ -20,72 +22,71 @@ export class AuthenticationService {
   constructor(
     private readonly usersRepository: UsersRepository,
     private readonly usersService: UsersService,
-    private readonly dateTime: DateTimeService
+    private readonly dateTimeService: DateTimeService
   ) {}
 
   public async register(dto: RegisterUserDto): Promise<void> {
-    const {
-      firstname,
-      lastname,
-      email,
-      city,
-      role,
-      birthDate,
-      password,
-      avatar,
-    } = dto;
-
-    const user = await this.usersRepository.findByEmail(email);
-    if (user) {
+    const userModel = await this.usersRepository.findByEmail(dto.email);
+    if (userModel) {
       throw new ConflictException('User already exists');
     }
 
     const userEntity = await new UserEntity({
-      firstname,
-      lastname,
-      email,
-      city,
-      role,
-      avatar,
-      birthDate: this.dateTime.getDateTimeLocale(
-        DateTimeService.UTC_FORMAT,
-        birthDate
+      id: makeUuid(),
+      firstname: dto.firstname,
+      lastname: dto.lastname,
+      email: dto.email,
+      cityId: 1,
+      roleId: 1,
+      avatarUrl: dto.avatarUrl,
+      birthDate: this.dateTimeService.formatDate(
+        dto.birthDate,
+        DateTimeService.DATE_FORMAT
       ),
-      createdAt: this.dateTime.getDateTimeLocale(DateTimeService.UTC_FORMAT),
-    }).setPassword(password);
+      info: '',
+      specializations: [],
+    }).setPassword(dto.password);
 
-    await this.usersRepository.create(userEntity.toObject());
+    await this.usersRepository.create(userEntity);
   }
 
-  public async verifyUser(dto: LoginUserDto): Promise<User> {
+  public async verifyUser(dto: LoginUserDto): Promise<UserModel> {
     const { email, password } = dto;
-    const user = await this.usersRepository.findByEmail(email);
-    if (user === null) {
+    const userModel = await this.usersRepository.findByEmail(email);
+    if (userModel === null) {
       throw new NotFoundException('User was not found');
     }
 
-    const userEntity = new UserEntity(user);
+    const userEntity = new UserEntity({
+      ...userModel,
+      specializations: [],
+    });
     if (!(await userEntity.comparePassword(password))) {
       throw new UnauthorizedException('Incorrect login or password');
     }
 
-    return userEntity.toObject();
+    // должен возвращать accessToken
+    return userModel;
   }
 
-  public async changePassword(dto: ChangePasswordDto, userId: string) {
+  public async changePassword(
+    dto: ChangePasswordDto,
+    userId: string
+  ): Promise<UserModel> {
     const { oldPassword, newPassword } = dto;
-    const user = await this.usersService.findById(userId);
+    const userModel = await this.usersService.findById(userId);
 
     await this.verifyUser({
-      email: user.email,
+      email: userModel.email,
       password: oldPassword,
     });
 
     const userEntity = await new UserEntity({
-      ...user,
+      ...userModel,
+      specializations: [],
     }).setPassword(newPassword);
 
-    return this.usersRepository.update(userId, userEntity.toObject());
+    return this.usersRepository.update(userId, userEntity);
   }
 
   public async logout(dto: LogoutUserDto): Promise<void> {}

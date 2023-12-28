@@ -1,38 +1,40 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { User } from '@project/libs/shared-types';
+import { UserModel } from '../../database/models/user.model';
 import { UsersRepository } from './users.repository';
+import { UserEntity } from './users.entity';
 import { ChangeProfileDto } from './dto/change-profile.dto';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  public async findById(userId: string): Promise<User> {
-    const user = await this.usersRepository.findById(userId);
-    if (!user) {
+  public async findById(userId: string): Promise<UserModel> {
+    const userModel = await this.usersRepository.findById(userId);
+    if (!userModel) {
       throw new NotFoundException('User was not found');
     }
 
-    return user;
+    return userModel;
   }
 
-  public async changeProfile(dto: ChangeProfileDto, userId: string) {
-    const { firstname, lastname, specialization, birthDate, info } = dto;
-    const { id, createdAt, email, city, role, passwordHash } =
-      await this.findById(userId);
+  public async changeProfile(
+    dto: ChangeProfileDto,
+    userId: string
+  ): Promise<UserModel> {
+    const userModel = await this.findById(userId);
 
-    return this.usersRepository.update(userId, {
-      id,
-      firstname,
-      lastname,
-      email,
-      passwordHash,
-      role,
-      city,
-      specialization,
-      birthDate,
-      info,
-      createdAt,
+    const userEntity = new UserEntity({
+      firstname: dto.firstname,
+      lastname: dto.lastname,
+      birthDate: dto.birthDate,
+      info: dto.info,
+      cityId: 2,
+      specializations: [],
+      email: userModel.email,
+      avatarUrl: userModel.avatarUrl ?? '',
+      roleId: 1,
     });
+
+    return this.usersRepository.update(userId, userEntity);
   }
 }

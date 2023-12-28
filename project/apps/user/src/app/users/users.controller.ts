@@ -14,8 +14,9 @@ import {
   ApiExtraModels,
   refs,
 } from '@nestjs/swagger';
-import { User, UserRole } from '@project/libs/shared-types';
-import { fillObject } from '@project/libs/utils-core';
+import { Contractor, Customer, UserRole } from '@project/libs/shared-types';
+import { UserModel } from '../../database/models/user.model';
+import { mapToUserByRole } from './users.mapper';
 import { UsersService } from './users.service';
 import { ChangeProfileDto } from './dto/change-profile.dto';
 import { ContractorUserRdo } from './rdo/contractor-user.rdo';
@@ -29,7 +30,7 @@ import { CustomerUserRdo } from './rdo/customer-user.rdo';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Get(':userId')
+  @Get('/:userId')
   @ApiOperation({ summary: 'Getting detailed information' })
   @ApiExtraModels(ContractorUserRdo, CustomerUserRdo)
   @ApiResponse({
@@ -43,12 +44,12 @@ export class UsersController {
   })
   public async getUser(
     @Param('userId') userId: string
-  ): Promise<ContractorUserRdo | CustomerUserRdo> {
-    const user = await this.usersService.findById(userId);
-    return this.getUserDataByRole(user);
+  ): Promise<Customer | Contractor> {
+    const userModel = await this.usersService.findById(userId);
+    return this.getUserRdoByRole(userModel);
   }
 
-  @Patch(':userId/profile')
+  @Patch('/:userId/profile')
   @ApiOperation({ summary: 'Change profile info' })
   @ApiExtraModels(ContractorUserRdo, CustomerUserRdo)
   @ApiResponse({
@@ -63,23 +64,19 @@ export class UsersController {
   public async changeProfile(
     @Param('userId') userId: string,
     @Body() dto: ChangeProfileDto
-  ): Promise<ContractorUserRdo | CustomerUserRdo> {
-    const user = await this.usersService.changeProfile(dto, userId);
-    return this.getUserDataByRole(user);
+  ): Promise<Customer | Contractor> {
+    const userModel = await this.usersService.changeProfile(dto, userId);
+    return this.getUserRdoByRole(userModel);
   }
 
-  private getUserDataByRole(user: User) {
-    if (user.role === UserRole.Customer) {
-      return fillObject(CustomerUserRdo, user);
-    }
-
-    if (user.role === UserRole.Contractor) {
-      return fillObject(ContractorUserRdo, user);
+  private getUserRdoByRole(userModel: UserModel): Customer | Contractor {
+    if ([UserRole.Customer, UserRole.Contractor].includes(userModel.roleId)) {
+      return mapToUserByRole(userModel);
     }
 
     throw new HttpException(
-      `User with id "${user.id}" has invalid role${
-        user.role ? ` - ${user.role}` : ''
+      `User with id "${userModel.id}" has invalid role${
+        userModel.roleId ? ` - ${userModel.roleId}` : ''
       }`,
       HttpStatus.BAD_REQUEST
     );

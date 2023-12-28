@@ -5,6 +5,7 @@
 
 import { Logger, INestApplication, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
 
@@ -24,12 +25,14 @@ const setupOpenApi = (app: INestApplication) => {
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  const configService = app.get(ConfigService);
+  const port = configService.get('app.port');
+
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
   app.enableVersioning({
     type: VersioningType.URI,
   });
-  const port = process.env.PORT || 3000;
   setupOpenApi(app);
   await app.listen(port);
 

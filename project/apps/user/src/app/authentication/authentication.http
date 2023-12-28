@@ -6,8 +6,8 @@ Content-Type: application/json
   "firstname": "John",
   "lastname": "Doe",
   "email": "john@doe.com",
-  "city": "Saint Petersburg",
-  "role": "customer",
+  "cityId": 1,
+  "roleId": 1,
   "password": "123456",
   "birthDate": "1977-11-11T08:55:00.000Z"
 }

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
-import { AvailableCity, UserRole } from '@project/libs/shared-types';
+import { Expose, Transform } from 'class-transformer';
+import { UserRole } from '@project/libs/shared-types';
 
 export class ContractorUserRdo {
   @ApiProperty({
@@ -25,19 +25,11 @@ export class ContractorUserRdo {
   public lastname: string;
 
   @ApiProperty({
-    description: 'Registration date',
-    example: '1977-11-11T08:55:00.000Z',
+    description: "User's city id",
+    example: 1,
   })
   @Expose()
-  public createdAt: string;
-
-  @ApiProperty({
-    description: "User's city",
-    enum: AvailableCity,
-    example: AvailableCity.Moscow,
-  })
-  @Expose()
-  public city: AvailableCity;
+  public cityId: number;
 
   @ApiProperty({
     description: "User's role",
@@ -45,6 +37,7 @@ export class ContractorUserRdo {
     example: UserRole.Customer,
   })
   @Expose()
+  @Transform(({ obj }) => obj.role.name)
   public role: UserRole;
 
   @ApiProperty({
@@ -67,21 +60,7 @@ export class ContractorUserRdo {
     isArray: true,
   })
   @Expose()
-  public specialization: string;
-
-  @ApiProperty({
-    description: "User's completed tasks count",
-    example: 10,
-  })
-  @Expose()
-  public completedTasksCount: number;
-
-  @ApiProperty({
-    description: "User's failed tasks count",
-    example: 1,
-  })
-  @Expose()
-  public failedTasksCount: number;
+  public specializations: string[];
 
   @ApiProperty({
     description: "User's rating",
@@ -96,4 +75,11 @@ export class ContractorUserRdo {
   })
   @Expose()
   public ratingLevel: number;
+
+  @ApiProperty({
+    description: 'Registration date',
+    example: '1977-11-11T08:55:00.000Z',
+  })
+  @Expose()
+  public createdAt: number;
 }
