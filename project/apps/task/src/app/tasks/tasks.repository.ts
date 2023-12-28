@@ -1,11 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CRUDRepository } from '@project/libs/utils-types';
-import { TaskModel } from '../../database/models/task.model';
-import { TaskEntity } from './tasks.entity';
+import {
+  TaskModel,
+  TaskModelProperties,
+} from '../../database/models/task.model';
 
 @Injectable()
 export class TasksRepository
-  implements CRUDRepository<TaskEntity, number, TaskModel>
+  implements CRUDRepository<TaskModelProperties, number, TaskModel>
 {
   constructor(
     @Inject(TaskModel) private readonly taskModel: typeof TaskModel
@@ -33,10 +35,10 @@ export class TasksRepository
       .first();
   }
 
-  public async create(item: TaskEntity): Promise<TaskModel> {
+  public async create(taskData: TaskModelProperties): Promise<TaskModel> {
     return this.taskModel
       .query()
-      .insert(item.toObject())
+      .insert(taskData)
       .withGraphFetched('tags')
       .withGraphFetched('city')
       .withGraphFetched('status')
@@ -44,10 +46,13 @@ export class TasksRepository
       .returning('*');
   }
 
-  public async update(id: number, item: TaskEntity): Promise<TaskModel> {
+  public async update(
+    id: number,
+    taskData: TaskModelProperties
+  ): Promise<TaskModel> {
     return this.taskModel
       .query()
-      .patchAndFetchById(id, item.toObject())
+      .patchAndFetchById(id, taskData)
       .withGraphFetched('tags')
       .withGraphFetched('city')
       .withGraphFetched('status')

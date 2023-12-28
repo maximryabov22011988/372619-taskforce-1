@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CommentModel } from '../../database/models/comment.model';
 import { CommentsRepository } from './comments.repository';
-import { CommentEntity } from './comments.entity';
 import { CreateCommentDto } from './dto/create-comment.dto';
 
 @Injectable()
@@ -9,12 +8,7 @@ export class CommentsService {
   constructor(private readonly commentsRepository: CommentsRepository) {}
 
   public async createComment(dto: CreateCommentDto): Promise<CommentModel> {
-    const commentEntity = new CommentEntity({
-      text: dto.text,
-      taskId: dto.taskId,
-    });
-
-    return this.commentsRepository.create(commentEntity);
+    return this.commentsRepository.create(dto);
   }
 
   public async deleteComment(commentId: number): Promise<void> {

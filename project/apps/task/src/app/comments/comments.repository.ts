@@ -1,6 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CommentModel } from '../../database/models/comment.model';
-import { CommentEntity } from './comments.entity';
+import {
+  CommentModel,
+  CommentModelProperties,
+} from '../../database/models/comment.model';
 
 @Injectable()
 export class CommentsRepository {
@@ -16,8 +18,10 @@ export class CommentsRepository {
       .first();
   }
 
-  public async create(item: CommentEntity): Promise<CommentModel> {
-    return this.commentModel.query().insert(item.toObject()).returning('*');
+  public async create(
+    commentData: CommentModelProperties
+  ): Promise<CommentModel> {
+    return this.commentModel.query().insert(commentData).returning('*');
   }
 
   public async findAllForTask(taskId: number): Promise<CommentModel[]> {
