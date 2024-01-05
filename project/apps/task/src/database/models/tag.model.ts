@@ -1,5 +1,7 @@
 import { BaseModel } from './base.model';
 
+export type TagModelProperties = Pick<TagModel, 'name'>;
+
 export class TagModel extends BaseModel {
   public static get tableName() {
     return 'tags';

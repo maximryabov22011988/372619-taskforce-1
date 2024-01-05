@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Comment } from '@project/libs/shared-types';
-import { mapToComment } from 'apps/task/src/app/comments/comments.mapper';
+import { mapToComment } from './comments.mapper';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { CommentRdo } from './rdo/comment.rdo';

@@ -1,8 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { QueryBuilderType } from 'objection';
 import {
   CommentModel,
   CommentModelProperties,
 } from '../../database/models/comment.model';
+import { CommentQuery } from './comments.query';
 
 @Injectable()
 export class CommentsRepository {
@@ -24,8 +26,14 @@ export class CommentsRepository {
     return this.commentModel.query().insert(commentData).returning('*');
   }
 
-  public async findAllForTask(taskId: number): Promise<CommentModel[]> {
-    return this.commentModel.query().where({ taskId }).returning('*');
+  public async findAllForTask(
+    taskId: number,
+    query: CommentQuery
+  ): Promise<CommentModel[]> {
+    const queryBuilder = this.commentModel.query().where({ taskId });
+    this.applyPagination(queryBuilder, query);
+
+    return queryBuilder.returning('*');
   }
 
   public async deleteAllForTask(taskId: number): Promise<void> {
@@ -34,5 +42,14 @@ export class CommentsRepository {
 
   public async delete(commentId: number): Promise<void> {
     await this.commentModel.query().where({ id: commentId }).delete();
+  }
+
+  private applyPagination(
+    queryBuilder: QueryBuilderType<CommentModel>,
+    query: CommentQuery
+  ) {
+    const { page, limit } = query;
+
+    queryBuilder.offset(limit * (page - 1)).limit(limit);
   }
 }

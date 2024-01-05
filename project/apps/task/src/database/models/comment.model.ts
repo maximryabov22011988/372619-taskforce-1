@@ -1,8 +1,10 @@
-import { Model } from 'objection';
 import { BaseModel } from './base.model';
-import { TaskModel } from './task.model';
+import { Uuid } from '@project/libs/shared-types';
 
-export type CommentModelProperties = Pick<CommentModel, 'text' | 'taskId'>;
+export type CommentModelProperties = Pick<
+  CommentModel,
+  'text' | 'taskId' | 'authorId'
+>;
 
 export class CommentModel extends BaseModel {
   public static get tableName() {
@@ -15,6 +17,7 @@ export class CommentModel extends BaseModel {
 
   public readonly text: string;
   public readonly taskId: number;
+  public readonly authorId: Uuid;
   public readonly createdAt: number;
   public readonly updatedAt: number;
 
@@ -34,6 +37,10 @@ export class CommentModel extends BaseModel {
         taskId: {
           type: 'integer',
         },
+        authorId: {
+          type: 'string',
+          format: 'uuid',
+        },
         createdAt: {
           type: 'integer',
         },
@@ -43,15 +50,4 @@ export class CommentModel extends BaseModel {
       },
     };
   }
-
-  public static relationMappings = {
-    task: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: TaskModel,
-      join: {
-        from: 'comments.taskId',
-        to: 'tasks.id',
-      },
-    },
-  };
 }

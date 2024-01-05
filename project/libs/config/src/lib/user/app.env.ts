@@ -1,13 +1,8 @@
 import { IsNumber, IsString, Max, Min, IsEnum } from 'class-validator';
+import { Environment } from '@project/libs/shared-types';
 
 const MIN_PORT = 0;
 const MAX_PORT = 65535;
-
-enum Environment {
-  Development = 'development',
-  Production = 'production',
-  Stage = 'stage',
-}
 
 export class AppEnv {
   @IsString({

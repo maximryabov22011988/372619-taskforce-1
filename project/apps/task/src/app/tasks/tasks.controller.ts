@@ -1,5 +1,6 @@
 import {
   Controller,
+  Query,
   Get,
   Post,
   Patch,
@@ -10,15 +11,16 @@ import {
   HttpStatus,
   ParseIntPipe,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { DateTimeService } from '@project/services';
-import { Comment, Task } from '@project/libs/shared-types';
-import { TaskModel } from '../../database/models/task.model';
+import { AvailableCityId, Comment, Task } from '@project/libs/shared-types';
 import { CommentsService } from '../comments/comments.service';
 import { CommentRdo } from '../comments/rdo/comment.rdo';
-import { mapToComment } from 'apps/task/src/app/comments/comments.mapper';
-import { mapToTask } from 'apps/task/src/app/tasks/tasks.mapper';
+import { mapToComment } from '../comments/comments.mapper';
+import { CommentQuery } from '../comments/comments.query';
+import { mapToTask } from '../tasks/tasks.mapper';
 import { TasksService } from './tasks.service';
+import { Sorting, TaskQuery } from './tasks.query';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { TaskRdo } from './rdo/task.rdo';
@@ -43,9 +45,45 @@ export class TasksController {
     type: TaskRdo,
     isArray: true,
   })
-  public async findAll(): Promise<Task[]> {
-    const tasksModels = await this.tasksService.findAll();
-    return tasksModels.map(this.getTaskRdo);
+  @ApiQuery({
+    name: 'page',
+    type: Number,
+    description: 'Page number. It is used for paginating',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'limit',
+    type: Number,
+    description: 'Max limit records',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'categoryId',
+    type: Number,
+    description: 'Selection by category id',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'tagId',
+    type: Number,
+    description: 'Selection by tag id',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'cityId',
+    enum: AvailableCityId,
+    description: 'Selection by city id',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'sorting',
+    enum: Sorting,
+    description: 'Selection by passed sort',
+    required: false,
+  })
+  public async findAll(@Query() query: TaskQuery): Promise<Task[]> {
+    const tasksModels = await this.tasksService.findAll(query);
+    return tasksModels.map(mapToTask);
   }
 
   @Get('/:taskId')
@@ -63,7 +101,7 @@ export class TasksController {
     @Param('taskId', ParseIntPipe) taskId: number
   ): Promise<Task> {
     const taskModel = await this.tasksService.findById(taskId);
-    return this.getTaskRdo(taskModel);
+    return mapToTask(taskModel);
   }
 
   @Post('/')
@@ -79,7 +117,7 @@ export class TasksController {
   })
   public async createTask(@Body() dto: CreateTaskDto): Promise<Task> {
     const taskModel = await this.tasksService.createTask(dto);
-    return this.getTaskRdo(taskModel);
+    return mapToTask(taskModel);
   }
 
   @Patch('/:taskId')
@@ -98,7 +136,7 @@ export class TasksController {
     @Body() dto: UpdateTaskDto
   ): Promise<Task> {
     const taskModel = await this.tasksService.updateTask(taskId, dto);
-    return this.getTaskRdo(taskModel);
+    return mapToTask(taskModel);
   }
 
   @Delete('/:taskId')
@@ -124,6 +162,18 @@ export class TasksController {
 
   @Get('/:taskId/comments')
   @ApiOperation({ summary: 'Getting task comment list' })
+  @ApiQuery({
+    name: 'page',
+    type: Number,
+    description: 'Page number. It is used for paginating',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'limit',
+    type: Number,
+    description: 'Max limit records',
+    required: false,
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Comment list',
@@ -131,9 +181,16 @@ export class TasksController {
     isArray: true,
   })
   public async findAllForTask(
-    @Param('taskId', ParseIntPipe) taskId: number
+    @Param('taskId', ParseIntPipe) taskId: number,
+    @Query() query: CommentQuery
   ): Promise<Comment[]> {
-    const commentsModels = await this.commentsService.findAllForTask(taskId);
+    await this.tasksService.findById(taskId);
+
+    const commentsModels = await this.commentsService.findAllForTask(
+      taskId,
+      query
+    );
+
     return commentsModels.map(mapToComment);
   }
 
@@ -155,13 +212,8 @@ export class TasksController {
   public async deleteComments(
     @Param('taskId', ParseIntPipe) taskId: number
   ): Promise<void> {
+    await this.tasksService.findById(taskId);
+
     await this.commentsService.deleteAllForTask(taskId);
   }
-
-  private getTaskRdo = (taskModel: TaskModel): Task => {
-    return mapToTask(
-      taskModel,
-      this.dateTimeService.formatDate(taskModel.executionDate)
-    );
-  };
 }

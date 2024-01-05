@@ -22,4 +22,11 @@ export class CommentRdo {
   })
   @Expose()
   public taskId: number;
+
+  @ApiProperty({
+    description: 'Comment author id',
+    example: 'da7f1411-dd49-4689-a2de-cda2f0e9bf85',
+  })
+  @Expose()
+  public authorId: string;
 }

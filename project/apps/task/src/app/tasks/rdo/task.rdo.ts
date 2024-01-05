@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
+import parseInt from 'lodash/parseInt';
 import { AvailableCity, TaskStatus } from '@project/libs/shared-types';
+import { dateTimeService } from '@project/services';
 
 export class TaskRdo {
   @ApiProperty({
@@ -8,7 +10,7 @@ export class TaskRdo {
     example: 1,
   })
   @Expose()
-  public id?: number;
+  public id: number;
 
   @ApiProperty({
     description: "Task's title",
@@ -44,6 +46,7 @@ export class TaskRdo {
     example: '2023-12-25T00:00:00.000Z',
   })
   @Expose()
+  @Transform(({ obj }) => dateTimeService.formatDate(obj.executionDate))
   public executionDate: string;
 
   @ApiProperty({
@@ -67,6 +70,7 @@ export class TaskRdo {
     type: String,
   })
   @Expose()
+  @Transform(({ obj }) => obj.tags.map(({ name }) => name))
   public tags: string[];
 
   @ApiProperty({
@@ -95,11 +99,13 @@ export class TaskRdo {
   public customerId: string;
 
   @ApiProperty({
-    description: "Task's contractor",
-    example: 'da7f1411-dd49-4689-a2de-cda2f0e9bf85',
+    description: "Task's comments count",
+    type: Number,
+    example: 12,
   })
   @Expose()
-  public contractorId: string;
+  @Transform(({ obj }) => parseInt(obj.commentsCount))
+  public commentsCount: number;
 
   @ApiProperty({
     description: 'Date of creation task',

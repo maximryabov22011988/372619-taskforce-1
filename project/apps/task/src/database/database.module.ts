@@ -8,6 +8,7 @@ import { StatusModel } from './models/status.model';
 import { TagModel } from './models/tag.model';
 import { CommentModel } from './models/comment.model';
 import { TaskModel } from './models/task.model';
+import { TasksTagsModel } from './models/tasks-tags.model';
 import { knex } from './knex';
 
 @Global()
@@ -31,6 +32,7 @@ import { knex } from './knex';
       TagModel,
       CommentModel,
       TaskModel,
+      TasksTagsModel,
     ]),
   ],
   exports: [ObjectionModule],

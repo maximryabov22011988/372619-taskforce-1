@@ -7,6 +7,7 @@ export async function up(knex: Knex) {
     table.increments('id').primary();
     table.string('text', 300).notNullable();
     table.integer('task_id').unsigned().notNullable();
+    table.uuid('author_id').notNullable();
     table.timestamp('created_at').defaultTo(knex.fn.now()).notNullable();
     table.timestamp('updated_at').defaultTo(knex.fn.now()).notNullable();
 

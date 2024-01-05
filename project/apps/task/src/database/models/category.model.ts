@@ -1,5 +1,7 @@
 import { BaseModel } from './base.model';
 
+export type CategoryModelProperties = Pick<CategoryModel, 'name'>;
+
 export class CategoryModel extends BaseModel {
   public static get tableName() {
     return 'categories';
