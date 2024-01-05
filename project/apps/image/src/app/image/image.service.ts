@@ -59,7 +59,7 @@ export class ImageService {
     const writedFile = `${fileName}.${fileExtension}`;
 
     const [year, month] = this.dateTime
-      .getDate('YYYY MM', new Date())
+      .getFormattedDate(new Date(), 'YYYY MM')
       .split(' ');
     const subDirectory = `${year}/${month}`;
 
