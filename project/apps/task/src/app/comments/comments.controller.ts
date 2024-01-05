@@ -6,7 +6,6 @@ import {
   Param,
   HttpCode,
   HttpStatus,
-  ParseIntPipe,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Comment } from '@project/libs/shared-types';
@@ -55,7 +54,7 @@ export class CommentsController {
     description: 'Unauthorized',
   })
   public async deleteComment(
-    @Param('commentId', ParseIntPipe) commentId: number
+    @Param('commentId') commentId: number
   ): Promise<void> {
     await this.commentsService.deleteComment(commentId);
   }

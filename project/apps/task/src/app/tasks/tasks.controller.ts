@@ -9,7 +9,6 @@ import {
   Param,
   HttpCode,
   HttpStatus,
-  ParseIntPipe,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { DateTimeService } from '@project/services';
@@ -97,9 +96,7 @@ export class TasksController {
     status: HttpStatus.NOT_FOUND,
     description: 'Not found',
   })
-  public async findById(
-    @Param('taskId', ParseIntPipe) taskId: number
-  ): Promise<Task> {
+  public async findById(@Param('taskId') taskId: number): Promise<Task> {
     const taskModel = await this.tasksService.findById(taskId);
     return mapToTask(taskModel);
   }
@@ -132,7 +129,7 @@ export class TasksController {
     description: 'Not found',
   })
   public async updateTask(
-    @Param('taskId', ParseIntPipe) taskId: number,
+    @Param('taskId') taskId: number,
     @Body() dto: UpdateTaskDto
   ): Promise<Task> {
     const taskModel = await this.tasksService.updateTask(taskId, dto);
@@ -154,9 +151,7 @@ export class TasksController {
     status: HttpStatus.UNAUTHORIZED,
     description: 'Unauthorized',
   })
-  public async deleteTask(
-    @Param('taskId', ParseIntPipe) taskId: number
-  ): Promise<void> {
+  public async deleteTask(@Param('taskId') taskId: number): Promise<void> {
     await this.tasksService.deleteTask(taskId);
   }
 
@@ -181,7 +176,7 @@ export class TasksController {
     isArray: true,
   })
   public async findAllForTask(
-    @Param('taskId', ParseIntPipe) taskId: number,
+    @Param('taskId') taskId: number,
     @Query() query: CommentQuery
   ): Promise<Comment[]> {
     await this.tasksService.findById(taskId);
@@ -209,9 +204,7 @@ export class TasksController {
     status: HttpStatus.UNAUTHORIZED,
     description: 'Unauthorized',
   })
-  public async deleteComments(
-    @Param('taskId', ParseIntPipe) taskId: number
-  ): Promise<void> {
+  public async deleteComments(@Param('taskId') taskId: number): Promise<void> {
     await this.tasksService.findById(taskId);
 
     await this.commentsService.deleteAllForTask(taskId);

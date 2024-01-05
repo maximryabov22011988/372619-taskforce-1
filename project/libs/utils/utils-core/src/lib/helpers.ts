@@ -5,7 +5,7 @@ export const fillObject = <T, V>(
   plainObject: V
 ) => plainToInstance(someDto, plainObject, { excludeExtraneousValues: true });
 
-export const transform: Record<string, (params: { value: any }) => any> = {
+export const transform = {
   numericStringToNumber: ({ value }: { value: string }) => parseInt(value, 10),
 };
 
