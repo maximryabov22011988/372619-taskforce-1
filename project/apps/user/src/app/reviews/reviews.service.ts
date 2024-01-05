@@ -8,6 +8,9 @@ export class ReviewsService {
   constructor(private readonly reviewsRepository: ReviewsRepository) {}
 
   public async createReview(dto: CreateReviewDto): Promise<ReviewModel> {
-    return this.reviewsRepository.create(dto);
+    return this.reviewsRepository.create({
+      ...dto,
+      authorId: '8148308b-f6d9-432f-a442-70efba47a473',
+    });
   }
 }

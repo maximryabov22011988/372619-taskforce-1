@@ -1,12 +1,3 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { BaseAuthRdo } from './base.rdo';
 
-export class LoggedUserRdo {
-  @ApiProperty({
-    description: 'Access token',
-    example:
-      'eyJhbGciOiJIUzUxMiIsI.hgJhbGciOiTOOzUxMiIsI.ytJhbGciOiJgreUzUxMiIsI',
-  })
-  @Expose()
-  public accessToken: string;
-}
+export class LoggedUserRdo extends BaseAuthRdo {}

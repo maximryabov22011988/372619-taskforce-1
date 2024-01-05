@@ -23,10 +23,10 @@ import { UserModel } from './models/user.model';
       }),
     }),
     ObjectionModule.forFeature([
-      UserModel,
-      SpecializationModel,
       RoleModel,
+      SpecializationModel,
       ReviewModel,
+      UserModel,
     ]),
   ],
   exports: [ObjectionModule],

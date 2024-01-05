@@ -1,14 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsJWT, IsNotEmpty } from 'class-validator';
+import { Expose } from 'class-transformer';
 
-export class LogoutUserDto {
+export class BaseAuthRdo {
   @ApiProperty({
     description: 'Access token',
     example:
       'eyJhbGciOiJIUzUxMiIsI.hgJhbGciOiTOOzUxMiIsI.ytJhbGciOiJgreUzUxMiIsI',
   })
-  @IsNotEmpty()
-  @IsString()
-  @IsJWT()
+  @Expose()
   public accessToken: string;
 }

@@ -2,7 +2,6 @@ import {
   Controller,
   Get,
   Param,
-  HttpException,
   HttpStatus,
   Patch,
   Body,
@@ -14,8 +13,7 @@ import {
   ApiExtraModels,
   refs,
 } from '@nestjs/swagger';
-import { Contractor, Customer, UserRole } from '@project/libs/shared-types';
-import { UserModel } from '../../database/models/user.model';
+import { Contractor, Customer } from '@project/libs/shared-types';
 import { mapToUserByRole } from './users.mapper';
 import { UsersService } from './users.service';
 import { ChangeProfileDto } from './dto/change-profile.dto';
@@ -46,7 +44,7 @@ export class UsersController {
     @Param('userId') userId: string
   ): Promise<Customer | Contractor> {
     const userModel = await this.usersService.findById(userId);
-    return this.getUserRdoByRole(userModel);
+    return mapToUserByRole(userModel);
   }
 
   @Patch('/:userId/profile')
@@ -66,19 +64,6 @@ export class UsersController {
     @Body() dto: ChangeProfileDto
   ): Promise<Customer | Contractor> {
     const userModel = await this.usersService.changeProfile(dto, userId);
-    return this.getUserRdoByRole(userModel);
-  }
-
-  private getUserRdoByRole(userModel: UserModel): Customer | Contractor {
-    if ([UserRole.Customer, UserRole.Contractor].includes(userModel.roleId)) {
-      return mapToUserByRole(userModel);
-    }
-
-    throw new HttpException(
-      `User with id "${userModel.id}" has invalid role${
-        userModel.roleId ? ` - ${userModel.roleId}` : ''
-      }`,
-      HttpStatus.BAD_REQUEST
-    );
+    return mapToUserByRole(userModel);
   }
 }

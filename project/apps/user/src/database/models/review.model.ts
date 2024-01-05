@@ -1,8 +1,9 @@
 import { BaseModel } from './base.model';
+import { Uuid } from '@project/libs/shared-types';
 
 export type ReviewModelProperties = Pick<
   ReviewModel,
-  'text' | 'taskId' | 'rating'
+  'text' | 'taskId' | 'authorId' | 'rating'
 >;
 
 export class ReviewModel extends BaseModel {
@@ -17,13 +18,14 @@ export class ReviewModel extends BaseModel {
   public readonly text: string;
   public readonly taskId: number;
   public readonly rating: number;
+  public readonly authorId: Uuid;
   public readonly createdAt: number;
   public readonly updatedAt: number;
 
   public static get jsonSchema() {
     return {
       type: 'object',
-      required: ['text', 'taskId', 'rating'],
+      required: ['text', 'taskId', 'authorId', 'rating'],
       properties: {
         id: {
           type: 'integer',
@@ -35,6 +37,10 @@ export class ReviewModel extends BaseModel {
         },
         taskId: {
           type: 'integer',
+        },
+        authorId: {
+          type: 'string',
+          format: 'uuid',
         },
         rating: {
           type: 'integer',

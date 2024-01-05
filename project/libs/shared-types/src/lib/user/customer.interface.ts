@@ -1,13 +1,3 @@
-import { User } from './user.interface';
+import { BaseUser } from './user.interface';
 
-export type Customer = Pick<
-  User,
-  | 'id'
-  | 'firstname'
-  | 'lastname'
-  | 'createdAt'
-  | 'cityId'
-  | 'email'
-  | 'info'
-  | 'role'
->;
+export type Customer = BaseUser;

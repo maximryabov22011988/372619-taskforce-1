@@ -24,6 +24,13 @@ export class ReviewRdo {
   public taskId: number;
 
   @ApiProperty({
+    description: 'Review author id',
+    example: 'da7f1411-dd49-4689-a2de-cda2f0e9bf85',
+  })
+  @Expose()
+  public authorId: string;
+
+  @ApiProperty({
     description: 'Rating',
     example: 4,
   })

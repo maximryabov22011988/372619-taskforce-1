@@ -36,13 +36,13 @@ export class AuthenticationService {
       firstname: dto.firstname,
       lastname: dto.lastname,
       email: dto.email,
-      cityId: 1,
-      roleId: 1,
-      avatarUrl: dto.avatarUrl,
+      cityId: dto.cityId,
+      roleId: dto.roleId,
       birthDate: this.dateTimeService.formatDate(
         dto.birthDate,
         DateTimeService.DATE_FORMAT
       ),
+      avatarUrl: dto.avatarUrl ?? '',
       info: '',
       specializations: [],
     }).setPassword(dto.password);
@@ -82,8 +82,18 @@ export class AuthenticationService {
     });
 
     const userEntity = await new UserEntity({
-      ...userModel,
+      firstname: userModel.firstname,
+      lastname: userModel.lastname,
+      birthDate: this.dateTimeService.formatDate(
+        userModel.birthDate,
+        DateTimeService.DATE_FORMAT
+      ),
+      info: userModel.info,
       specializations: [],
+      cityId: userModel.cityId,
+      email: userModel.email,
+      roleId: userModel.roleId,
+      avatarUrl: userModel.avatarUrl,
     }).setPassword(newPassword);
 
     return this.usersRepository.update(userId, userEntity);

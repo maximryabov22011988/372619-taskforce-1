@@ -5,8 +5,8 @@ const tableName = 'users';
 export async function up(knex: Knex) {
   await knex.schema.createTable(tableName, (table) => {
     table.uuid('id').primary();
-    table.string('firstname', 25).notNullable();
-    table.string('lastname', 25).notNullable();
+    table.string('firstname', 50).notNullable();
+    table.string('lastname', 50).notNullable();
     table.string('email', 250).notNullable().unique();
     table.integer('city_id').unsigned().notNullable();
     table.string('password_hash', 60).notNullable();

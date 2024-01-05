@@ -16,6 +16,7 @@ export class UsersRepository
       .query()
       .where({ id })
       .withGraphFetched('role')
+      .withGraphFetched('reviews')
       .returning('*')
       .first();
   }
@@ -25,6 +26,7 @@ export class UsersRepository
       .query()
       .where({ email })
       .withGraphFetched('role')
+      .withGraphFetched('reviews')
       .returning('*')
       .first();
   }
@@ -34,6 +36,7 @@ export class UsersRepository
       .query()
       .insert(item.toObject())
       .withGraphFetched('role')
+      .withGraphFetched('reviews')
       .returning('*');
   }
 
@@ -42,6 +45,7 @@ export class UsersRepository
       .query()
       .patchAndFetchById(id, item.toObject())
       .withGraphFetched('role')
+      .withGraphFetched('reviews')
       .returning('*');
   }
 
