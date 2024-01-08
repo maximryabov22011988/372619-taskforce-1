@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
 import { UserRole } from '@project/libs/shared-types';
-import { dateTimeService } from '@project/services';
+import { dateTimeService } from '@project/libs/services';
 
 export class BaseUserRdo {
   @ApiProperty({

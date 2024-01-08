@@ -30,7 +30,7 @@ export class TasksRepository
     await this.applyFilters(queryBuilder, query);
     this.applyPaginationAndSorting(queryBuilder, query);
 
-    // добавить инфу: количество откликов
+    // FIXME добавить инфу: количество откликов
     return queryBuilder
       .withGraphFetched('tags')
       .withGraphFetched('city')

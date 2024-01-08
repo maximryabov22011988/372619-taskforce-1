@@ -4,7 +4,7 @@ import {
   ValidationOptions,
   ValidatorConstraintInterface,
 } from 'class-validator';
-import { dateTimeService } from '@project/services';
+import { dateTimeService } from '@project/libs/services';
 
 const MIN_AGE = 18;
 

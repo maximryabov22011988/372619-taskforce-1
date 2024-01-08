@@ -29,7 +29,8 @@ export default registerAs('app', (): AppConfig => {
   });
 
   if (errors.length) {
-    throw new Error(errors.toString());
+    throw new Error(`[App config]: Environments validation failed. Please check .image.env file.
+      Error message: ${errors.toString()}`);
   }
 
   return config;

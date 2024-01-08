@@ -4,9 +4,10 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { v4 as makeUuid } from 'uuid';
-import { DateTimeService } from '@project/services';
-import { Tokens } from '@project/libs/shared-types';
+import { DateTimeService } from '@project/libs/services';
+import { Tokens, AccessTokenPayload } from '@project/libs/shared-types';
 import { UserModel } from '../../database/models/user.model';
 import { UsersRepository } from '../users/users.repository';
 import { UsersService } from '../users/users.service';
@@ -22,6 +23,7 @@ export class AuthenticationService {
   constructor(
     private readonly usersRepository: UsersRepository,
     private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
     private readonly dateTimeService: DateTimeService
   ) {}
 
@@ -65,7 +67,6 @@ export class AuthenticationService {
       throw new UnauthorizedException('Incorrect login or password');
     }
 
-    // должен возвращать accessToken
     return userModel;
   }
 
@@ -103,5 +104,21 @@ export class AuthenticationService {
 
   public async updateTokens(dto: UpdateTokensDto): Promise<Tokens> {
     return { accessToken: '', refreshToken: '' };
+  }
+
+  public async createUserToken(
+    userModel: UserModel
+  ): Promise<Pick<Tokens, 'accessToken'>> {
+    const payload: AccessTokenPayload = {
+      sub: userModel.id,
+      email: userModel.email,
+      roleId: userModel.roleId,
+      lastname: userModel.lastname,
+      firstname: userModel.firstname,
+    };
+
+    return {
+      accessToken: await this.jwtService.signAsync(payload),
+    };
   }
 }

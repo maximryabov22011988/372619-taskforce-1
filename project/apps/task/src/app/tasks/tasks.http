@@ -1,6 +1,7 @@
 ### Создание нового задания
 POST  http://localhost:3002/api/v1/tasks HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZGJkN2UwYy03Zjg4LTQ3YmQtYjE4My1lNjE5NGFlNWM0MTkiLCJlbWFpbCI6ImpvaG45M0Bkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ3MTQ2MTcsImV4cCI6MTcwNDcxODIxN30.jfPH-QXRLxNborqWBgWUj0xy4rTFeaF1vxGvpihn1cw
 
 {
   "title": "Task long long title",
@@ -18,18 +19,21 @@ Content-Type: application/json
 ### Получение списка заданий
 GET  http://localhost:3002/api/v1/tasks?page=1&cityId=1&categoryId=1&tagId=5 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZGJkN2UwYy03Zjg4LTQ3YmQtYjE4My1lNjE5NGFlNWM0MTkiLCJlbWFpbCI6ImpvaG45M0Bkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ3MTQ2MTcsImV4cCI6MTcwNDcxODIxN30.jfPH-QXRLxNborqWBgWUj0xy4rTFeaF1vxGvpihn1cw
 
 
 
 ### Получение детальной информации о задаче
 GET  http://localhost:3002/api/v1/tasks/1 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZGJkN2UwYy03Zjg4LTQ3YmQtYjE4My1lNjE5NGFlNWM0MTkiLCJlbWFpbCI6ImpvaG45M0Bkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ3MTQ2MTcsImV4cCI6MTcwNDcxODIxN30.jfPH-QXRLxNborqWBgWUj0xy4rTFeaF1vxGvpihn1cw
 
 
 
 ### Обновление данных по задаче
 PATCH  http://localhost:3002/api/v1/tasks/1 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZGJkN2UwYy03Zjg4LTQ3YmQtYjE4My1lNjE5NGFlNWM0MTkiLCJlbWFpbCI6ImpvaG45M0Bkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ3MTQ2MTcsImV4cCI6MTcwNDcxODIxN30.jfPH-QXRLxNborqWBgWUj0xy4rTFeaF1vxGvpihn1cw
 
 {
   "statusId": 2,
@@ -41,15 +45,18 @@ Content-Type: application/json
 ### Удаление существующей задачи
 DELETE  http://localhost:3002/api/v1/tasks/1 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZGJkN2UwYy03Zjg4LTQ3YmQtYjE4My1lNjE5NGFlNWM0MTkiLCJlbWFpbCI6ImpvaG45M0Bkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ3MTQ2MTcsImV4cCI6MTcwNDcxODIxN30.jfPH-QXRLxNborqWBgWUj0xy4rTFeaF1vxGvpihn1cw
 
 
 
 ### Получение списка комментариев для определенного задания
 GET  http://localhost:3002/api/v1/tasks/8/comments?page=1 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZGJkN2UwYy03Zjg4LTQ3YmQtYjE4My1lNjE5NGFlNWM0MTkiLCJlbWFpbCI6ImpvaG45M0Bkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ3MTQ2MTcsImV4cCI6MTcwNDcxODIxN30.jfPH-QXRLxNborqWBgWUj0xy4rTFeaF1vxGvpihn1cw
 
 
 
 ### Удаление всех комментариев задания
 DELETE  http://localhost:3002/api/v1/tasks/1/comments HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZGJkN2UwYy03Zjg4LTQ3YmQtYjE4My1lNjE5NGFlNWM0MTkiLCJlbWFpbCI6ImpvaG45M0Bkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ3MTQ2MTcsImV4cCI6MTcwNDcxODIxN30.jfPH-QXRLxNborqWBgWUj0xy4rTFeaF1vxGvpihn1cw

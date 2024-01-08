@@ -4,7 +4,7 @@ import {
   ValidationOptions,
   ValidatorConstraintInterface,
 } from 'class-validator';
-import { dateTimeService } from '@project/services';
+import { dateTimeService } from '@project/libs/services';
 
 @ValidatorConstraint({ name: 'IsSameOrAfterToday', async: false })
 class IsSameOrAfterTodayValidator implements ValidatorConstraintInterface {

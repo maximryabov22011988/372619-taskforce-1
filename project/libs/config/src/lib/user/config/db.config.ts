@@ -34,7 +34,8 @@ export default registerAs('db', (): DbConfig => {
   });
 
   if (errors.length) {
-    throw new Error(errors.toString());
+    throw new Error(`[DB config]: Environments validation failed. Please check .user.env file.
+      Error message: ${errors.toString()}`);
   }
 
   return config;

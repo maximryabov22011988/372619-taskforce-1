@@ -4,7 +4,7 @@ import { Customer, Contractor, UserRoleId } from '@project/libs/shared-types';
 import { UserModel } from '../../database/models/user.model';
 import { CustomerUserRdo } from './rdo/customer-user.rdo';
 import { ContractorUserRdo } from './rdo/contractor-user.rdo';
-import { dateTimeService, DateTimeService } from '@project/services';
+import { dateTimeService } from '@project/libs/services';
 
 export const mapToUserByRole = (
   userModel: UserModel

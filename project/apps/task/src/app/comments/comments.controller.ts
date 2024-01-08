@@ -6,9 +6,11 @@ import {
   Param,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Comment } from '@project/libs/shared-types';
+import { JwtAuthGuard } from '@project/libs/validators';
 import { mapToComment } from './comments.mapper';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
@@ -22,6 +24,7 @@ import { CommentRdo } from './rdo/comment.rdo';
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post('/')
   @ApiOperation({ summary: 'Creating new comment' })
   @ApiResponse({
@@ -38,6 +41,7 @@ export class CommentsController {
     return mapToComment(commentModel);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete('/:commentId')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Deleting existing comment' })

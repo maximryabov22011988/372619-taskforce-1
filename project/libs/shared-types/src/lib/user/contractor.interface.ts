@@ -1,8 +1,8 @@
-import { BaseUser } from './user.interface';
+import { User } from './user.interface';
 
 export type Specialization = string;
 
-export interface Contractor extends BaseUser {
+export interface Contractor extends User {
   age: number;
   specializations: Specialization[];
   rating: number;

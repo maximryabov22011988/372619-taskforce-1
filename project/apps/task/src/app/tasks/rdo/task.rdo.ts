@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
 import parseInt from 'lodash/parseInt';
 import { AvailableCity, TaskStatus } from '@project/libs/shared-types';
-import { dateTimeService } from '@project/services';
+import { dateTimeService } from '@project/libs/services';
 
 export class TaskRdo {
   @ApiProperty({

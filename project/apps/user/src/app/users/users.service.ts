@@ -3,7 +3,7 @@ import { UserModel } from '../../database/models/user.model';
 import { UsersRepository } from './users.repository';
 import { UserEntity } from './users.entity';
 import { ChangeProfileDto } from './dto/change-profile.dto';
-import { DateTimeService } from '@project/services';
+import { DateTimeService } from '@project/libs/services';
 
 @Injectable()
 export class UsersService {

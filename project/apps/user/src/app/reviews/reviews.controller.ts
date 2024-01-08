@@ -1,6 +1,7 @@
-import { Controller, Post, Body, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, HttpStatus, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Review } from '@project/libs/shared-types';
+import { JwtAuthGuard } from '@project/libs/validators';
 import { ReviewsService } from './reviews.service';
 import { mapToReview } from './reviews.mapper';
 import { CreateReviewDto } from './dto/create-review.dto';
@@ -14,6 +15,7 @@ import { ReviewRdo } from './rdo/review.rdo';
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post('/')
   @ApiOperation({ summary: 'Creating new review' })
   @ApiResponse({

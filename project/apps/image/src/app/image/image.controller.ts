@@ -8,6 +8,7 @@ import {
   Param,
   Inject,
   UsePipes,
+  UseGuards,
 } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -20,7 +21,8 @@ import {
 import { Express } from 'express';
 import assign from 'lodash/assign';
 import { fillObject } from '@project/libs/utils-core';
-import { ImageConfig } from '@project/config';
+import { ImageConfig } from '@project/libs/config';
+import { JwtAuthGuard } from '@project/libs/validators';
 import { ImageFile } from '@project/libs/shared-types';
 import { ImageService } from './image.service';
 import { MongoIdValidationPipe } from './pipe/mongo-id-validation.pipe';
@@ -69,6 +71,7 @@ export class ImageController {
     return this.getImageFile(newImageFile);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('/upload')
   @ApiOperation({ summary: 'Uploading image' })
   @ApiBody({
@@ -87,6 +90,10 @@ export class ImageController {
     description: 'Image file is successfully uploaded',
     type: UploadedImageFileRdo,
   })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+  })
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
   @UsePipes(new FileSizeValidationPipe({ maxSizeInKb: 1000 }))
@@ -97,6 +104,7 @@ export class ImageController {
     return this.getImageFile(newImageFile);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':fileId')
   @ApiOperation({ summary: 'Getting image file' })
   @ApiResponse({
@@ -107,6 +115,10 @@ export class ImageController {
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
     description: 'Not found',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
   })
   public async getImageFileById(
     @Param('fileId', MongoIdValidationPipe) fileId: string

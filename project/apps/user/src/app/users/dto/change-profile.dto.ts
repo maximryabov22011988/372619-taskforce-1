@@ -9,7 +9,7 @@ import {
   Length,
   MaxLength,
 } from 'class-validator';
-import { MinimumValidAge } from '@project/validators';
+import { MinimumValidAge } from '@project/libs/validators';
 import { AvailableCityId } from '@project/libs/shared-types';
 import { UserRule } from '../users.validation';
 

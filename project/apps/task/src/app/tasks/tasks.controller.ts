@@ -9,10 +9,11 @@ import {
   Param,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
-import { DateTimeService } from '@project/services';
 import { AvailableCityId, Comment, Task } from '@project/libs/shared-types';
+import { JwtAuthGuard } from '@project/libs/validators';
 import { CommentsService } from '../comments/comments.service';
 import { CommentRdo } from '../comments/rdo/comment.rdo';
 import { mapToComment } from '../comments/comments.mapper';
@@ -32,10 +33,10 @@ import { TaskRdo } from './rdo/task.rdo';
 export class TasksController {
   constructor(
     private readonly tasksService: TasksService,
-    private readonly commentsService: CommentsService,
-    private readonly dateTimeService: DateTimeService
+    private readonly commentsService: CommentsService
   ) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get('/')
   @ApiOperation({ summary: 'Getting task list' })
   @ApiResponse({
@@ -80,11 +81,22 @@ export class TasksController {
     description: 'Selection by passed sort',
     required: false,
   })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Task details',
+    isArray: true,
+    type: TaskRdo,
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+  })
   public async findAll(@Query() query: TaskQuery): Promise<Task[]> {
     const tasksModels = await this.tasksService.findAll(query);
     return tasksModels.map(mapToTask);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/:taskId')
   @ApiOperation({ summary: 'Getting detailed information about task' })
   @ApiResponse({
@@ -96,11 +108,16 @@ export class TasksController {
     status: HttpStatus.NOT_FOUND,
     description: 'Not found',
   })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+  })
   public async findById(@Param('taskId') taskId: number): Promise<Task> {
     const taskModel = await this.tasksService.findById(taskId);
     return mapToTask(taskModel);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('/')
   @ApiOperation({ summary: 'Creating new task' })
   @ApiResponse({
@@ -117,6 +134,7 @@ export class TasksController {
     return mapToTask(taskModel);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch('/:taskId')
   @ApiOperation({ summary: 'Update existing task' })
   @ApiResponse({
@@ -136,6 +154,7 @@ export class TasksController {
     return mapToTask(taskModel);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete('/:taskId')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete existing task' })
@@ -155,6 +174,7 @@ export class TasksController {
     await this.tasksService.deleteTask(taskId);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/:taskId/comments')
   @ApiOperation({ summary: 'Getting task comment list' })
   @ApiQuery({
@@ -175,6 +195,10 @@ export class TasksController {
     type: CommentRdo,
     isArray: true,
   })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+  })
   public async findAllForTask(
     @Param('taskId') taskId: number,
     @Query() query: CommentQuery
@@ -189,6 +213,7 @@ export class TasksController {
     return commentsModels.map(mapToComment);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete('/:taskId/comments')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Deleting all comments belonging to the task' })

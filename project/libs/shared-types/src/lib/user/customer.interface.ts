@@ -1,3 +1,3 @@
-import { BaseUser } from './user.interface';
+import { User } from './user.interface';
 
-export type Customer = BaseUser;
+export type Customer = User;

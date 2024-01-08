@@ -4,12 +4,12 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { v4 as makeUuid } from 'uuid';
-import { DateTimeService } from '@project/services';
+import { DateTimeService } from '@project/libs/services';
 import { TaskStatusId } from '@project/libs/shared-types';
 import { TaskModel } from '../../database/models/task.model';
 import { CategoryModel } from '../../database/models/category.model';
-import { CategoriesRepository } from './repository/category.repository';
-import { TagsRepository } from './repository/tag.repository';
+import { CategoriesRepository } from './repository/categories.repository';
+import { TagsRepository } from './repository/tags.repository';
 import { TasksRepository } from './repository/tasks.repository';
 import { TaskQuery } from './tasks.query';
 import { CreateTaskDto } from './dto/create-task.dto';

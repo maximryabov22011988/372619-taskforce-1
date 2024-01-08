@@ -10,7 +10,7 @@ import {
   IsNotEmpty,
   IsEnum,
 } from 'class-validator';
-import { MinimumValidAge } from '@project/validators';
+import { MinimumValidAge } from '@project/libs/validators';
 import { UserRule } from '../../users/users.validation';
 import { PasswordRule } from '../authentication.validation';
 

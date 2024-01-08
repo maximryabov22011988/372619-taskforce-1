@@ -13,7 +13,7 @@ import {
   ArrayMaxSize,
 } from 'class-validator';
 import { AvailableCityId } from '@project/libs/shared-types';
-import { IsSameOrAfterToday } from '@project/validators';
+import { IsSameOrAfterToday } from '@project/libs/validators';
 import { TaskValidationRule } from '../tasks.validation';
 
 export class CreateTaskDto {

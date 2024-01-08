@@ -5,7 +5,7 @@ export type Email = string;
 export type Password = string;
 export type ImageUrl = string;
 
-export interface BaseUser {
+export interface User {
   id?: Uuid;
   firstname: string;
   lastname: string;
