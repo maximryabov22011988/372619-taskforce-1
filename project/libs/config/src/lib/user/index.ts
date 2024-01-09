@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { jwtConfig } from '../jwt';
+import { jwtConfig } from '../shared/jwt';
 import { default as appConfig } from './config/app.config';
 import { default as dbConfig } from './config/db.config';
 
