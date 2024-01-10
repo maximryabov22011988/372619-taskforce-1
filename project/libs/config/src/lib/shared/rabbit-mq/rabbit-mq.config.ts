@@ -1,7 +1,7 @@
 import { registerAs } from '@nestjs/config';
 import { validateSync } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
-import { RabbitMqEnv } from '../rabbit-mq.env';
+import { RabbitMqEnv } from './rabbit-mq.env';
 
 const DEFAULT_RABBIT_MQ_PORT = 5672;
 

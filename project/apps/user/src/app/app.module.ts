@@ -5,6 +5,7 @@ import { DatabaseModule } from '../database/database.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { UsersModule } from './users/users.module';
 import { ReviewsModule } from './reviews/reviews.module';
+import { NotifyModule } from './notify/notify.module';
 
 const { UserConfigModule: ConfigModule } = UserConfig;
 
@@ -12,6 +13,7 @@ const { UserConfigModule: ConfigModule } = UserConfig;
   imports: [
     ConfigModule,
     JwtModule,
+    NotifyModule,
     UsersModule,
     AuthenticationModule,
     ReviewsModule,

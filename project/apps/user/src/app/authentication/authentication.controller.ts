@@ -13,6 +13,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { fillObject } from '@project/libs/utils-core';
 import { Uuid } from '@project/libs/shared-types';
 import { JwtAuthGuard } from '@project/libs/validators';
+import { NotifyService } from '../notify/notify.service';
 import { AuthenticationService } from './authentication.service';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
@@ -28,7 +29,10 @@ import { UpdatedTokensRdo } from './rdo/updated-tokens.rdo';
   version: '1',
 })
 export class AuthenticationController {
-  constructor(private readonly authService: AuthenticationService) {}
+  constructor(
+    private readonly authService: AuthenticationService,
+    private readonly notifyService: NotifyService
+  ) {}
 
   @Post('/register')
   @ApiOperation({ summary: 'Registration new user' })
@@ -41,7 +45,10 @@ export class AuthenticationController {
     description: 'User has already exists',
   })
   public async register(@Body() dto: RegisterUserDto): Promise<void> {
-    await this.authService.register(dto);
+    const newUserModel = await this.authService.register(dto);
+
+    const { email, firstname, lastname } = newUserModel;
+    await this.notifyService.registerSubscriber({ email, firstname, lastname });
   }
 
   @Post('/login')
