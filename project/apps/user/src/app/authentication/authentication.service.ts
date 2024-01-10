@@ -27,7 +27,7 @@ export class AuthenticationService {
     private readonly dateTimeService: DateTimeService
   ) {}
 
-  public async register(dto: RegisterUserDto): Promise<UserModel> {
+  public async register(dto: RegisterUserDto): Promise<void> {
     const userModel = await this.usersRepository.findByEmail(dto.email);
     if (userModel) {
       throw new ConflictException('User already exists');
@@ -49,9 +49,7 @@ export class AuthenticationService {
       specializations: [],
     }).setPassword(dto.password);
 
-    const createdUserModel = await this.usersRepository.create(userEntity);
-
-    return createdUserModel;
+    await this.usersRepository.create(userEntity);
   }
 
   public async verifyUser(dto: LoginUserDto): Promise<UserModel> {

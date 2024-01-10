@@ -1,7 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { getRabbitMQConnection } from './helpers';
 
-export const getRabbitMQOptions = () => ({
+export const getRabbitMqOptions = () => ({
   inject: [ConfigService],
   useFactory: async (config: ConfigService) => ({
     exchanges: [

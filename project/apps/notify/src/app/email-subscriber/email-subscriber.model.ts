@@ -2,23 +2,27 @@ import { Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Subscriber } from '@project/libs/shared-types';
 
-const SUBSCRIBERS_COLLECTION_NAME = 'email-subscribers';
-
 export type EmailSubscriberModelProperties = Subscriber;
 
 @Schema({
-  collection: SUBSCRIBERS_COLLECTION_NAME,
+  collection: 'email-subscribers',
   timestamps: true,
 })
 export class EmailSubscriberModel extends Document implements Subscriber {
   @Prop()
-  public email: string;
+  public userId: string;
 
   @Prop()
-  public firstname: string;
+  public title: string;
 
   @Prop()
-  public lastname: string;
+  public description: string;
+
+  @Prop()
+  public city: string;
+
+  @Prop()
+  public price: number;
 }
 
 export const EmailSubscriberSchema =

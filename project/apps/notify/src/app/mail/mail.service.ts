@@ -8,12 +8,14 @@ export class MailService {
 
   public async sendNotifyNewSubscriber(subscriber: Subscriber): Promise<void> {
     await this.mailerService.sendMail({
-      to: subscriber.email,
-      subject: 'Подписка на рассылку оформлена',
+      to: 'test-user@example.com',
+      subject: 'Вы подписались на рассылку',
       template: './add-subscriber',
       context: {
-        user: `${subscriber.firstname} ${subscriber.lastname}`,
-        email: `${subscriber.email}`,
+        title: `${subscriber.title}`,
+        description: `${subscriber.description}`,
+        price: `${subscriber.price}`,
+        city: `${subscriber.city}`,
       },
     });
   }

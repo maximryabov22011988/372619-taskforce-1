@@ -1,6 +1,9 @@
+import { Uuid } from '../shared';
+
 export interface Subscriber {
-  id?: string;
-  email: string;
-  firstname: string;
-  lastname: string;
+  userId: Uuid;
+  title: string;
+  description: string;
+  city: string;
+  price: number;
 }

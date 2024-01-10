@@ -1,12 +1,23 @@
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsString, IsUUID, IsNumber } from 'class-validator';
 
 export class CreateSubscriberDto {
-  @IsEmail({}, { message: 'The email is not valid' })
-  public email: string;
+  @IsNotEmpty()
+  @IsUUID()
+  public userId: string;
 
-  @IsNotEmpty({ message: 'The first name is empty' })
-  public firstname: string;
+  @IsNotEmpty()
+  @IsString()
+  public title: string;
 
-  @IsNotEmpty({ message: 'The last name is empty' })
-  public lastname: string;
+  @IsNotEmpty()
+  @IsString()
+  public description: string;
+
+  @IsNotEmpty()
+  @IsString()
+  public city: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  public price: number;
 }

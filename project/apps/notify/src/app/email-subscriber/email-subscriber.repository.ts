@@ -40,7 +40,7 @@ export class EmailSubscriberRepository {
       .exec();
   }
 
-  public async findByEmail(email: string): Promise<Subscriber | null> {
-    return this.emailSubscriberModel.findOne({ email }).exec();
+  public async findByTitle(title: string): Promise<Subscriber | null> {
+    return this.emailSubscriberModel.findOne({ title }).exec();
   }
 }

@@ -9,9 +9,9 @@ export class EmailSubscriberService {
   ) {}
 
   public async addSubscriber(subscriber: CreateSubscriberDto) {
-    const { email } = subscriber;
-    const existedSubscriber = await this.emailSubscriberRepository.findByEmail(
-      email
+    const { title } = subscriber;
+    const existedSubscriber = await this.emailSubscriberRepository.findByTitle(
+      title
     );
 
     if (existedSubscriber) {

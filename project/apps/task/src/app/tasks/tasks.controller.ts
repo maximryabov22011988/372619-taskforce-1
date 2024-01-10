@@ -18,6 +18,7 @@ import { CommentsService } from '../comments/comments.service';
 import { CommentRdo } from '../comments/rdo/comment.rdo';
 import { mapToComment } from '../comments/comments.mapper';
 import { CommentQuery } from '../comments/comments.query';
+import { NotifyService } from '../notify/notify.service';
 import { mapToTask } from '../tasks/tasks.mapper';
 import { TasksService } from './tasks.service';
 import { Sorting, TaskQuery } from './tasks.query';
@@ -33,7 +34,8 @@ import { TaskRdo } from './rdo/task.rdo';
 export class TasksController {
   constructor(
     private readonly tasksService: TasksService,
-    private readonly commentsService: CommentsService
+    private readonly commentsService: CommentsService,
+    private readonly notifyService: NotifyService
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -131,7 +133,17 @@ export class TasksController {
   })
   public async createTask(@Body() dto: CreateTaskDto): Promise<Task> {
     const taskModel = await this.tasksService.createTask(dto);
-    return mapToTask(taskModel);
+    const task = mapToTask(taskModel);
+
+    await this.notifyService.registerSubscriber({
+      userId: task.customerId,
+      title: task.title,
+      description: task.description,
+      city: task.city,
+      price: task.price,
+    });
+
+    return task;
   }
 
   @UseGuards(JwtAuthGuard)
