@@ -5,3 +5,4 @@ export * from './lib/review';
 export * from './lib/image';
 export * from './lib/task';
 export * from './lib/comment';
+export * from './lib/notify';

@@ -14,7 +14,7 @@ export interface RabbitMqConfig {
   exchange: string;
 }
 
-export default registerAs('rabbit', (): RabbitMqConfig => {
+export default registerAs('rabbitMq', (): RabbitMqConfig => {
   const config: RabbitMqConfig = {
     host: process.env.RABBITMQ_HOST,
     port: parseInt(

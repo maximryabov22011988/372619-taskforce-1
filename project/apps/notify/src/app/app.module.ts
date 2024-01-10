@@ -1,12 +1,16 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { NotifyConfig } from '@project/libs/config';
-import { NotifyModule } from './notify/notify.module';
+import { EmailSubscriberModule } from './email-subscriber/email-subscriber.module';
 
-const { getMongooseOptions } = NotifyConfig;
+const { NotifyConfigModule: ConfigModule, getMongooseOptions } = NotifyConfig;
 
 @Module({
-  imports: [NotifyModule, MongooseModule.forRootAsync(getMongooseOptions())],
+  imports: [
+    ConfigModule,
+    EmailSubscriberModule,
+    MongooseModule.forRootAsync(getMongooseOptions()),
+  ],
   controllers: [],
   providers: [],
 })

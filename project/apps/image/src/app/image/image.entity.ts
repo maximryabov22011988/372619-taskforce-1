@@ -1,5 +1,6 @@
 import { ImageFile, Entity } from '@project/libs/shared-types';
 
+// FIXME Выпилить Entity
 export class ImageFileEntity implements Entity<ImageFileEntity>, ImageFile {
   public id?: string;
   public originalName: string;
