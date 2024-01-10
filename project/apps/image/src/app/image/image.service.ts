@@ -9,7 +9,6 @@ import { cwd } from 'node:process';
 import { DateTimeService } from '@project/libs/services';
 import { ImageConfig } from '@project/libs/config';
 import { ImageFile } from '@project/libs/shared-types';
-import { ImageFileEntity } from './image.entity';
 import { ImageRepository } from './image.repository';
 
 const { appConfig } = ImageConfig;
@@ -42,15 +41,14 @@ export class ImageService {
 
   public async saveFile(file: Express.Multer.File): Promise<ImageFile> {
     const writedFile = await this.writeFile(file);
-    const newFile = new ImageFileEntity({
+
+    return this.imageRepository.create({
       originalName: file.originalname,
       name: writedFile.hashName,
       mimetype: file.mimetype,
       path: writedFile.path,
       size: file.size,
     });
-
-    return this.imageRepository.create(newFile);
   }
 
   private async writeFile(file: Express.Multer.File): Promise<WritedImageFile> {
