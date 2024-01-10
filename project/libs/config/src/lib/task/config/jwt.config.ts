@@ -1,7 +1,7 @@
 import { registerAs } from '@nestjs/config';
 import { validateSync } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
-import { JwtEnv } from './jwt.env';
+import { JwtEnv } from '../jwt.env';
 
 export interface JWTConfig {
   accessTokenSecret: string;
@@ -23,7 +23,7 @@ export default registerAs('jwt', (): JWTConfig => {
   });
 
   if (errors.length) {
-    throw new Error(`[JWT config]: Environments validation failed. Please check .user.env file.
+    throw new Error(`[JWT config]: Environments validation failed. Please check .task.env file.
       Error message: ${errors.toString()}`);
   }
 
