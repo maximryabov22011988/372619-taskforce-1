@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { BaseUserRdo } from './base.rdo';
+import { BaseUserRdo } from './base-user.rdo';
 
 export class ContractorUserRdo extends BaseUserRdo {
   @ApiProperty({

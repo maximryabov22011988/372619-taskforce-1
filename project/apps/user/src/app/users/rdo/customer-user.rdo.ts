@@ -1,3 +1,3 @@
-import { BaseUserRdo } from './base.rdo';
+import { BaseUserRdo } from './base-user.rdo';
 
 export class CustomerUserRdo extends BaseUserRdo {}
