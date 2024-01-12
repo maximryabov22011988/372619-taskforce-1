@@ -3,9 +3,16 @@
  * This is only a minimal backend to get started.
  */
 
-import { Logger, INestApplication, VersioningType } from '@nestjs/common';
+import {
+  Logger,
+  INestApplication,
+  VersioningType,
+  ValidationPipe,
+} from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { Environment } from '@project/libs/shared-types';
 import { AppModule } from './app/app.module';
 
 const setupOpenApi = (app: INestApplication) => {
@@ -24,12 +31,21 @@ const setupOpenApi = (app: INestApplication) => {
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  const configService = app.get(ConfigService);
+  const port = configService.get('app.port');
+  const env = configService.get('app.environment');
+
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
   app.enableVersioning({
     type: VersioningType.URI,
   });
-  const port = process.env.PORT || 3000;
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      disableErrorMessages: env !== Environment.Development,
+    })
+  );
   setupOpenApi(app);
   await app.listen(port);
 

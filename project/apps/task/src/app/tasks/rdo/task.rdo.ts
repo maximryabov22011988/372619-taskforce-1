@@ -1,14 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
+import parseInt from 'lodash/parseInt';
 import { AvailableCity, TaskStatus } from '@project/libs/shared-types';
+import { dateTimeService } from '@project/libs/services';
 
 export class TaskRdo {
   @ApiProperty({
     description: 'Unique identifier',
-    example: '4ff6e921-36c4-4f80-ae41-919c06c0c5c3',
+    example: 1,
   })
   @Expose()
-  public id?: string;
+  public id: number;
 
   @ApiProperty({
     description: "Task's title",
@@ -41,14 +43,15 @@ export class TaskRdo {
 
   @ApiProperty({
     description: 'Date of completion task',
-    example: '2023-12-13T21:06:44.253Z',
+    example: '2023-12-25T00:00:00.000Z',
   })
   @Expose()
+  @Transform(({ obj }) => dateTimeService.formatDate(obj.executionDate))
   public executionDate: string;
 
   @ApiProperty({
     description: 'Picture',
-    example: 'example.png',
+    example: '/api/static/example-1a9f2b32-7f87-490c-9c56-0c4a78b89791.jpg',
   })
   @Expose()
   public imageUrl: string;
@@ -67,6 +70,7 @@ export class TaskRdo {
     type: String,
   })
   @Expose()
+  @Transform(({ obj }) => obj.tags.map(({ name }) => name))
   public tags: string[];
 
   @ApiProperty({
@@ -95,23 +99,18 @@ export class TaskRdo {
   public customerId: string;
 
   @ApiProperty({
-    description: "Task's contractor",
-    example: 'da7f1411-dd49-4689-a2de-cda2f0e9bf85',
+    description: "Task's comments count",
+    type: Number,
+    example: 12,
   })
   @Expose()
-  public contractorId: string;
+  @Transform(({ obj }) => parseInt(obj.commentsCount))
+  public commentsCount: number;
 
   @ApiProperty({
     description: 'Date of creation task',
     example: '2023-12-13T21:06:44.253Z',
   })
   @Expose()
-  public createdAt: string;
-
-  @ApiProperty({
-    description: 'Task update date',
-    example: '2023-12-13T21:06:44.253Z',
-  })
-  @Expose()
-  public updatedAt: string;
+  public createdAt: number;
 }

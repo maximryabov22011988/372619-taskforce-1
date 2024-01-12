@@ -1,41 +1,42 @@
 import { genSalt, hash, compare } from 'bcrypt';
 import {
-  AvailableCity,
-  User,
-  UserRole,
   Email,
   Password,
   ImageUrl,
   Specialization,
   Entity,
 } from '@project/libs/shared-types';
+import { UserModelProperties } from '../../database/models/user.model';
 
 const SALT_ROUNDS = 10;
 
-export class UserEntity implements Entity<UserEntity>, User {
-  public id: string;
+export class UserEntity implements Entity<UserEntity> {
+  public id?: string;
   public firstname: string;
   public lastname: string;
   public email: Email;
-  public city: AvailableCity;
+  public cityId: number;
   public passwordHash: Password;
-  public specialization: Specialization[];
-  public role: UserRole;
-  public birthDate: string;
-  public createdAt: string;
+  public specializations: Specialization[];
+  public roleId: number;
+  public avatarUrl?: ImageUrl;
   public info: string;
-  public avatar?: ImageUrl;
+  public birthDate: string;
 
-  constructor(user: Omit<User, 'passwordHash'>) {
-    this.fillEntity(user);
+  constructor(
+    userData: UserModelProperties & { specializations: Specialization[] }
+  ) {
+    this.fillEntity(userData);
   }
 
   public toObject() {
     return { ...this };
   }
 
-  public fillEntity(user: Omit<User, 'passwordHash'>) {
-    Object.assign(this, user);
+  public fillEntity(
+    userData: UserModelProperties & { specializations: Specialization[] }
+  ) {
+    Object.assign(this, userData);
   }
 
   public async setPassword(password: string): Promise<UserEntity> {

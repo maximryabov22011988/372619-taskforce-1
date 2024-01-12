@@ -1,13 +1,20 @@
 import { Module } from '@nestjs/common';
-import { TaskConfig } from '@project/config';
+import { TaskConfig } from '@project/libs/config';
+import { JwtModule } from '@project/libs/modules';
+import { DatabaseModule } from '../database/database.module';
 import { TasksModule } from './tasks/tasks.module';
 import { CommentsModule } from './comments/comments.module';
-import { DatabaseModule } from '../database/database.module';
 
 const { TaskConfigModule: ConfigModule } = TaskConfig;
 
 @Module({
-  imports: [ConfigModule, TasksModule, CommentsModule, DatabaseModule],
+  imports: [
+    ConfigModule,
+    JwtModule,
+    TasksModule,
+    CommentsModule,
+    DatabaseModule,
+  ],
   controllers: [],
   providers: [],
 })

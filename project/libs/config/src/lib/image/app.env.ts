@@ -1,13 +1,8 @@
 import { IsNumber, IsString, Max, Min, IsEnum } from 'class-validator';
+import { Environment } from '@project/libs/shared-types';
 
 const MIN_PORT = 0;
 const MAX_PORT = 65535;
-
-enum Environment {
-  Development = 'development',
-  Production = 'production',
-  Stage = 'stage',
-}
 
 export class AppEnv {
   @IsString({
@@ -31,10 +26,10 @@ export class AppEnv {
   @IsString({
     message: `Environment is required. Example: "uploads"`,
   })
-  public staticPath: string;
+  public uploadDirectory: string;
 
   @IsString({
     message: `Environment is required. Example: "/api/static"`,
   })
-  public staticServePath: string;
+  public uploadServePath: string;
 }

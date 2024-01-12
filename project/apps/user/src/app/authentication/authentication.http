@@ -5,11 +5,11 @@ Content-Type: application/json
 {
   "firstname": "John",
   "lastname": "Doe",
-  "email": "john@doe.com",
-  "city": "Saint Petersburg",
-  "role": "customer",
+  "email": "john9@doe.com",
+  "cityId": 2,
+  "roleId": 1,
   "password": "123456",
-  "birthDate": "1977-11-11T08:55:00.000Z"
+  "birthDate": "2004-12-29"
 }
 
 
@@ -19,15 +19,16 @@ POST http://localhost:3000/api/v1/auth/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "john@doe.com",
+  "email": "john9@doe.com",
   "password": "123456"
 }
 
 
 
 ### Изменение пользовательского пароля
-PATCH  http://localhost:3000/api/v1/auth/password/e781a119-ecda-4dc0-8256-14ebd9e8c2e3 HTTP/1.1
+PATCH  http://localhost:3000/api/v1/auth/password/963d1b4e-2979-403e-a107-4bb40f7d1cb3 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZGJkN2UwYy03Zjg4LTQ3YmQtYjE4My1lNjE5NGFlNWM0MTkiLCJlbWFpbCI6ImpvaG45M0Bkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ3MTQ2MTcsImV4cCI6MTcwNDcxODIxN30.jfPH-QXRLxNborqWBgWUj0xy4rTFeaF1vxGvpihn1cw
 
 {
   "oldPassword": "123456",
@@ -39,12 +40,14 @@ Content-Type: application/json
 ### Выход из авторизованной зоны
 POST  http://localhost:3000/api/v1/auth/logout HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZGJkN2UwYy03Zjg4LTQ3YmQtYjE4My1lNjE5NGFlNWM0MTkiLCJlbWFpbCI6ImpvaG45M0Bkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ3MTQ2MTcsImV4cCI6MTcwNDcxODIxN30.jfPH-QXRLxNborqWBgWUj0xy4rTFeaF1vxGvpihn1cw
 
 
 
 ### Обновление токенов
 POST  http://localhost:3000/api/v1/auth/tokens HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZGJkN2UwYy03Zjg4LTQ3YmQtYjE4My1lNjE5NGFlNWM0MTkiLCJlbWFpbCI6ImpvaG45M0Bkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ3MTQ2MTcsImV4cCI6MTcwNDcxODIxN30.jfPH-QXRLxNborqWBgWUj0xy4rTFeaF1vxGvpihn1cw
 
 {
   "refreshToken": "123fsd4fk4jf43sd4kr43kd4ff4ds"

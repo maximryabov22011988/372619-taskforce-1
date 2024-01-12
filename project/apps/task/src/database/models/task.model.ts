@@ -7,6 +7,21 @@ import { CityModel } from './city.model';
 import { StatusModel } from './status.model';
 import { CategoryModel } from './category.model';
 
+export type TaskModelProperties = Pick<
+  TaskModel,
+  | 'title'
+  | 'description'
+  | 'price'
+  | 'executionDate'
+  | 'imageUrl'
+  | 'address'
+  | 'categoryId'
+  | 'cityId'
+  | 'statusId'
+  | 'contractorId'
+  | 'customerId'
+>;
+
 export class TaskModel extends BaseModel {
   public static get tableName() {
     return 'tasks';
@@ -27,8 +42,8 @@ export class TaskModel extends BaseModel {
   public readonly statusId: number;
   public readonly contractorId: Uuid;
   public readonly customerId: Uuid;
-  public readonly createdAt: string;
-  public readonly updatedAt: string;
+  public readonly createdAt: number;
+  public readonly updatedAt: number;
 
   public static get jsonSchema() {
     return {
@@ -40,8 +55,6 @@ export class TaskModel extends BaseModel {
         'cityId',
         'statusId',
         'customerId',
-        'createdAt',
-        'updatedAt',
       ],
       properties: {
         id: {
@@ -62,6 +75,7 @@ export class TaskModel extends BaseModel {
         },
         executionDate: {
           type: 'string',
+          format: 'date',
         },
         imageUrl: {
           type: 'string',
@@ -81,16 +95,25 @@ export class TaskModel extends BaseModel {
           type: 'integer',
         },
         contractorId: {
-          type: ['string', 'null'],
+          oneOf: [
+            {
+              type: 'string',
+              format: 'uuid',
+            },
+            {
+              type: 'null',
+            },
+          ],
         },
         customerId: {
           type: 'string',
+          format: 'uuid',
         },
         createdAt: {
-          type: 'string',
+          type: 'integer',
         },
         updatedAt: {
-          type: 'string',
+          type: 'integer',
         },
       },
     };

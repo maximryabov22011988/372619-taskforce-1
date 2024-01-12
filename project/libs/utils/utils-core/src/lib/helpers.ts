@@ -5,6 +5,10 @@ export const fillObject = <T, V>(
   plainObject: V
 ) => plainToInstance(someDto, plainObject, { excludeExtraneousValues: true });
 
+export const transform = {
+  numericStringToNumber: ({ value }: { value: string }) => parseInt(value, 10),
+};
+
 type GetMongoConnectionParams = {
   username: string;
   password: string;

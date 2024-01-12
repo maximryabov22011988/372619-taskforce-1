@@ -7,7 +7,6 @@ import { Logger, INestApplication, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
-import { join } from 'path';
 import { AppModule } from './app/app.module';
 
 const setupOpenApi = (app: INestApplication) => {

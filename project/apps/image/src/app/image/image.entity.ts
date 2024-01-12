@@ -2,9 +2,11 @@ import { ImageFile, Entity } from '@project/libs/shared-types';
 
 export class ImageFileEntity implements Entity<ImageFileEntity>, ImageFile {
   public id?: string;
-  public name: string;
   public originalName: string;
+  public name: string;
+  public mimetype: string;
   public path: string;
+  public size: number;
 
   constructor(imageFile: ImageFile) {
     this.fillEntity(imageFile);

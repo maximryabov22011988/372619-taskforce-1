@@ -1,7 +1,10 @@
-import { Model } from 'objection';
-import { Uuid } from '@project/libs/shared-types';
 import { BaseModel } from './base.model';
-import { TaskModel } from './task.model';
+import { Uuid } from '@project/libs/shared-types';
+
+export type CommentModelProperties = Pick<
+  CommentModel,
+  'text' | 'taskId' | 'authorId'
+>;
 
 export class CommentModel extends BaseModel {
   public static get tableName() {
@@ -14,19 +17,19 @@ export class CommentModel extends BaseModel {
 
   public readonly text: string;
   public readonly taskId: number;
-  public readonly userId: Uuid;
-  public readonly createdAt: string;
-  public readonly updatedAt: string;
+  public readonly authorId: Uuid;
+  public readonly createdAt: number;
+  public readonly updatedAt: number;
 
   public static get jsonSchema() {
     return {
       type: 'object',
-      required: ['text', 'taskId', 'userId'],
+      required: ['text', 'taskId'],
       properties: {
         id: {
           type: 'integer',
         },
-        name: {
+        text: {
           type: 'string',
           minLength: 1,
           maxLength: 300,
@@ -34,27 +37,17 @@ export class CommentModel extends BaseModel {
         taskId: {
           type: 'integer',
         },
-        userId: {
+        authorId: {
           type: 'string',
+          format: 'uuid',
         },
         createdAt: {
-          type: 'string',
+          type: 'integer',
         },
         updatedAt: {
-          type: 'string',
+          type: 'integer',
         },
       },
     };
   }
-
-  public static relationMappings = {
-    task: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: TaskModel,
-      join: {
-        from: 'comments.taskId',
-        to: 'tasks.id',
-      },
-    },
-  };
 }

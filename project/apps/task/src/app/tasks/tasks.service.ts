@@ -1,9 +1,17 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { v4 as makeUuid } from 'uuid';
-import { DateTimeService } from '@project/services';
-import { Task, TaskStatus } from '@project/libs/shared-types';
-import { TasksRepository } from './tasks.repository';
-import { TaskEntity } from './tasks.entity';
+import { DateTimeService } from '@project/libs/services';
+import { TaskStatusId } from '@project/libs/shared-types';
+import { TaskModel } from '../../database/models/task.model';
+import { CategoryModel } from '../../database/models/category.model';
+import { CategoriesRepository } from './repository/categories.repository';
+import { TagsRepository } from './repository/tags.repository';
+import { TasksRepository } from './repository/tasks.repository';
+import { TaskQuery } from './tasks.query';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 
@@ -11,59 +19,103 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 export class TasksService {
   constructor(
     private readonly tasksRepository: TasksRepository,
-    private readonly dateTime: DateTimeService
+    private readonly categoriesRepository: CategoriesRepository,
+    private readonly tagsRepository: TagsRepository,
+    private readonly dateTimeService: DateTimeService
   ) {}
 
-  public async findById(taskId: number): Promise<Task> {
-    const task = await this.tasksRepository.findById(taskId);
-    if (!task) {
+  public async findById(taskId: number): Promise<TaskModel> {
+    const taskModel = await this.tasksRepository.findById(taskId);
+    if (!taskModel) {
       throw new NotFoundException('Task was not found');
     }
 
-    return task;
+    return taskModel;
   }
 
-  public async findAll(): Promise<Task[]> {
-    return this.tasksRepository.findAll();
+  public async findAll(query: TaskQuery): Promise<TaskModel[]> {
+    return this.tasksRepository.findAll(query);
   }
 
-  public async createTask(dto: CreateTaskDto): Promise<Task> {
-    const task = {
+  public async createTask(dto: CreateTaskDto): Promise<TaskModel> {
+    let categoryModel = await this.getCategory(dto.category);
+    if (!categoryModel) {
+      categoryModel = await this.createCategory(dto.category);
+    }
+
+    const createdTaskModel = await this.tasksRepository.create({
       title: dto.title,
       description: dto.description,
-      category: dto.category,
-      city: dto.city,
       price: dto.price ?? 0,
-      executionDate: dto.executionDate ?? null,
+      executionDate: this.getExecutionDate(dto.executionDate),
       imageUrl: dto.imageUrl ?? '',
-      address: dto.address ?? null,
-      tags: dto.tags ?? null,
-      status: TaskStatus.New,
-      categoryId: 1,
-      cityId: 1,
-      statusId: 1,
+      address: dto.address ?? '',
+      categoryId: categoryModel.id,
+      cityId: dto.cityId,
+      statusId: TaskStatusId.New,
       customerId: makeUuid(),
-      contractorId: makeUuid(),
-      createdAt: this.dateTime.getDateTimeLocale(DateTimeService.UTC_FORMAT),
-      updatedAt: this.dateTime.getDateTimeLocale(DateTimeService.UTC_FORMAT),
-    };
-    const taskEntity = new TaskEntity(task);
-
-    return this.tasksRepository.create(taskEntity);
-  }
-
-  public async updateTask(taskId: number, dto: UpdateTaskDto): Promise<Task> {
-    const task = await this.findById(taskId);
-    const taskEntity = new TaskEntity({
-      ...task,
-      ...dto,
+      contractorId: null,
     });
 
-    return this.tasksRepository.update(taskId, taskEntity);
+    await this.createTags(dto.tags ?? [], createdTaskModel.id);
+
+    return createdTaskModel;
+  }
+
+  public async updateTask(
+    taskId: number,
+    dto: UpdateTaskDto
+  ): Promise<TaskModel> {
+    const taskModel = await this.findById(taskId);
+
+    return this.tasksRepository.update(taskId, {
+      title: taskModel.title,
+      description: taskModel.description,
+      categoryId: taskModel.categoryId,
+      cityId: taskModel.cityId,
+      price: taskModel.price,
+      imageUrl: taskModel.imageUrl,
+      address: taskModel.address,
+      customerId: taskModel.customerId,
+      executionDate: this.getExecutionDate(taskModel.executionDate),
+      statusId: dto.statusId ?? taskModel.statusId,
+      contractorId: dto.contractorId ?? taskModel.contractorId,
+    });
   }
 
   public async deleteTask(taskId: number): Promise<void> {
     await this.findById(taskId);
     await this.tasksRepository.delete(taskId);
+  }
+
+  private checkIsValidTag(tag: string) {
+    if (tag.includes(' ')) {
+      throw new BadRequestException(`Invalid tag "${tag}"`);
+    }
+  }
+
+  private async createTags(tags: string[], taskId: number): Promise<void> {
+    if (tags.length) {
+      const uniqTags = new Set([...tags]);
+
+      for (const tag of uniqTags) {
+        this.checkIsValidTag(tag);
+        await this.tagsRepository.create({ name: tag }, taskId);
+      }
+    }
+  }
+
+  private async getCategory(name: string): Promise<CategoryModel> {
+    return this.categoriesRepository.findByName(name);
+  }
+
+  private async createCategory(name: string): Promise<CategoryModel> {
+    return this.categoriesRepository.create({ name });
+  }
+
+  private getExecutionDate(date: Date | string | null): string | null {
+    return date
+      ? this.dateTimeService.formatDate(date, DateTimeService.DATE_FORMAT)
+      : null;
   }
 }

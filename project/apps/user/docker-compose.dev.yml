@@ -1,0 +1,48 @@
+version: '3.5'
+services:
+  taskforce.user.postgres:
+    container_name: taskforce.user.postgres
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: taskforce-user
+    ports:
+      - '5433:5432'
+    volumes:
+      - taskforce-user:/var/lib/postgresql/data
+
+    healthcheck:
+      test: [ 'CMD-SHELL', 'pg_isready -U admin -d taskforce-user' ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+    networks:
+      - taskforce-user
+    restart: unless-stopped
+
+  taskforce.user.pgadmin:
+    container_name: taskforce.user.pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@academy.org
+      PGADMIN_DEFAULT_PASSWORD: test
+      PGADMIN_CONFIG_SESSION_COOKIE_NAME: '"taskforce_user_cookie"'
+    ports:
+      - '8083:80'
+    volumes:
+      - user-pgadmin:/var/lib/pgadmin
+
+    networks:
+      - taskforce-user
+    restart: unless-stopped
+
+networks:
+  taskforce-user:
+    driver: bridge
+
+volumes:
+  taskforce-user:
+  user-pgadmin:

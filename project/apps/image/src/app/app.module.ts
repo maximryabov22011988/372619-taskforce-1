@@ -1,20 +1,15 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { ImageConfig } from '@project/config';
+import { ImageConfig } from '@project/libs/config';
+import { JwtModule } from '@project/libs/modules';
 import { ImageModule } from './image/image.module';
 
-const {
-  ImageConfigModule: ConfigModule,
-  getServeStaticOptions,
-  getMongooseOptions,
-} = ImageConfig;
+const { getMongooseOptions } = ImageConfig;
 
 @Module({
   imports: [
-    ConfigModule,
+    JwtModule,
     ImageModule,
-    ServeStaticModule.forRootAsync(getServeStaticOptions()),
     MongooseModule.forRootAsync(getMongooseOptions()),
   ],
   controllers: [],

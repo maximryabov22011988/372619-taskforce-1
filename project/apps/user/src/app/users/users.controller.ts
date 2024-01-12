@@ -2,10 +2,11 @@ import {
   Controller,
   Get,
   Param,
-  HttpException,
   HttpStatus,
   Patch,
   Body,
+  ParseUUIDPipe,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiOperation,
@@ -14,8 +15,9 @@ import {
   ApiExtraModels,
   refs,
 } from '@nestjs/swagger';
-import { User, UserRole } from '@project/libs/shared-types';
-import { fillObject } from '@project/libs/utils-core';
+import { Contractor, Customer, Uuid } from '@project/libs/shared-types';
+import { JwtAuthGuard } from '@project/libs/validators';
+import { mapToUserByRole } from './users.mapper';
 import { UsersService } from './users.service';
 import { ChangeProfileDto } from './dto/change-profile.dto';
 import { ContractorUserRdo } from './rdo/contractor-user.rdo';
@@ -29,7 +31,8 @@ import { CustomerUserRdo } from './rdo/customer-user.rdo';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Get(':userId')
+  @UseGuards(JwtAuthGuard)
+  @Get('/:userId')
   @ApiOperation({ summary: 'Getting detailed information' })
   @ApiExtraModels(ContractorUserRdo, CustomerUserRdo)
   @ApiResponse({
@@ -41,14 +44,19 @@ export class UsersController {
     status: HttpStatus.NOT_FOUND,
     description: 'Not found',
   })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+  })
   public async getUser(
-    @Param('userId') userId: string
-  ): Promise<ContractorUserRdo | CustomerUserRdo> {
-    const user = await this.usersService.findById(userId);
-    return this.getUserDataByRole(user);
+    @Param('userId', ParseUUIDPipe) userId: Uuid
+  ): Promise<Customer | Contractor> {
+    const userModel = await this.usersService.findById(userId);
+    return mapToUserByRole(userModel);
   }
 
-  @Patch(':userId/profile')
+  @UseGuards(JwtAuthGuard)
+  @Patch('/:userId/profile')
   @ApiOperation({ summary: 'Change profile info' })
   @ApiExtraModels(ContractorUserRdo, CustomerUserRdo)
   @ApiResponse({
@@ -60,28 +68,15 @@ export class UsersController {
     status: HttpStatus.NOT_FOUND,
     description: 'Not found',
   })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+  })
   public async changeProfile(
-    @Param('userId') userId: string,
+    @Param('userId', ParseUUIDPipe) userId: Uuid,
     @Body() dto: ChangeProfileDto
-  ): Promise<ContractorUserRdo | CustomerUserRdo> {
-    const user = await this.usersService.changeProfile(dto, userId);
-    return this.getUserDataByRole(user);
-  }
-
-  private getUserDataByRole(user: User) {
-    if (user.role === UserRole.Customer) {
-      return fillObject(CustomerUserRdo, user);
-    }
-
-    if (user.role === UserRole.Contractor) {
-      return fillObject(ContractorUserRdo, user);
-    }
-
-    throw new HttpException(
-      `User with id "${user.id}" has invalid role${
-        user.role ? ` - ${user.role}` : ''
-      }`,
-      HttpStatus.BAD_REQUEST
-    );
+  ): Promise<Customer | Contractor> {
+    const userModel = await this.usersService.changeProfile(dto, userId);
+    return mapToUserByRole(userModel);
   }
 }

@@ -1,6 +1,8 @@
 export interface ImageFile {
   id?: string;
-  name: string;
   originalName: string;
+  name: string;
+  mimetype: string;
   path: string;
+  size: number;
 }

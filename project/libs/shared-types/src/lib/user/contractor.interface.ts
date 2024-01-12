@@ -2,16 +2,9 @@ import { User } from './user.interface';
 
 export type Specialization = string;
 
-export interface Contractor
-  extends Pick<
-    User,
-    'id' | 'firstname' | 'lastname' | 'createdAt' | 'city' | 'role' | 'email'
-  > {
-  info: string;
+export interface Contractor extends User {
   age: number;
-  specialization: Specialization[];
-  completedTasksCount: number;
-  failedTasksCount: number;
+  specializations: Specialization[];
   rating: number;
   ratingLevel: number;
 }

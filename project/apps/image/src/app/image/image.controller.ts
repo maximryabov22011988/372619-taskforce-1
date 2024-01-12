@@ -5,7 +5,12 @@ import {
   UploadedFile,
   UseInterceptors,
   HttpStatus,
+  Param,
+  Inject,
+  UsePipes,
+  UseGuards,
 } from '@nestjs/common';
+import { ConfigType } from '@nestjs/config';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiOperation,
@@ -14,32 +19,32 @@ import {
   ApiBody,
 } from '@nestjs/swagger';
 import { Express } from 'express';
-import { diskStorage } from 'multer';
-import { v4 as makeUuid } from 'uuid';
-import { parse } from 'path';
+import assign from 'lodash/assign';
 import { fillObject } from '@project/libs/utils-core';
+import { ImageConfig } from '@project/libs/config';
+import { JwtAuthGuard } from '@project/libs/validators';
+import { ImageFile } from '@project/libs/shared-types';
 import { ImageService } from './image.service';
+import { MongoIdValidationPipe } from './pipe/mongo-id-validation.pipe';
+import { FileSizeValidationPipe } from './pipe/file-size-validation.pipe';
 import { UploadedImageFileRdo } from './rdo/uploaded-image-file.rdo';
 
-const storage = diskStorage({
-  destination: `./${process.env.STATIC_PATH}`,
-  filename(_, file, callback) {
-    const parsedPath = parse(file.originalname);
-    const filename = `${parsedPath.name.replace(/\s/g, '')}-${makeUuid()}`;
-    const extension = parsedPath.ext;
-    callback(null, `${filename}${extension}`);
-  },
-});
+const { appConfig } = ImageConfig;
 
 @Controller({
   path: 'image',
   version: '1',
 })
 export class ImageController {
-  constructor(private readonly imageService: ImageService) {}
+  constructor(
+    private readonly imageService: ImageService,
 
-  @Post('/upload')
-  @ApiOperation({ summary: 'Uploading image file' })
+    @Inject(appConfig.KEY)
+    private readonly applicationConfig: ConfigType<typeof appConfig>
+  ) {}
+
+  @Post('/upload/avatar')
+  @ApiOperation({ summary: 'Uploading user avatar' })
   @ApiBody({
     schema: {
       type: 'object',
@@ -57,15 +62,77 @@ export class ImageController {
     type: UploadedImageFileRdo,
   })
   @ApiConsumes('multipart/form-data')
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage,
-    })
-  )
+  @UseInterceptors(FileInterceptor('file'))
+  @UsePipes(new FileSizeValidationPipe({ maxSizeInKb: 500 }))
+  public async uploadAvatar(
+    @UploadedFile() file: Express.Multer.File
+  ): Promise<ImageFile> {
+    const newImageFile = await this.imageService.saveFile(file);
+    return this.getImageFile(newImageFile);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/upload')
+  @ApiOperation({ summary: 'Uploading image' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Image file is successfully uploaded',
+    type: UploadedImageFileRdo,
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+  })
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('file'))
+  @UsePipes(new FileSizeValidationPipe({ maxSizeInKb: 1000 }))
   public async uploadImage(
     @UploadedFile() file: Express.Multer.File
-  ): Promise<UploadedImageFileRdo> {
-    const imageFile = await this.imageService.saveImageFile(file);
-    return fillObject(UploadedImageFileRdo, imageFile);
+  ): Promise<ImageFile> {
+    const newImageFile = await this.imageService.saveFile(file);
+    return this.getImageFile(newImageFile);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get(':fileId')
+  @ApiOperation({ summary: 'Getting image file' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Image file is successfully received',
+    type: UploadedImageFileRdo,
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Not found',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+  })
+  public async getImageFileById(
+    @Param('fileId', MongoIdValidationPipe) fileId: string
+  ): Promise<ImageFile> {
+    const imageFile = await this.imageService.getFile(fileId);
+    return this.getImageFile(imageFile);
+  }
+
+  private getImageFile(imageFile: ImageFile): ImageFile {
+    return fillObject(
+      UploadedImageFileRdo,
+      assign(imageFile, {
+        path: `${this.applicationConfig.uploadServePath}${imageFile.path}`,
+      })
+    );
   }
 }

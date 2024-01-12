@@ -1,38 +1,42 @@
 ### Создание нового задания
 POST  http://localhost:3002/api/v1/tasks HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZGJkN2UwYy03Zjg4LTQ3YmQtYjE4My1lNjE5NGFlNWM0MTkiLCJlbWFpbCI6ImpvaG45M0Bkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ3MTQ2MTcsImV4cCI6MTcwNDcxODIxN30.jfPH-QXRLxNborqWBgWUj0xy4rTFeaF1vxGvpihn1cw
 
 {
-  "title": "Task title",
-  "description": "Task's extended description",
-  "categoryId": 1,
+  "title": "Task long long title",
+  "description": "Objectively procrastinate dynamic imperatives without customer directed niches. Proactively productivate interdependent e-commerce and transparent methodologies.",
+  "category": "мебель",
   "cityId": 1,
-  "statusId": 1,
   "price": 1000,
-  "executionDate": "2023-23-04T08:55:00.000Z",
+  "tags": ["tt1"],
+  "executionDate": "2024-01-05",
   "address": "Moscow, Presnenskaya embankment, 12, office No. 2"
 }
 
 
 
 ### Получение списка заданий
-GET  http://localhost:3002/api/v1/tasks HTTP/1.1
+GET  http://localhost:3002/api/v1/tasks?page=1&cityId=1&categoryId=1&tagId=5 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZGJkN2UwYy03Zjg4LTQ3YmQtYjE4My1lNjE5NGFlNWM0MTkiLCJlbWFpbCI6ImpvaG45M0Bkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ3MTQ2MTcsImV4cCI6MTcwNDcxODIxN30.jfPH-QXRLxNborqWBgWUj0xy4rTFeaF1vxGvpihn1cw
 
 
 
 ### Получение детальной информации о задаче
 GET  http://localhost:3002/api/v1/tasks/1 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZGJkN2UwYy03Zjg4LTQ3YmQtYjE4My1lNjE5NGFlNWM0MTkiLCJlbWFpbCI6ImpvaG45M0Bkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ3MTQ2MTcsImV4cCI6MTcwNDcxODIxN30.jfPH-QXRLxNborqWBgWUj0xy4rTFeaF1vxGvpihn1cw
 
 
 
 ### Обновление данных по задаче
 PATCH  http://localhost:3002/api/v1/tasks/1 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZGJkN2UwYy03Zjg4LTQ3YmQtYjE4My1lNjE5NGFlNWM0MTkiLCJlbWFpbCI6ImpvaG45M0Bkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ3MTQ2MTcsImV4cCI6MTcwNDcxODIxN30.jfPH-QXRLxNborqWBgWUj0xy4rTFeaF1vxGvpihn1cw
 
 {
-  "status": "in-progress",
+  "statusId": 2,
   "contractorId": "fbc55fd6-9ac2-4aad-8b79-5adfb2faed8d"
 }
 
@@ -41,3 +45,18 @@ Content-Type: application/json
 ### Удаление существующей задачи
 DELETE  http://localhost:3002/api/v1/tasks/1 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZGJkN2UwYy03Zjg4LTQ3YmQtYjE4My1lNjE5NGFlNWM0MTkiLCJlbWFpbCI6ImpvaG45M0Bkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ3MTQ2MTcsImV4cCI6MTcwNDcxODIxN30.jfPH-QXRLxNborqWBgWUj0xy4rTFeaF1vxGvpihn1cw
+
+
+
+### Получение списка комментариев для определенного задания
+GET  http://localhost:3002/api/v1/tasks/8/comments?page=1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZGJkN2UwYy03Zjg4LTQ3YmQtYjE4My1lNjE5NGFlNWM0MTkiLCJlbWFpbCI6ImpvaG45M0Bkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ3MTQ2MTcsImV4cCI6MTcwNDcxODIxN30.jfPH-QXRLxNborqWBgWUj0xy4rTFeaF1vxGvpihn1cw
+
+
+
+### Удаление всех комментариев задания
+DELETE  http://localhost:3002/api/v1/tasks/1/comments HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZGJkN2UwYy03Zjg4LTQ3YmQtYjE4My1lNjE5NGFlNWM0MTkiLCJlbWFpbCI6ImpvaG45M0Bkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ3MTQ2MTcsImV4cCI6MTcwNDcxODIxN30.jfPH-QXRLxNborqWBgWUj0xy4rTFeaF1vxGvpihn1cw

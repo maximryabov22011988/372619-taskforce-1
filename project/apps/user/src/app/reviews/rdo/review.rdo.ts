@@ -4,24 +4,10 @@ import { Expose } from 'class-transformer';
 export class ReviewRdo {
   @ApiProperty({
     description: 'Unique identifier',
-    example: '4ff6e921-36c4-4f80-ae41-919c06c0c5c3',
+    example: 1,
   })
   @Expose()
-  public id: string;
-
-  @ApiProperty({
-    description: 'Task identifier',
-    example: 'ahw55fd6-9ac2-4aad-8b79-5adfb2faeyui',
-  })
-  @Expose()
-  public taskId: string;
-
-  @ApiProperty({
-    description: 'Rating',
-    example: 4,
-  })
-  @Expose()
-  public rating: number;
+  public id: number;
 
   @ApiProperty({
     description: 'Review text',
@@ -29,4 +15,25 @@ export class ReviewRdo {
   })
   @Expose()
   public text: string;
+
+  @ApiProperty({
+    description: 'Task identifier',
+    example: 1,
+  })
+  @Expose()
+  public taskId: number;
+
+  @ApiProperty({
+    description: 'Review author id',
+    example: 'da7f1411-dd49-4689-a2de-cda2f0e9bf85',
+  })
+  @Expose()
+  public authorId: string;
+
+  @ApiProperty({
+    description: 'Rating',
+    example: 4,
+  })
+  @Expose()
+  public rating: number;
 }
