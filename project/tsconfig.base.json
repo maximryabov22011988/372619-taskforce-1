@@ -16,11 +16,11 @@
     "baseUrl": ".",
     "paths": {
       "@project/libs/config": ["libs/config/src/index.ts"],
-      "@project/libs/shared-types": ["libs/shared-types/src/index.ts"],
-      "@project/libs/utils-core": ["libs/utils/utils-core/src/index.ts"],
-      "@project/libs/utils-types": ["libs/utils/utils-types/src/index.ts"],
       "@project/libs/modules": ["libs/modules/src/index.ts"],
       "@project/libs/services": ["libs/services/src/index.ts"],
+      "@project/libs/shared-types": ["libs/shared-types/src/index.ts"],
+      "@project/libs/utils-core": ["libs/utils/core/src/index.ts"],
+      "@project/libs/utils-types": ["libs/utils/types/src/index.ts"],
       "@project/libs/validators": ["libs/validators/src/index.ts"]
     }
   },

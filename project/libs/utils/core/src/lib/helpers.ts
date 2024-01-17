@@ -27,3 +27,18 @@ export const getMongoConnection = ({
   authDatabase,
 }: GetMongoConnectionParams): string =>
   `mongodb://${username}:${password}@${host}:${port}/${databaseName}?authSource=${authDatabase}`;
+
+type GetRabbitMQConnectionParams = {
+  user: string;
+  password: string;
+  host: string;
+  port: string;
+};
+
+export const getRabbitMQConnection = ({
+  user,
+  password,
+  host,
+  port,
+}: GetRabbitMQConnectionParams): string =>
+  `amqp://${user}:${password}@${host}:${port}`;

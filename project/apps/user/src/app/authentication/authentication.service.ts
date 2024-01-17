@@ -14,9 +14,7 @@ import { UsersService } from '../users/users.service';
 import { UserEntity } from '../users/users.entity';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
-import { LogoutUserDto } from './dto/logout-user.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
-import { UpdateTokensDto } from './dto/update-tokens.dto';
 
 @Injectable()
 export class AuthenticationService {
@@ -52,7 +50,7 @@ export class AuthenticationService {
     await this.usersRepository.create(userEntity);
   }
 
-  public async verifyUser(dto: LoginUserDto): Promise<UserModel> {
+  public async verifyUser(dto: LoginUserDto): Promise<boolean> {
     const { email, password } = dto;
     const userModel = await this.usersRepository.findByEmail(email);
     if (userModel === null) {
@@ -67,7 +65,11 @@ export class AuthenticationService {
       throw new UnauthorizedException('Incorrect login or password');
     }
 
-    return userModel;
+    return true;
+  }
+
+  public async getUserByEmail(email: string): Promise<UserModel> {
+    return this.usersRepository.findByEmail(email);
   }
 
   public async changePassword(
@@ -77,33 +79,31 @@ export class AuthenticationService {
     const { oldPassword, newPassword } = dto;
     const userModel = await this.usersService.findById(userId);
 
-    await this.verifyUser({
+    const isVerified = await this.verifyUser({
       email: userModel.email,
       password: oldPassword,
     });
 
-    const userEntity = await new UserEntity({
-      firstname: userModel.firstname,
-      lastname: userModel.lastname,
-      birthDate: this.dateTimeService.formatDate(
-        userModel.birthDate,
-        DateTimeService.DATE_FORMAT
-      ),
-      info: userModel.info,
-      specializations: [],
-      cityId: userModel.cityId,
-      email: userModel.email,
-      roleId: userModel.roleId,
-      avatarUrl: userModel.avatarUrl,
-    }).setPassword(newPassword);
+    if (isVerified) {
+      const userEntity = await new UserEntity({
+        firstname: userModel.firstname,
+        lastname: userModel.lastname,
+        birthDate: this.dateTimeService.formatDate(
+          userModel.birthDate,
+          DateTimeService.DATE_FORMAT
+        ),
+        info: userModel.info,
+        specializations: [],
+        cityId: userModel.cityId,
+        email: userModel.email,
+        roleId: userModel.roleId,
+        avatarUrl: userModel.avatarUrl,
+      }).setPassword(newPassword);
 
-    return this.usersRepository.update(userId, userEntity);
-  }
+      return this.usersRepository.update(userId, userEntity);
+    }
 
-  public async logout(dto: LogoutUserDto): Promise<void> {}
-
-  public async updateTokens(dto: UpdateTokensDto): Promise<Tokens> {
-    return { accessToken: '', refreshToken: '' };
+    return userModel;
   }
 
   public async createUserToken(

@@ -2,6 +2,8 @@ import { Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ImageFile } from '@project/libs/shared-types';
 
+export type ImageModelProperties = ImageFile;
+
 @Schema({
   collection: 'images',
   timestamps: true,

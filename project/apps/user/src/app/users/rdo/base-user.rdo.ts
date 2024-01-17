@@ -26,6 +26,13 @@ export class BaseUserRdo {
   public lastname: string;
 
   @ApiProperty({
+    description: 'User info',
+    example: 'Some info about user',
+  })
+  @Expose()
+  public info: string;
+
+  @ApiProperty({
     description: "User's city id",
     example: 1,
   })

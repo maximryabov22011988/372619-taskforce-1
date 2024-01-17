@@ -16,11 +16,8 @@ import { JwtAuthGuard } from '@project/libs/validators';
 import { AuthenticationService } from './authentication.service';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
-import { LogoutUserDto } from './dto/logout-user.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
-import { UpdateTokensDto } from './dto/update-tokens.dto';
 import { LoggedUserRdo } from './rdo/logged-user.rdo';
-import { UpdatedTokensRdo } from './rdo/updated-tokens.rdo';
 
 @ApiTags('Authentication service')
 @Controller({
@@ -60,51 +57,18 @@ export class AuthenticationController {
     status: HttpStatus.UNAUTHORIZED,
     description: 'Unauthorized',
   })
-  public async login(@Body() dto: LoginUserDto): Promise<LoggedUserRdo> {
-    const userModel = await this.authService.verifyUser(dto);
-    const token = await this.authService.createUserToken(userModel);
+  public async login(
+    @Body() dto: LoginUserDto
+  ): Promise<LoggedUserRdo | object> {
+    const isVerified = await this.authService.verifyUser(dto);
+    if (isVerified) {
+      const userModel = await this.authService.getUserByEmail(dto.email);
+      const token = await this.authService.createUserToken(userModel);
 
-    return fillObject(LoggedUserRdo, token);
-  }
+      return fillObject(LoggedUserRdo, token);
+    }
 
-  @UseGuards(JwtAuthGuard)
-  @Post('/logout')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({ summary: 'Logout user' })
-  @ApiResponse({
-    status: HttpStatus.NO_CONTENT,
-    description: 'User has been logged out',
-  })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  public async logout(@Body() dto: LogoutUserDto): Promise<void> {
-    await this.authService.logout(dto);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Post('/tokens')
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Update tokens' })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Tokens has been updated successfully',
-    type: UpdatedTokensRdo,
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  public async updateTokens(
-    @Body() dto: UpdateTokensDto
-  ): Promise<UpdatedTokensRdo> {
-    const tokens = await this.authService.updateTokens(dto);
-    return fillObject(UpdatedTokensRdo, tokens);
+    return {};
   }
 
   @UseGuards(JwtAuthGuard)

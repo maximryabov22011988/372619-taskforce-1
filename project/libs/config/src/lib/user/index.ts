@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { jwtConfig } from '../jwt';
 import { default as appConfig } from './config/app.config';
 import { default as dbConfig } from './config/db.config';
+import { default as jwtConfig } from './config/jwt.config';
 
 const ENV_TASK_FILE_PATH = 'apps/user/.user.env';
 
