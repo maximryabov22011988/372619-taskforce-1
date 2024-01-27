@@ -1,0 +1,23 @@
+### Получение детальной информации о пользователе
+GET http://localhost:3004/users/1771598c-5907-4e75-ae45-817a938e97ed HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YjQzYzQ4YS01NWRhLTQzMWEtYWY5ZC1mMjNiMDg0M2E0ZjYiLCJlbWFpbCI6ImpvaG4xQGRvZS5jb20iLCJyb2xlSWQiOjEsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjMxMjM3MCwiZXhwIjoxNzA2MzEyNjcwfQ.S3dYOmvoY_F6SBQmmAlz5YMmz9YlgELw4eWxU__YJik
+
+
+
+### Изменение информации пользователя
+PATCH http://localhost:3004/users/4b43c48a-55da-431a-af9d-f23b0843a4f6/profile HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhODU0NDdlZS0wNGM1LTQxOGUtODlmZi0yYTU2ZDcyYzdjNjMiLCJlbWFpbCI6ImpvaG44M0Bkb2UuY29tIiwicm9sZUlkIjoyLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDU3MDA2ODYsImV4cCI6MTcwNTcwMDk4Nn0.USDa4VosDAHIJzbPm_vJpWCddzXL23EwgXCpbD7OQo0
+
+{
+  "firstname": "Jack",
+  "lastname": "Russel",
+  "info": "Some text",
+  "specializations": []
+}
+
+
+
+
+

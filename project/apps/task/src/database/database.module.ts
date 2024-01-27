@@ -4,6 +4,7 @@ import { knexSnakeCaseMappers } from 'objection';
 import { BaseModel } from './models/base.model';
 import { CityModel } from './models/city.model';
 import { CategoryModel } from './models/category.model';
+import { ReviewModel } from './models/review.model';
 import { StatusModel } from './models/status.model';
 import { TagModel } from './models/tag.model';
 import { CommentModel } from './models/comment.model';
@@ -31,6 +32,7 @@ import { knex } from './knex';
       StatusModel,
       TagModel,
       CommentModel,
+      ReviewModel,
       TaskModel,
       TasksTagsModel,
     ]),

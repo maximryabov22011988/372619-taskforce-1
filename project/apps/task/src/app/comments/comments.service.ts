@@ -1,24 +1,36 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { v4 as makeUuid } from 'uuid';
+import { CommentQuery } from '@project/libs/queries';
+import { Uuid } from '@project/libs/shared-types';
+import { CreateCommentDto } from '@project/libs/dto';
 import { CommentModel } from '../../database/models/comment.model';
-import { CommentQuery } from './comments.query';
 import { CommentsRepository } from './comments.repository';
-import { CreateCommentDto } from './dto/create-comment.dto';
 
 @Injectable()
 export class CommentsService {
   constructor(private readonly commentsRepository: CommentsRepository) {}
 
-  public async createComment(dto: CreateCommentDto): Promise<CommentModel> {
+  public async createComment(
+    dto: CreateCommentDto,
+    authorId: Uuid
+  ): Promise<CommentModel> {
     return this.commentsRepository.create({
       ...dto,
-      authorId: makeUuid(),
+      authorId,
     });
   }
 
   public async deleteComment(commentId: number): Promise<void> {
     await this.findById(commentId);
     await this.commentsRepository.delete(commentId);
+  }
+
+  public async findById(commentId: number): Promise<CommentModel> {
+    const commentModel = await this.commentsRepository.findById(commentId);
+    if (!commentModel) {
+      throw new NotFoundException('Comment was not found');
+    }
+
+    return commentModel;
   }
 
   public async findAllForTask(
@@ -30,14 +42,5 @@ export class CommentsService {
 
   public async deleteAllForTask(taskId: number): Promise<void> {
     await this.commentsRepository.deleteAllForTask(taskId);
-  }
-
-  private async findById(commentId: number): Promise<CommentModel> {
-    const comment = await this.commentsRepository.findById(commentId);
-    if (!comment) {
-      throw new NotFoundException('Comment was not found');
-    }
-
-    return comment;
   }
 }

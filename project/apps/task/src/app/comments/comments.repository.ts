@@ -4,7 +4,7 @@ import {
   CommentModel,
   CommentModelProperties,
 } from '../../database/models/comment.model';
-import { CommentQuery } from './comments.query';
+import { CommentQuery } from '@project/libs/queries';
 
 @Injectable()
 export class CommentsRepository {

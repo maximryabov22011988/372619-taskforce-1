@@ -1,62 +1,114 @@
+### Получение списка новых заданий
+GET http://localhost:3002/api/v1/tasks/new?page=1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwYjMzZGJiZS1iYzE5LTRmZTgtYmY5Ni1kNWNkOThlNjQ2ZDMiLCJlbWFpbCI6ImpvaG4yQGRvZS5jb20iLCJyb2xlSWQiOjIsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjM2NTI5MCwiZXhwIjoxNzA2MzY1NTkwfQ.ilEdNFBVsaqcyMN9AjZU7K1NXf2UjJ8yGiCn8cDJtrc
+
+
+
+### Получение собственных заданий
+GET http://localhost:3002/api/v1/tasks/my HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwYjMzZGJiZS1iYzE5LTRmZTgtYmY5Ni1kNWNkOThlNjQ2ZDMiLCJlbWFpbCI6ImpvaG4yQGRvZS5jb20iLCJyb2xlSWQiOjIsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjM2NTM1NywiZXhwIjoxNzA2MzY1NjU3fQ.X3drPS28lVcRZjrCP3HH4cItDLF-pUMDUDyMzQRzBM4
+
+
+
+### Получение детальной информации о задании
+GET  http://localhost:3002/api/v1/tasks/91 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMWIxOTk1MS01MDllLTRlMWMtOTc2ZC1iMDdhNmI1Y2E5OWMiLCJlbWFpbCI6ImpvaG44MUBkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IlJ1c3NlbCIsImZpcnN0bmFtZSI6IkphY2siLCJpYXQiOjE3MDYwNTM4MzYsImV4cCI6MTcwNjA1NDEzNn0.XO__uwkrLSLeN1qpV-PuOHeWzdB58P444YNsvWGdGz0
+
+
+
+### Получение количества опубликованных заданий заказчика
+GET  http://localhost:3002/api/v1/tasks/customers/4b43c48a-55da-431a-af9d-f23b0843a4f6 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwYjMzZGJiZS1iYzE5LTRmZTgtYmY5Ni1kNWNkOThlNjQ2ZDMiLCJlbWFpbCI6ImpvaG4yQGRvZS5jb20iLCJyb2xlSWQiOjIsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjM2NTM1NywiZXhwIjoxNzA2MzY1NjU3fQ.X3drPS28lVcRZjrCP3HH4cItDLF-pUMDUDyMzQRzBM4
+
+
+
+### Получение количества новых заданий заказчика
+GET  http://localhost:3002/api/v1/tasks/new/customers/4b43c48a-55da-431a-af9d-f23b0843a4f6 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YjQzYzQ4YS01NWRhLTQzMWEtYWY5ZC1mMjNiMDg0M2E0ZjYiLCJlbWFpbCI6ImpvaG4xQGRvZS5jb20iLCJyb2xlSWQiOjEsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjMwMTQzMSwiZXhwIjoxNzA2MzAxNzMxfQ.HjoePBkhVQ8HgkeTzR3jTlRR_JL8-jGMdElZrJ8H6ZQ
+
+
+
+### Получение количества выполненных заданий исполнителя
+GET  http://localhost:3002/api/v1/tasks/done/contractors/0b33dbbe-bc19-4fe8-bf96-d5cd98e646d3 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwYjMzZGJiZS1iYzE5LTRmZTgtYmY5Ni1kNWNkOThlNjQ2ZDMiLCJlbWFpbCI6ImpvaG4yQGRvZS5jb20iLCJyb2xlSWQiOjIsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjM2NTM1NywiZXhwIjoxNzA2MzY1NjU3fQ.X3drPS28lVcRZjrCP3HH4cItDLF-pUMDUDyMzQRzBM4
+
+
+
+### Получение количества проваленных заданий исполнителя
+GET  http://localhost:3002/api/v1/tasks/failed/contractors/0b33dbbe-bc19-4fe8-bf96-d5cd98e646d3 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwYjMzZGJiZS1iYzE5LTRmZTgtYmY5Ni1kNWNkOThlNjQ2ZDMiLCJlbWFpbCI6ImpvaG4yQGRvZS5jb20iLCJyb2xlSWQiOjIsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjMwMjg1OSwiZXhwIjoxNzA2MzAzMTU5fQ.hsUgjbxPJeQ_GBw5TjpUNAv1K99x4qFohouLqpud8f4
+
+
+
 ### Создание нового задания
 POST  http://localhost:3002/api/v1/tasks HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZTMyNTU4Ni05NzUyLTQzMTctOWMyNS1kNjM3YjI4MzJhYmEiLCJlbWFpbCI6ImpvaG41NDUzQGRvZS5jb20iLCJyb2xlSWQiOjEsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNDkxNDQ5NCwiZXhwIjoxNzA0OTE0Nzk0fQ.bx6LjtRHFeXsIf57LPSDnIhEkLQfHXKFlM_Wj-Rs7VQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YjQzYzQ4YS01NWRhLTQzMWEtYWY5ZC1mMjNiMDg0M2E0ZjYiLCJlbWFpbCI6ImpvaG4xQGRvZS5jb20iLCJyb2xlSWQiOjEsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjM2NTQwMiwiZXhwIjoxNzA2MzY1NzAyfQ.pG-gd7alFbAjys0YadCoRQE8Sxfjts5XXhwfyBv0-WY
 
 {
   "title": "Task long long title",
   "description": "Objectively procrastinate dynamic imperatives without customer directed niches. Proactively productivate interdependent e-commerce and transparent methodologies.",
   "category": "мебель",
-  "cityId": 1,
+  "cityId": 3,
   "price": 1000,
-  "tags": ["tt1"],
-  "executionDate": "2024-01-15",
+  "tags": ["test12345"],
+  "executionDate": "2024-02-15",
   "address": "Moscow, Presnenskaya embankment, 12, office No. 2"
 }
 
 
 
-### Получение списка заданий
-GET  http://localhost:3002/api/v1/tasks?page=1&cityId=1&categoryId=1&tagId=5 HTTP/1.1
+### Откликнуться на задание
+PATCH  http://localhost:3002/api/v1/tasks/12/responses HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZGJkN2UwYy03Zjg4LTQ3YmQtYjE4My1lNjE5NGFlNWM0MTkiLCJlbWFpbCI6ImpvaG45M0Bkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ3MTQ2MTcsImV4cCI6MTcwNDcxODIxN30.jfPH-QXRLxNborqWBgWUj0xy4rTFeaF1vxGvpihn1cw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwYjMzZGJiZS1iYzE5LTRmZTgtYmY5Ni1kNWNkOThlNjQ2ZDMiLCJlbWFpbCI6ImpvaG4yQGRvZS5jb20iLCJyb2xlSWQiOjIsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjMxNzI2MSwiZXhwIjoxNzA2MzE3NTYxfQ.DS7fuc8CmHN5-rOhaD5wSotvlXFjBhSico4XxbgZkzM
 
 
 
-### Получение детальной информации о задаче
-GET  http://localhost:3002/api/v1/tasks/1 HTTP/1.1
+### Выбор исполнителя для задание
+PATCH  http://localhost:3002/api/v1/tasks/12/contractor HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZGJkN2UwYy03Zjg4LTQ3YmQtYjE4My1lNjE5NGFlNWM0MTkiLCJlbWFpbCI6ImpvaG45M0Bkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ3MTQ2MTcsImV4cCI6MTcwNDcxODIxN30.jfPH-QXRLxNborqWBgWUj0xy4rTFeaF1vxGvpihn1cw
-
-
-
-### Обновление данных по задаче
-PATCH  http://localhost:3002/api/v1/tasks/1 HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZGJkN2UwYy03Zjg4LTQ3YmQtYjE4My1lNjE5NGFlNWM0MTkiLCJlbWFpbCI6ImpvaG45M0Bkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ3MTQ2MTcsImV4cCI6MTcwNDcxODIxN30.jfPH-QXRLxNborqWBgWUj0xy4rTFeaF1vxGvpihn1cw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YjQzYzQ4YS01NWRhLTQzMWEtYWY5ZC1mMjNiMDg0M2E0ZjYiLCJlbWFpbCI6ImpvaG4xQGRvZS5jb20iLCJyb2xlSWQiOjEsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjMxNzMwMywiZXhwIjoxNzA2MzE3NjAzfQ.Uhk2-LNmCh0JkIKRUP-9fthx4W0cgHUyRNX-XNwS0CI
 
 {
-  "statusId": 2,
-  "contractorId": "fbc55fd6-9ac2-4aad-8b79-5adfb2faed8d"
+  "contractorId": "0b33dbbe-bc19-4fe8-bf96-d5cd98e646d3"
 }
 
 
 
-### Удаление существующей задачи
-DELETE  http://localhost:3002/api/v1/tasks/1 HTTP/1.1
+### Обновление статуса задания
+PATCH  http://localhost:3002/api/v1/tasks/3/status HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZGJkN2UwYy03Zjg4LTQ3YmQtYjE4My1lNjE5NGFlNWM0MTkiLCJlbWFpbCI6ImpvaG45M0Bkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ3MTQ2MTcsImV4cCI6MTcwNDcxODIxN30.jfPH-QXRLxNborqWBgWUj0xy4rTFeaF1vxGvpihn1cw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YjQzYzQ4YS01NWRhLTQzMWEtYWY5ZC1mMjNiMDg0M2E0ZjYiLCJlbWFpbCI6ImpvaG4xQGRvZS5jb20iLCJyb2xlSWQiOjEsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjI5NDYyMSwiZXhwIjoxNzA2Mjk0OTIxfQ.4SGCousOk0h5rUB_URzLnnRgqr-IgjR62Cb5icd-Cpg
+
+{
+  "statusId": 3
+}
+
+
+
+### Удаление существующего задания
+DELETE  http://localhost:3002/api/v1/tasks/28 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5MjBlMzM5My05YWJkLTQ0NmYtOTIyOS1lYmQ3MjQ5NzJlNzYiLCJlbWFpbCI6ImpvaG45QGRvZS5jb20iLCJyb2xlSWQiOjIsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNTk0OTgwOCwiZXhwIjoxNzA1OTUwMTA4fQ.4LCbgorSIrk-1YxOioJr7vJZtEETqe_WTKDDIaspKYs
 
 
 
 ### Получение списка комментариев для определенного задания
-GET  http://localhost:3002/api/v1/tasks/8/comments?page=1 HTTP/1.1
+GET  http://localhost:3002/api/v1/tasks/21/comments?page=1 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZGJkN2UwYy03Zjg4LTQ3YmQtYjE4My1lNjE5NGFlNWM0MTkiLCJlbWFpbCI6ImpvaG45M0Bkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ3MTQ2MTcsImV4cCI6MTcwNDcxODIxN30.jfPH-QXRLxNborqWBgWUj0xy4rTFeaF1vxGvpihn1cw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMWIxOTk1MS01MDllLTRlMWMtOTc2ZC1iMDdhNmI1Y2E5OWMiLCJlbWFpbCI6ImpvaG44MUBkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IlJ1c3NlbCIsImZpcnN0bmFtZSI6IkphY2siLCJpYXQiOjE3MDYxMTAwNzEsImV4cCI6MTcwNjExMDM3MX0.BzOkbFwCGoCh2ycTKTpicAP80_jKzdFO7PNWBaErd3E
 
 
 
 ### Удаление всех комментариев задания
-DELETE  http://localhost:3002/api/v1/tasks/1/comments HTTP/1.1
+DELETE  http://localhost:3002/api/v1/tasks/21/comments HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZGJkN2UwYy03Zjg4LTQ3YmQtYjE4My1lNjE5NGFlNWM0MTkiLCJlbWFpbCI6ImpvaG45M0Bkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ3MTQ2MTcsImV4cCI6MTcwNDcxODIxN30.jfPH-QXRLxNborqWBgWUj0xy4rTFeaF1vxGvpihn1cw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMWIxOTk1MS01MDllLTRlMWMtOTc2ZC1iMDdhNmI1Y2E5OWMiLCJlbWFpbCI6ImpvaG44MUBkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IlJ1c3NlbCIsImZpcnN0bmFtZSI6IkphY2siLCJpYXQiOjE3MDYxMTAwNzEsImV4cCI6MTcwNjExMDM3MX0.BzOkbFwCGoCh2ycTKTpicAP80_jKzdFO7PNWBaErd3E

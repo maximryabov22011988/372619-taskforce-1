@@ -2,7 +2,7 @@ import { IsNotEmpty, IsString, IsUUID, IsNumber } from 'class-validator';
 
 export class CreateSubscriberDto {
   @IsNotEmpty()
-  @IsUUID()
+  @IsUUID(4)
   public userId: string;
 
   @IsNotEmpty()

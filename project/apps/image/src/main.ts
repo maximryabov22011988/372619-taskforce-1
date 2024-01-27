@@ -22,7 +22,7 @@ const setupOpenApi = (app: INestApplication) => {
   });
 };
 
-async function bootstrap() {
+const bootstrap = async () => {
   const app = await NestFactory.create(AppModule);
 
   const configService = app.get(ConfigService);
@@ -39,6 +39,6 @@ async function bootstrap() {
   Logger.log(
     `🚀 Image microservice is running on: http://localhost:${port}/${globalPrefix}`
   );
-}
+};
 
 bootstrap();

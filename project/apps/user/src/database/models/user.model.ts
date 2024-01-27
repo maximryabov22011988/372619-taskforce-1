@@ -3,7 +3,6 @@ import { Model } from 'objection';
 import { BaseModel } from './base.model';
 import { RoleModel } from './role.model';
 import { SpecializationModel } from './specialization.model';
-import { ReviewModel } from './review.model';
 
 export type UserModelProperties = Pick<
   UserModel,
@@ -108,14 +107,6 @@ export class UserModel extends BaseModel<Uuid> {
       join: {
         from: 'users.roleId',
         to: 'roles.id',
-      },
-    },
-    reviews: {
-      relation: Model.HasManyRelation,
-      modelClass: ReviewModel,
-      join: {
-        from: 'users.id',
-        to: 'reviews.authorId',
       },
     },
     specializations: {

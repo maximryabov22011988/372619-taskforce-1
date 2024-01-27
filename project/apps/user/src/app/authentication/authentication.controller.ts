@@ -8,16 +8,23 @@ import {
   Param,
   ParseUUIDPipe,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { fillObject } from '@project/libs/utils-core';
-import { Uuid } from '@project/libs/shared-types';
+import {
+  RequestWithTokenPayload,
+  User,
+  Uuid,
+} from '@project/libs/shared-types';
 import { JwtAuthGuard } from '@project/libs/validators';
+import { ChangePasswordDto, RegisterUserDto } from '@project/libs/dto';
+import { LoggedUserRdo, RegisteredUserRdo } from '@project/libs/rdo';
+import { RequestWithUser } from '@project/libs/shared-types';
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 import { AuthenticationService } from './authentication.service';
-import { RegisterUserDto } from './dto/register-user.dto';
-import { LoginUserDto } from './dto/login-user.dto';
-import { ChangePasswordDto } from './dto/change-password.dto';
-import { LoggedUserRdo } from './rdo/logged-user.rdo';
+import { TokenPayloadRdo } from './rdo/token-payload.rdo';
 
 @ApiTags('Authentication service')
 @Controller({
@@ -27,65 +34,96 @@ import { LoggedUserRdo } from './rdo/logged-user.rdo';
 export class AuthenticationController {
   constructor(private readonly authService: AuthenticationService) {}
 
-  @Post('/register')
+  @Post('register')
   @ApiOperation({ summary: 'Registration new user' })
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'New user has been successfully created',
+    type: RegisteredUserRdo,
   })
   @ApiResponse({
     status: HttpStatus.CONFLICT,
     description: 'User has already exists',
   })
-  public async register(@Body() dto: RegisterUserDto): Promise<void> {
-    await this.authService.register(dto);
+  public async register(@Body() dto: RegisterUserDto): Promise<User> {
+    const userModel = await this.authService.register(dto);
+    return fillObject(RegisteredUserRdo, userModel);
   }
 
-  @Post('/login')
+  @UseGuards(LocalAuthGuard)
+  @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Login user' })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Not found',
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'User has been logged in successfully',
     type: LoggedUserRdo,
   })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  public async login(
-    @Body() dto: LoginUserDto
-  ): Promise<LoggedUserRdo | object> {
-    const isVerified = await this.authService.verifyUser(dto);
-    if (isVerified) {
-      const userModel = await this.authService.getUserByEmail(dto.email);
-      const token = await this.authService.createUserToken(userModel);
+  public async login(@Req() { user }: RequestWithUser): Promise<LoggedUserRdo> {
+    const userModel = await this.authService.getUserByEmail(user.email);
+    const token = await this.authService.createUserToken({
+      ...userModel,
+    });
 
-      return fillObject(LoggedUserRdo, token);
-    }
-
-    return {};
+    return fillObject(LoggedUserRdo, token);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Patch('/password/:userId')
+  @Post('check')
+  @ApiOperation({ summary: 'Getting user information' })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Getting user information',
+    type: TokenPayloadRdo,
+  })
+  public async checkToken(@Req() { user: payload }: RequestWithTokenPayload) {
+    return payload;
+  }
+
+  @UseGuards(JwtRefreshGuard)
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Refresh tokens' })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'New access/refresh token successfully received',
+    type: LoggedUserRdo,
+  })
+  public async refreshToken(@Req() { user }: RequestWithUser) {
+    return this.authService.createUserToken(user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('password/:userId')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Change password' })
   @ApiResponse({
-    status: HttpStatus.NO_CONTENT,
-    description: 'Password has been changed successfully',
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
     description: 'Not found',
   })
   @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
+    status: HttpStatus.NO_CONTENT,
+    description: 'Password has been changed successfully',
   })
   public async changePassword(
     @Param('userId', ParseUUIDPipe) userId: Uuid,

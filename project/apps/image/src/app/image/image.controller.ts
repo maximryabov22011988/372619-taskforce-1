@@ -22,12 +22,13 @@ import { Express } from 'express';
 import assign from 'lodash/assign';
 import { fillObject } from '@project/libs/utils-core';
 import { ImageConfig } from '@project/libs/config';
-import { JwtAuthGuard } from '@project/libs/validators';
-import { ImageFile } from '@project/libs/shared-types';
+import { JwtAuthGuard, Roles, RolesGuard } from '@project/libs/validators';
+import { ImageFile, UserRoleId } from '@project/libs/shared-types';
+import { UploadedImageFileRdo } from '@project/libs/rdo';
 import { ImageService } from './image.service';
-import { MongoIdValidationPipe } from './pipe/mongo-id-validation.pipe';
-import { FileSizeValidationPipe } from './pipe/file-size-validation.pipe';
-import { UploadedImageFileRdo } from './rdo/uploaded-image-file.rdo';
+import { MongoIdValidationPipe } from './pipes/mongo-id-validation.pipe';
+import { FileExtensionValidationPipe } from './pipes/file-extension-validation.pipe';
+import { FileSizeValidationPipe } from './pipes/file-size-validation.pipe';
 
 const { appConfig } = ImageConfig;
 
@@ -43,7 +44,12 @@ export class ImageController {
     private readonly applicationConfig: ConfigType<typeof appConfig>
   ) {}
 
-  @Post('/upload/avatar')
+  @Post('upload/avatar')
+  @UseInterceptors(FileInterceptor('file'))
+  @UsePipes(
+    new FileSizeValidationPipe({ maxSizeInKb: 500 }),
+    new FileExtensionValidationPipe(['jpeg', 'png'])
+  )
   @ApiOperation({ summary: 'Uploading user avatar' })
   @ApiBody({
     schema: {
@@ -62,8 +68,6 @@ export class ImageController {
     type: UploadedImageFileRdo,
   })
   @ApiConsumes('multipart/form-data')
-  @UseInterceptors(FileInterceptor('file'))
-  @UsePipes(new FileSizeValidationPipe({ maxSizeInKb: 500 }))
   public async uploadAvatar(
     @UploadedFile() file: Express.Multer.File
   ): Promise<ImageFile> {
@@ -71,8 +75,14 @@ export class ImageController {
     return this.getImageFile(newImageFile);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Post('/upload')
+  @Roles(UserRoleId.Customer)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  @UsePipes(
+    new FileSizeValidationPipe({ maxSizeInKb: 1000 }),
+    new FileExtensionValidationPipe(['jpg', 'png'])
+  )
   @ApiOperation({ summary: 'Uploading image' })
   @ApiBody({
     schema: {
@@ -86,17 +96,15 @@ export class ImageController {
     },
   })
   @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
     status: HttpStatus.OK,
     description: 'Image file is successfully uploaded',
     type: UploadedImageFileRdo,
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
   @ApiConsumes('multipart/form-data')
-  @UseInterceptors(FileInterceptor('file'))
-  @UsePipes(new FileSizeValidationPipe({ maxSizeInKb: 1000 }))
   public async uploadImage(
     @UploadedFile() file: Express.Multer.File
   ): Promise<ImageFile> {
@@ -108,17 +116,17 @@ export class ImageController {
   @Get(':fileId')
   @ApiOperation({ summary: 'Getting image file' })
   @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Image file is successfully received',
-    type: UploadedImageFileRdo,
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
     description: 'Not found',
   })
   @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
+    status: HttpStatus.OK,
+    description: 'Image file is successfully received',
+    type: UploadedImageFileRdo,
   })
   public async getImageFileById(
     @Param('fileId', MongoIdValidationPipe) fileId: string

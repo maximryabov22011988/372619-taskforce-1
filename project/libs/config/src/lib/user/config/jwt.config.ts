@@ -6,12 +6,16 @@ import { JwtEnv } from '../jwt.env';
 export interface JWTConfig {
   accessTokenSecret: string;
   accessTokenExpiresIn: string;
+  refreshTokenSecret: string;
+  refreshTokenExpiresIn: string;
 }
 
 export default registerAs('jwt', (): JWTConfig => {
   const config: JWTConfig = {
-    accessTokenSecret: process.env.JWT_AT_SECRET,
-    accessTokenExpiresIn: process.env.JWT_AT_EXPIRES_IN,
+    accessTokenSecret: process.env.USER_JWT_AT_SECRET,
+    accessTokenExpiresIn: process.env.USER_JWT_AT_EXPIRES_IN,
+    refreshTokenSecret: process.env.USER_JWT_RT_SECRET,
+    refreshTokenExpiresIn: process.env.USER_JWT_RT_EXPIRES_IN,
   };
 
   const jwtEnv = plainToInstance(JwtEnv, config, {

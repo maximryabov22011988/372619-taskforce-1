@@ -1,14 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { ChangeProfileDto } from '@project/libs/dto';
 import { UserModel } from '../../database/models/user.model';
+import { SpecializationsService } from '../specializations/specializations.service';
 import { UsersRepository } from './users.repository';
 import { UserEntity } from './users.entity';
-import { ChangeProfileDto } from './dto/change-profile.dto';
 import { DateTimeService } from '@project/libs/services';
 
 @Injectable()
 export class UsersService {
   constructor(
     private readonly usersRepository: UsersRepository,
+    private readonly specializationsService: SpecializationsService,
     private readonly dateTimeService: DateTimeService
   ) {}
 
@@ -35,12 +37,27 @@ export class UsersService {
         DateTimeService.DATE_FORMAT
       ),
       info: dto.info ?? '',
-      specializations: dto.specializations ?? [],
       cityId: dto.cityId ?? userModel.cityId,
       email: userModel.email,
       roleId: userModel.roleId,
       avatarUrl: userModel.avatarUrl,
     });
+
+    const existedSpecializations =
+      await this.specializationsService.findAllSpecializationsByUser(
+        userModel.id
+      );
+    if (!existedSpecializations.length) {
+      await this.specializationsService.createSpecializations(
+        dto.specializations,
+        userModel.id
+      );
+    }
+
+    await this.specializationsService.updateSpecializations(
+      dto.specializations,
+      userModel.id
+    );
 
     return this.usersRepository.update(userId, userEntity);
   }

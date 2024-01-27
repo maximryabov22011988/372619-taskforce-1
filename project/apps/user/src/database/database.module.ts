@@ -5,8 +5,9 @@ import { knex } from './knex';
 import { BaseModel } from './models/base.model';
 import { RoleModel } from './models/role.model';
 import { SpecializationModel } from './models/specialization.model';
-import { ReviewModel } from './models/review.model';
 import { UserModel } from './models/user.model';
+import { UsersSpecializationsModel } from './models/users-spectializations.model';
+import { RefreshTokenModel } from './models/refresh-token.model';
 
 @Global()
 @Module({
@@ -25,8 +26,9 @@ import { UserModel } from './models/user.model';
     ObjectionModule.forFeature([
       RoleModel,
       SpecializationModel,
-      ReviewModel,
       UserModel,
+      UsersSpecializationsModel,
+      RefreshTokenModel,
     ]),
   ],
   exports: [ObjectionModule],

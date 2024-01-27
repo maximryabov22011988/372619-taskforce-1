@@ -1,0 +1,36 @@
+### Регистрация нового пользователя
+POST http://localhost:3004/auth/register HTTP/1.1
+Content-Type: application/json
+
+{
+  "firstname": "John",
+  "lastname": "Doe",
+  "email": "john22@doe.com",
+  "cityId": 2,
+  "roleId": 2,
+  "password": "123456",
+  "birthDate": "2004-12-29"
+}
+
+
+
+### Логин пользователя в систему
+POST http://localhost:3004/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "john1@doe.com",
+  "password": "123456"
+}
+
+
+
+### Изменение пользовательского пароля
+PATCH  http://localhost:3004/auth/password/a85447ee-04c5-418e-89ff-2a56d72c7c63 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhODU0NDdlZS0wNGM1LTQxOGUtODlmZi0yYTU2ZDcyYzdjNjMiLCJlbWFpbCI6ImpvaG44M0Bkb2UuY29tIiwicm9sZUlkIjoyLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDU3MDA2ODYsImV4cCI6MTcwNTcwMDk4Nn0.USDa4VosDAHIJzbPm_vJpWCddzXL23EwgXCpbD7OQo0
+
+{
+  "oldPassword": "123456",
+  "newPassword": "567890"
+}

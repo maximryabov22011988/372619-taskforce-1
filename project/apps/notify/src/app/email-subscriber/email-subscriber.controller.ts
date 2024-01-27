@@ -13,9 +13,9 @@ export class EmailSubscriberController {
   ) {}
 
   @RabbitSubscribe({
-    exchange: 'taskforce.notify',
+    exchange: 'taskforce.notify', // вынести в env
     routingKey: RabbitRouting.AddSubscriber,
-    queue: 'taskforce.notify',
+    queue: 'taskforce.notify', // вынести в env
   })
   public async create(subscriber: CreateSubscriberDto): Promise<void> {
     this.emailSubscriberService.addSubscriber(subscriber);

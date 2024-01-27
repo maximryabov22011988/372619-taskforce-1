@@ -16,7 +16,11 @@
     "baseUrl": ".",
     "paths": {
       "@project/libs/config": ["libs/config/src/index.ts"],
+      "@project/libs/dto": ["libs/dto/src/index.ts"],
+      "@project/libs/filters": ["libs/filters/src/index.ts"],
       "@project/libs/modules": ["libs/modules/src/index.ts"],
+      "@project/libs/queries": ["libs/queries/src/index.ts"],
+      "@project/libs/rdo": ["libs/rdo/src/index.ts"],
       "@project/libs/services": ["libs/services/src/index.ts"],
       "@project/libs/shared-types": ["libs/shared-types/src/index.ts"],
       "@project/libs/utils-core": ["libs/utils/core/src/index.ts"],

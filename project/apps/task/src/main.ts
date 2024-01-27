@@ -12,6 +12,7 @@ import {
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { UniqueConstraintExceptionFilter } from '@project/libs/filters';
 import { Environment } from '@project/libs/shared-types';
 import { AppModule } from './app/app.module';
 
@@ -28,7 +29,7 @@ const setupOpenApi = (app: INestApplication) => {
   });
 };
 
-async function bootstrap() {
+const bootstrap = async () => {
   const app = await NestFactory.create(AppModule);
 
   const configService = app.get(ConfigService);
@@ -40,6 +41,7 @@ async function bootstrap() {
   app.enableVersioning({
     type: VersioningType.URI,
   });
+  app.useGlobalFilters(new UniqueConstraintExceptionFilter());
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -52,6 +54,6 @@ async function bootstrap() {
   Logger.log(
     `🚀 Task microservice is running on: http://localhost:${port}/${globalPrefix}`
   );
-}
+};
 
 bootstrap();

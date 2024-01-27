@@ -1,0 +1,139 @@
+### Получение списка новых заданий
+GET http://localhost:3004/tasks/new?page=1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwYjMzZGJiZS1iYzE5LTRmZTgtYmY5Ni1kNWNkOThlNjQ2ZDMiLCJlbWFpbCI6ImpvaG4yQGRvZS5jb20iLCJyb2xlSWQiOjIsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjM2NDg4NCwiZXhwIjoxNzA2MzY1MTg0fQ.KuzvsdAokkR82ObPjuYgSEzFHc21A4IIA4vJb3fT-Wg
+
+
+
+### Получение собственных заданий
+GET http://localhost:3004/tasks/my HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YjQzYzQ4YS01NWRhLTQzMWEtYWY5ZC1mMjNiMDg0M2E0ZjYiLCJlbWFpbCI6ImpvaG4xQGRvZS5jb20iLCJyb2xlSWQiOjEsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjM2ODIzMiwiZXhwIjoxNzA2MzY4NTMyfQ.1UJ6zd1I8BOtjH7SxQA9Qjx1CA0YqYN-rSeQWwoE-s0
+
+
+
+### Получение детальной информации о задании
+GET http://localhost:3004/tasks/81 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YjQzYzQ4YS01NWRhLTQzMWEtYWY5ZC1mMjNiMDg0M2E0ZjYiLCJlbWFpbCI6ImpvaG4xQGRvZS5jb20iLCJyb2xlSWQiOjEsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjM2Nzk3OSwiZXhwIjoxNzA2MzY4Mjc5fQ.j2dLy2o5IAAJ-HeEOsvk3s-XvC5SvuRV-rSwmzeYMzw
+
+
+
+### Создание нового задания
+POST http://localhost:3004/tasks HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YjQzYzQ4YS01NWRhLTQzMWEtYWY5ZC1mMjNiMDg0M2E0ZjYiLCJlbWFpbCI6ImpvaG4xQGRvZS5jb20iLCJyb2xlSWQiOjEsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjI5Mjc4MywiZXhwIjoxNzA2MjkzMDgzfQ.9tpFmYQeT-LSMPvMZ29r9GJLqKc55o7M1iA_zXBhGFs
+
+{
+  "title": "Task long long title",
+  "description": "Objectively procrastinate dynamic imperatives without customer directed niches. Proactively productivate interdependent e-commerce and transparent methodologies.",
+  "category": "мебель",
+  "cityId": 1,
+  "price": 1000,
+  "tags": ["tt1"],
+  "executionDate": "2024-02-22",
+  "address": "Moscow, Presnenskaya embankment, 12, office No. 2"
+}
+
+
+
+### Откликнуться на задание
+PATCH  http://localhost:3004/tasks/6/responses HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNzcxNTk4Yy01OTA3LTRlNzUtYWU0NS04MTdhOTM4ZTk3ZWQiLCJlbWFpbCI6ImpvaG4yMkBkb2UuY29tIiwicm9sZUlkIjoyLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDYzMTE3ODgsImV4cCI6MTcwNjMxMjA4OH0.QExZwkjhUz1e-WRM-ulqdY6bDFv_rFBURESusxuEOhQ
+
+
+
+### Выбор исполнителя для задания
+PATCH  http://localhost:3004/tasks/5/contractor HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YjQzYzQ4YS01NWRhLTQzMWEtYWY5ZC1mMjNiMDg0M2E0ZjYiLCJlbWFpbCI6ImpvaG4xQGRvZS5jb20iLCJyb2xlSWQiOjEsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjMxMTk5MywiZXhwIjoxNzA2MzEyMjkzfQ.yJayWbnkA0IZBIOP73SpIgCb5WkPbqvggDNeRBeKBwA
+
+{
+  "contractorId": "1771598c-5907-4e75-ae45-817a938e97ed"
+}
+
+
+
+### Обновление статуса задания
+PATCH http://localhost:3004/tasks/5/status HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YjQzYzQ4YS01NWRhLTQzMWEtYWY5ZC1mMjNiMDg0M2E0ZjYiLCJlbWFpbCI6ImpvaG4xQGRvZS5jb20iLCJyb2xlSWQiOjEsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjMxMTk5MywiZXhwIjoxNzA2MzEyMjkzfQ.yJayWbnkA0IZBIOP73SpIgCb5WkPbqvggDNeRBeKBwA
+
+{
+  "statusId": 3
+}
+
+
+
+### Удаление существующего задания
+DELETE http://localhost:3004/tasks/26 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMWIxOTk1MS01MDllLTRlMWMtOTc2ZC1iMDdhNmI1Y2E5OWMiLCJlbWFpbCI6ImpvaG44MUBkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDU5NDk5NTgsImV4cCI6MTcwNTk1MDI1OH0.X0WOUJ5Kf9gMJsTZJ322hhe_s8XXghmJC8iSzn-bfR0
+
+
+
+### Создание новой категории
+POST http://localhost:3004/tasks/categories HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMWIxOTk1MS01MDllLTRlMWMtOTc2ZC1iMDdhNmI1Y2E5OWMiLCJlbWFpbCI6ImpvaG44MUBkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDU5NTEyOTEsImV4cCI6MTcwNTk1MTU5MX0.QDf9p1WP95HxiSAzfzpJ4R45gyFdBlWauhUqOuW58sY
+
+{
+  "name": "furniture61"
+}
+
+
+
+### Создание отзыва об исполнителе
+POST http://localhost:3004/tasks/reviews HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YjQzYzQ4YS01NWRhLTQzMWEtYWY5ZC1mMjNiMDg0M2E0ZjYiLCJlbWFpbCI6ImpvaG4xQGRvZS5jb20iLCJyb2xlSWQiOjEsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjMxMTk5MywiZXhwIjoxNzA2MzEyMjkzfQ.yJayWbnkA0IZBIOP73SpIgCb5WkPbqvggDNeRBeKBwA
+
+{
+  "text": "This is great work. This is great work. This is great work",
+  "taskId": 5,
+  "rating": 5,
+  "customerId": "4b43c48a-55da-431a-af9d-f23b0843a4f6",
+  "contractorId": "1771598c-5907-4e75-ae45-817a938e97ed"
+}
+
+
+
+### Получение рейтинга исполнителя
+GET  http://localhost:3004/tasks/contractors/0b33dbbe-bc19-4fe8-bf96-d5cd98e646d3/rating HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YjQzYzQ4YS01NWRhLTQzMWEtYWY5ZC1mMjNiMDg0M2E0ZjYiLCJlbWFpbCI6ImpvaG4xQGRvZS5jb20iLCJyb2xlSWQiOjEsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjI5NDYyMSwiZXhwIjoxNzA2Mjk0OTIxfQ.4SGCousOk0h5rUB_URzLnnRgqr-IgjR62Cb5icd-Cpg
+
+
+
+
+### Получение списка комментариев для определенного задания
+GET http://localhost:3004/tasks/36/comments?page=1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMWIxOTk1MS01MDllLTRlMWMtOTc2ZC1iMDdhNmI1Y2E5OWMiLCJlbWFpbCI6ImpvaG44MUBkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IlJ1c3NlbCIsImZpcnN0bmFtZSI6IkphY2siLCJpYXQiOjE3MDYxMTAyOTAsImV4cCI6MTcwNjExMDU5MH0.c6qqiBzjGxtsgmMaAtB_KtFs81HoOf3bihdxnmZ6JKI
+
+
+
+### Удаление всех комментариев задания
+DELETE http://localhost:3004/tasks/36/comments HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMWIxOTk1MS01MDllLTRlMWMtOTc2ZC1iMDdhNmI1Y2E5OWMiLCJlbWFpbCI6ImpvaG44MUBkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IlJ1c3NlbCIsImZpcnN0bmFtZSI6IkphY2siLCJpYXQiOjE3MDYxMTAyOTAsImV4cCI6MTcwNjExMDU5MH0.c6qqiBzjGxtsgmMaAtB_KtFs81HoOf3bihdxnmZ6JKI
+
+
+
+### Создание нового комментария
+POST http://localhost:3004/tasks/comments HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMWIxOTk1MS01MDllLTRlMWMtOTc2ZC1iMDdhNmI1Y2E5OWMiLCJlbWFpbCI6ImpvaG44MUBkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IlJ1c3NlbCIsImZpcnN0bmFtZSI6IkphY2siLCJpYXQiOjE3MDYxMTAyOTAsImV4cCI6MTcwNjExMDU5MH0.c6qqiBzjGxtsgmMaAtB_KtFs81HoOf3bihdxnmZ6JKI
+
+{
+  "text": "Some comment text",
+  "taskId": 36
+}
+
+
+
+### Удаление комментария
+DELETE http://localhost:3004/tasks/comments/109 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMWIxOTk1MS01MDllLTRlMWMtOTc2ZC1iMDdhNmI1Y2E5OWMiLCJlbWFpbCI6ImpvaG44MUBkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IlJ1c3NlbCIsImZpcnN0bmFtZSI6IkphY2siLCJpYXQiOjE3MDYxMTAyOTAsImV4cCI6MTcwNjExMDU5MH0.c6qqiBzjGxtsgmMaAtB_KtFs81HoOf3bihdxnmZ6JKI

@@ -1,25 +1,24 @@
 import { Module } from '@nestjs/common';
 import { DateTimeService } from '@project/libs/services';
-import { CommentsService } from '../comments/comments.service';
-import { CommentsRepository } from '../comments/comments.repository';
+import { CategoriesModule } from '../categories/categories.module';
+import { TagsModule } from '../tags/tags.module';
+import { CommentsModule } from '../comments/comments.module';
 import { NotifyModule } from '../notify/notify.module';
 import { TasksController } from './tasks.controller';
 import { TasksService } from './tasks.service';
-import { TasksRepository } from './repository/tasks.repository';
-import { CategoriesRepository } from './repository/categories.repository';
-import { TagsRepository } from './repository/tags.repository';
+import { TasksRepository } from './tasks.repository';
+import { CitiesModule } from '../cities/cities.module';
 
 @Module({
-  imports: [NotifyModule],
-  controllers: [TasksController],
-  providers: [
-    TasksService,
-    TasksRepository,
-    CategoriesRepository,
-    TagsRepository,
-    CommentsService,
-    CommentsRepository,
-    DateTimeService,
+  imports: [
+    NotifyModule,
+    CategoriesModule,
+    TagsModule,
+    CommentsModule,
+    CitiesModule,
   ],
+  controllers: [TasksController],
+  providers: [TasksService, TasksRepository, DateTimeService],
+  exports: [TasksService],
 })
 export class TasksModule {}
