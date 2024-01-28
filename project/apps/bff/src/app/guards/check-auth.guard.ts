@@ -6,9 +6,9 @@ import {
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigType } from '@nestjs/config';
-import { ApiGatewayConfig } from '@project/libs/config';
+import { BffConfig } from '@project/libs/config';
 
-const { microserviceConfig } = ApiGatewayConfig;
+const { microserviceConfig } = BffConfig;
 
 @Injectable()
 export class CheckAuthGuard implements CanActivate {

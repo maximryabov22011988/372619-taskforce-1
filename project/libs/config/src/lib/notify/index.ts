@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { getMongooseOptions } from './get-mongoose-options';
 import { getMailOptions } from './get-mail-options';
 import { default as appConfig } from './config/app.config';
 import { default as dbConfig } from './config/db.config';
@@ -9,14 +8,7 @@ import { default as mailConfig } from './config/mail.config';
 
 const ENV_NOTIFY_FILE_PATH = 'apps/notify/.notify.env';
 
-export {
-  appConfig,
-  dbConfig,
-  rabbitMqConfig,
-  mailConfig,
-  getMongooseOptions,
-  getMailOptions,
-};
+export { appConfig, dbConfig, rabbitMqConfig, mailConfig, getMailOptions };
 
 @Module({
   imports: [

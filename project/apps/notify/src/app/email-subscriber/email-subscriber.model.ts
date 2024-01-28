@@ -1,28 +1,21 @@
 import { Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Subscriber } from '@project/libs/shared-types';
+import { NewTasksNotification } from '@project/libs/shared-types';
 
-export type EmailSubscriberModelProperties = Subscriber;
+export type EmailSubscriberModelProperties = NewTasksNotification;
 
 @Schema({
   collection: 'email-subscribers',
   timestamps: true,
 })
-export class EmailSubscriberModel extends Document implements Subscriber {
-  @Prop()
-  public userId: string;
+export class EmailSubscriberModel
+  extends Document
+  implements NewTasksNotification
+{
+  public readonly createdAt: Date;
 
   @Prop()
-  public title: string;
-
-  @Prop()
-  public description: string;
-
-  @Prop()
-  public city: string;
-
-  @Prop()
-  public price: number;
+  public emails: string[];
 }
 
 export const EmailSubscriberSchema =

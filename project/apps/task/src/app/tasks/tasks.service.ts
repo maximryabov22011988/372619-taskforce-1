@@ -48,10 +48,10 @@ export class TasksService {
   }
 
   public async findAllByStatus(
-    query: TaskQuery,
-    statusId: TaskStatusId
+    statusId: TaskStatusId,
+    query?: TaskQuery
   ): Promise<TaskModel[]> {
-    return this.tasksRepository.findAllByStatus(query, statusId);
+    return this.tasksRepository.findAllByStatus(statusId, query);
   }
 
   public async findOwn({

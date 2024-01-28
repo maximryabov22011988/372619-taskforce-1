@@ -27,8 +27,8 @@ export class TasksRepository
   ) {}
 
   public async findAllByStatus(
-    query: TaskQuery,
-    statusId: TaskStatusId
+    statusId: TaskStatusId,
+    query?: TaskQuery
   ): Promise<TaskModel[]> {
     const queryBuilder = this.getQueryBuilderWithCommentsCount();
 
@@ -184,7 +184,7 @@ export class TasksRepository
     query: TaskQuery,
     statusId: TaskStatusId
   ) {
-    const { cityId, categoryId, tagId } = query;
+    const { cityId, categoryId, tagId } = query ?? {};
 
     if (statusId) {
       queryBuilder.where({ statusId });
@@ -213,9 +213,11 @@ export class TasksRepository
     queryBuilder: QueryBuilderType<TaskModel>,
     query: TaskQuery
   ) {
-    const { page, limit, sorting } = query;
+    const { page, limit, sorting } = query ?? {};
 
-    queryBuilder.offset(limit * (page - 1)).limit(limit);
+    if (page && limit) {
+      queryBuilder.offset(limit * (page - 1)).limit(limit);
+    }
 
     if (sorting === TaskSorting.CreatedAt) {
       queryBuilder.orderBy('createdAt', 'desc');

@@ -28,7 +28,7 @@ import {
 } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import FormData from 'form-data';
-import { ApiGatewayConfig } from '@project/libs/config';
+import { BffConfig } from '@project/libs/config';
 import {
   Uuid,
   ImageFile,
@@ -45,7 +45,7 @@ import { CheckAuthGuard } from '../../guards/check-auth.guard';
 import { ContractorUserRdo } from './rdo/contractor-user.rdo';
 import { CustomerUserRdo } from './rdo/customer-user.rdo';
 
-const { microserviceConfig } = ApiGatewayConfig;
+const { microserviceConfig } = BffConfig;
 
 @UseFilters(HttpExceptionFilter)
 @Controller('users')

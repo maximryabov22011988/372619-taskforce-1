@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateSubscriberDto } from './dto/create-subscriber.dto';
+import { CreateNewTasksNotificationDto } from '@project/libs/dto';
 import { EmailSubscriberRepository } from './email-subscriber.repository';
 
 @Injectable()
@@ -8,16 +8,14 @@ export class EmailSubscriberService {
     private readonly emailSubscriberRepository: EmailSubscriberRepository
   ) {}
 
-  public async addSubscriber(subscriber: CreateSubscriberDto) {
-    const { title } = subscriber;
-    const existedSubscriber = await this.emailSubscriberRepository.findByTitle(
-      title
-    );
+  public async addNewTasksSelection(
+    newTasksSelection: CreateNewTasksNotificationDto
+  ) {
+    return this.emailSubscriberRepository.create(newTasksSelection);
+  }
 
-    if (existedSubscriber) {
-      return existedSubscriber;
-    }
-
-    return this.emailSubscriberRepository.create(subscriber);
+  public async getLastTaskNotificationDate() {
+    const { createdAt } = await this.emailSubscriberRepository.findLatest();
+    return createdAt;
   }
 }

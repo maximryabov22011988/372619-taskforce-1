@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CRUDRepository } from '@project/libs/utils-types';
+import { UserRoleId } from '@project/libs/shared-types';
 import { UserModel } from '../../database/models/user.model';
 import { UserEntity } from './users.entity';
 
@@ -10,6 +11,10 @@ export class UsersRepository
   constructor(
     @Inject(UserModel) private readonly userModel: typeof UserModel
   ) {}
+
+  public async findByRole(roleId: UserRoleId): Promise<UserModel[]> {
+    return this.userModel.query().where({ roleId }).returning('*').execute();
+  }
 
   public async findById(id: string): Promise<UserModel> {
     return this.userModel

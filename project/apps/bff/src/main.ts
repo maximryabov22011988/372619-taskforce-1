@@ -10,7 +10,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app/app.module';
 import { RequestIdInterceptor } from './app/interceptors/request-id.interceptor';
-import { HttpExceptionFilter } from 'apps/bff/src/app/filters/http-exception.filter';
+import { HttpExceptionFilter } from './app/filters/http-exception.filter';
 
 const setupOpenApi = (app: INestApplication) => {
   const config = new DocumentBuilder()

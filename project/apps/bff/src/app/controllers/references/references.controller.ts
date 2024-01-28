@@ -12,11 +12,11 @@ import { HttpService } from '@nestjs/axios';
 import { ConfigType } from '@nestjs/config';
 import { Request } from 'express';
 import { City, Role, Status } from '@project/libs/shared-types';
-import { ApiGatewayConfig } from '@project/libs/config';
+import { BffConfig } from '@project/libs/config';
 import { CityRdo, RoleRdo, StatusRdo } from '@project/libs/rdo';
 import { CheckAuthGuard } from '../../guards/check-auth.guard';
 
-const { microserviceConfig } = ApiGatewayConfig;
+const { microserviceConfig } = BffConfig;
 
 @Controller('references')
 export class ReferencesController {

@@ -6,12 +6,14 @@ import { AuthenticationModule } from './authentication/authentication.module';
 import { UsersModule } from './users/users.module';
 import { RolesModule } from './roles/roles.module';
 import { RefreshTokenModule } from './refresh-token/refresh-token.module';
+import { SubscribeModule } from './subscribe/subscribe.module';
 
 const { UserConfigModule: ConfigModule } = UserConfig;
 
 @Module({
   imports: [
     ConfigModule,
+    SubscribeModule,
     JwtModule,
     UsersModule,
     AuthenticationModule,

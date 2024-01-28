@@ -50,6 +50,13 @@ export class DateTimeService {
 
     return dayjs().diff(date, unit);
   }
+
+  public isDateAfter(date: Date, dateToCheck: number | Date): boolean {
+    const lastDispatchDayjs = dayjs(date);
+    const dateToCheckDayjs = dayjs(dateToCheck);
+
+    return dateToCheckDayjs.isAfter(lastDispatchDayjs);
+  }
 }
 
 export const dateTimeService = new DateTimeService();

@@ -6,7 +6,7 @@ import { CommentModel } from './comment.model';
 import { CityModel } from './city.model';
 import { StatusModel } from './status.model';
 import { CategoryModel } from './category.model';
-import { ReviewModel } from 'apps/task/src/database/models/review.model';
+import { ReviewModel } from './review.model';
 
 export type TaskModelProperties = Pick<
   TaskModel,

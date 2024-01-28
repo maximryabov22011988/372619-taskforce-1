@@ -17,7 +17,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { HttpService } from '@nestjs/axios';
 import { ConfigType } from '@nestjs/config';
 import { Request } from 'express';
-import { ApiGatewayConfig } from '@project/libs/config';
+import { BffConfig } from '@project/libs/config';
 import {
   ChangePasswordDto,
   LoginUserDto,
@@ -29,7 +29,7 @@ import { TransformCityInterceptor } from '../../interceptors/transform-city.inte
 import { CheckAuthGuard } from '../../guards/check-auth.guard';
 import { HttpExceptionFilter } from '../../filters/http-exception.filter';
 
-const { microserviceConfig } = ApiGatewayConfig;
+const { microserviceConfig } = BffConfig;
 
 @UseFilters(HttpExceptionFilter)
 @Controller('auth')

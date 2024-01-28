@@ -37,7 +37,7 @@ import {
   CreateTaskDto,
   SelectTaskContractorDto,
 } from '@project/libs/dto';
-import { CommentRdo, TaskRdo } from '@project/libs/rdo';
+import { CommentRdo, TaskRdo, TaskItemRdo } from '@project/libs/rdo';
 import { CommentsService } from '../comments/comments.service';
 import { mapToComment } from '../comments/comment-mapper';
 import { NotifyService } from '../notify/notify.service';
@@ -45,7 +45,6 @@ import { isSameCustomerInterceptor } from './interceptors/is-same-customer.inter
 import { mapToTask } from './task-mapper';
 import { TasksService } from './tasks.service';
 import { mapToTaskItem } from './task-item-mapper';
-import { TaskItemRdo } from './rdo/task-item.rdo';
 
 @ApiTags('Task service')
 @Controller({
@@ -113,8 +112,8 @@ export class TasksController {
   })
   public async findAllNewTasks(@Query() query: TaskQuery): Promise<Task[]> {
     const tasksModels = await this.tasksService.findAllByStatus(
-      query,
-      TaskStatusId.New
+      TaskStatusId.New,
+      query
     );
     return tasksModels.map(mapToTaskItem);
   }
@@ -293,13 +292,13 @@ export class TasksController {
     const taskModel = await this.tasksService.createTask(dto, req.user.sub);
     const task = mapToTask(taskModel);
 
-    await this.notifyService.registerSubscriber({
-      userId: task.customerId,
-      title: task.title,
-      description: task.description,
-      city: task.city,
-      price: task.price,
-    });
+    // await this.notifyService.registerSubscriber({
+    //   userId: task.customerId,
+    //   title: task.title,
+    //   description: task.description,
+    //   city: task.city,
+    //   price: task.price,
+    // });
 
     return task;
   }
@@ -479,5 +478,29 @@ export class TasksController {
     await this.tasksService.findById(taskId);
 
     await this.commentsService.deleteAllForTask(taskId);
+  }
+
+  @Roles(UserRoleId.Contractor)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Get('new/notification')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({
+    summary: 'Notify contractors about new tasks',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: 'All contractors have been successfully notified',
+  })
+  public async sendNewTasksToContractors(): Promise<void> {
+    const newTasksModels = await this.tasksService.findAllByStatus(
+      TaskStatusId.New
+    );
+    const newTasks = newTasksModels.map(mapToTask);
+
+    await this.notifyService.notifyNewTasks(newTasks);
   }
 }

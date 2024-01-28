@@ -1,6 +1,6 @@
 import { MongooseModuleAsyncOptions } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
-import { getMongoConnection } from '@project/libs/utils-core';
+import { getMongoConnection } from './helpers';
 
 export const getMongooseOptions = (): MongooseModuleAsyncOptions => ({
   inject: [ConfigService],

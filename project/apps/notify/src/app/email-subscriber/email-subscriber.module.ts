@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { getRabbitMqOptions } from '@project/libs/utils-core';
+import { DateTimeService } from '@project/libs/services';
 import { MailModule } from '../mail/mail.module';
 import { EmailSubscriberController } from './email-subscriber.controller';
 import { EmailSubscriberService } from './email-subscriber.service';
@@ -24,6 +25,7 @@ import { EmailSubscriberRepository } from './email-subscriber.repository';
     EmailSubscriberService,
     EmailSubscriberRepository,
     EmailSubscriberController,
+    DateTimeService,
   ],
 })
 export class EmailSubscriberModule {}

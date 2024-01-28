@@ -5,7 +5,7 @@ import { default as httpConfig } from './config/http.config';
 import { default as microserviceConfig } from './config/microservice.config';
 import { getHttpOptions } from './get-http-options';
 
-const ENV_API_GATEWAY_FILE_PATH = 'apps/bff/.bff.env';
+const ENV_BFF_FILE_PATH = 'apps/bff/.bff.env';
 
 export { appConfig, httpConfig, microserviceConfig, getHttpOptions };
 
@@ -15,7 +15,7 @@ export { appConfig, httpConfig, microserviceConfig, getHttpOptions };
       isGlobal: true,
       cache: true,
       load: [appConfig, httpConfig, microserviceConfig],
-      envFilePath: ENV_API_GATEWAY_FILE_PATH,
+      envFilePath: ENV_BFF_FILE_PATH,
     }),
   ],
 })

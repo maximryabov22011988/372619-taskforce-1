@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
-import { TaskRdo } from '@project/libs/rdo';
+import { TaskRdo } from './task.rdo';
 
 export class TaskItemRdo extends TaskRdo {
   @ApiProperty({

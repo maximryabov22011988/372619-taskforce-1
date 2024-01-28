@@ -31,7 +31,7 @@ import pick from 'lodash/pick';
 import assign from 'lodash/assign';
 import { Request } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiGatewayConfig } from '@project/libs/config';
+import { BffConfig } from '@project/libs/config';
 import {
   Category,
   Comment,
@@ -63,15 +63,15 @@ import {
   CommentRdo,
   UploadedImageFileRdo,
   ReviewRdo,
+  TaskItemRdo,
 } from '@project/libs/rdo';
 import { fillObject } from '@project/libs/utils-core';
 import { HttpExceptionFilter } from '../../filters/http-exception.filter';
 import { CheckAuthGuard } from '../../guards/check-auth.guard';
 import { UserIdInterceptor } from '../../interceptors/user-id.interceptor';
 import { TaskItemWithCustomerDataRdo } from './rdo/task-item-with-customer-data.rdo';
-import { TaskItemRdo } from 'apps/task/src/app/tasks/rdo/task-item.rdo';
 
-const { microserviceConfig } = ApiGatewayConfig;
+const { microserviceConfig } = BffConfig;
 
 @UseFilters(HttpExceptionFilter)
 @Controller('tasks')
@@ -628,6 +628,31 @@ export class TaskController {
   ): Promise<void> {
     await this.httpService.axiosRef.delete(
       `${this.baseCommentsUrl}/${commentId}`,
+      {
+        headers: {
+          Authorization: req.headers['authorization'],
+        },
+      }
+    );
+  }
+
+  @UseGuards(CheckAuthGuard)
+  @Get('new/notification')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({
+    summary: 'Notify contractors about new tasks',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: 'All contractors have been successfully notified',
+  })
+  public async sendNewTasksToContractors(@Req() req: Request): Promise<void> {
+    await this.httpService.axiosRef.get(
+      `${this.baseTasksUrl}/new/notification`,
       {
         headers: {
           Authorization: req.headers['authorization'],

@@ -1,10 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { RabbitRPC } from '@golevelup/nestjs-rabbitmq';
+import { UserRoleId } from '@project/libs/shared-types';
 import { ChangeProfileDto } from '@project/libs/dto';
+import { DateTimeService } from '@project/libs/services';
 import { UserModel } from '../../database/models/user.model';
 import { SpecializationsService } from '../specializations/specializations.service';
 import { UsersRepository } from './users.repository';
 import { UserEntity } from './users.entity';
-import { DateTimeService } from '@project/libs/services';
 
 @Injectable()
 export class UsersService {
@@ -13,6 +15,10 @@ export class UsersService {
     private readonly specializationsService: SpecializationsService,
     private readonly dateTimeService: DateTimeService
   ) {}
+
+  public async findByRole(roleId: UserRoleId): Promise<UserModel[]> {
+    return this.usersRepository.findByRole(roleId);
+  }
 
   public async findById(userId: string): Promise<UserModel> {
     const userModel = await this.usersRepository.findById(userId);

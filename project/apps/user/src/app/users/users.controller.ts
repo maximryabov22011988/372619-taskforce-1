@@ -1,21 +1,31 @@
 import {
+  Body,
   Controller,
   Get,
-  Param,
   HttpStatus,
-  Patch,
-  Body,
+  Inject,
+  Param,
   ParseUUIDPipe,
+  Patch,
   UseGuards,
 } from '@nestjs/common';
 import {
+  ApiExtraModels,
   ApiOperation,
   ApiResponse,
   ApiTags,
-  ApiExtraModels,
   refs,
 } from '@nestjs/swagger';
-import { Contractor, Customer, Uuid } from '@project/libs/shared-types';
+import { ConfigType } from '@nestjs/config';
+import { AmqpConnection, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
+import { UserConfig } from '@project/libs/config';
+import {
+  Contractor,
+  Customer,
+  RabbitRouting,
+  UserRoleId,
+  Uuid,
+} from '@project/libs/shared-types';
 import { JwtAuthGuard } from '@project/libs/validators';
 import { ChangeProfileDto } from '@project/libs/dto';
 import { ContractorUserRdo, CustomerUserRdo } from '@project/libs/rdo';
