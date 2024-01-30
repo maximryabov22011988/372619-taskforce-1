@@ -7,13 +7,21 @@ import { Logger, INestApplication, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
+import { ACCESS_TOKEN_NAME } from '@project/libs/decorators';
 import { AppModule } from './app/app.module';
 
 const setupOpenApi = (app: INestApplication) => {
   const config = new DocumentBuilder()
     .setTitle('Image service')
-    .setDescription('Image service API')
     .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+      ACCESS_TOKEN_NAME
+    )
     .build();
   const document = SwaggerModule.createDocument(app, config);
 

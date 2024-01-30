@@ -25,10 +25,11 @@ export class ReviewsService {
   ): Promise<ReviewModel> {
     const taskModel = await this.tasksService.findById(dto.taskId);
 
-    if (
-      dto.customerId !== authorId ||
-      dto.contractorId !== taskModel.contractorId
-    ) {
+    if (dto.customerId !== authorId) {
+      throw new BadRequestException('Reviews could be created for your tasks');
+    }
+
+    if (dto.contractorId !== taskModel.contractorId) {
       throw new ForbiddenException(
         'Reviews could be created for your tasks contractors'
       );

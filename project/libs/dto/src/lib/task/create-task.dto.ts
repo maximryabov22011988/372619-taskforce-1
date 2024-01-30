@@ -56,6 +56,7 @@ export class CreateTaskDto {
   @ApiProperty({
     description: 'Service price',
     example: 1000,
+    required: false,
   })
   @IsOptional()
   @IsNumber()
@@ -65,6 +66,7 @@ export class CreateTaskDto {
   @ApiProperty({
     description: 'Date of completion task',
     example: '2023-12-25',
+    required: false,
   })
   @IsOptional()
   @IsDateString({ strict: true })
@@ -76,6 +78,7 @@ export class CreateTaskDto {
     description: 'Picture',
     example:
       '/api/static/specification-1a9f2b32-7f87-490c-9c56-0c4a78b89791.jpg',
+    required: false,
   })
   @IsOptional()
   @IsString()
@@ -84,6 +87,7 @@ export class CreateTaskDto {
   @ApiProperty({
     description: 'The address where the task should be performed',
     example: 'Moscow, Presnenskaya embankment, 12, office No. 2',
+    required: false,
   })
   @IsOptional()
   @Length(
@@ -97,6 +101,7 @@ export class CreateTaskDto {
     example: ['engineering', 'moscow'],
     isArray: true,
     type: String,
+    required: false,
   })
   @IsOptional()
   @ArrayMaxSize(5)

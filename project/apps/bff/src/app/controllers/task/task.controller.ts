@@ -19,12 +19,21 @@ import {
 import { HttpService } from '@nestjs/axios';
 import { ConfigType } from '@nestjs/config';
 import {
+  ApiBadRequestResponse,
   ApiBody,
+  ApiConflictResponse,
   ApiConsumes,
+  ApiCreatedResponse,
+  ApiForbiddenResponse,
+  ApiInternalServerErrorResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
   ApiOperation,
+  ApiParam,
   ApiQuery,
-  ApiResponse,
   ApiTags,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import FormData from 'form-data';
 import pick from 'lodash/pick';
@@ -42,6 +51,7 @@ import {
   TaskWithCustomer,
   TaskStatus,
   AvailableCityId,
+  TaskStatusId,
 } from '@project/libs/shared-types';
 import {
   TaskSorting,
@@ -70,6 +80,7 @@ import { HttpExceptionFilter } from '../../filters/http-exception.filter';
 import { CheckAuthGuard } from '../../guards/check-auth.guard';
 import { UserIdInterceptor } from '../../interceptors/user-id.interceptor';
 import { TaskItemWithCustomerDataRdo } from './rdo/task-item-with-customer-data.rdo';
+import { ApiAuth } from '@project/libs/decorators';
 
 const { microserviceConfig } = BffConfig;
 
@@ -103,24 +114,17 @@ export class TaskController {
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(new UserIdInterceptor('authorId'))
   @Post('reviews')
+  @ApiAuth()
   @ApiOperation({ summary: 'Creating new review' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Task not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    description: 'Bad request',
-  })
-  @ApiResponse({
-    status: HttpStatus.CREATED,
+  @ApiCreatedResponse({
     description: 'New review has been successfully created',
     type: ReviewRdo,
   })
+  @ApiBadRequestResponse({ description: 'Bad request' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiNotFoundResponse({ description: 'Task was not found' })
+  @ApiConflictResponse({ description: 'Review already exists' })
   public async createReview(
     @Body() dto: CreateReviewDto,
     @Req() req: Request & RequestWithTokenPayload
@@ -140,14 +144,9 @@ export class TaskController {
 
   @UseGuards(CheckAuthGuard)
   @Get('new')
+  @ApiAuth()
   @ApiOperation({
     summary: `Getting task list with status "${TaskStatus.New}"`,
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: `Task list with status "${TaskStatus.New}"`,
-    type: TaskRdo,
-    isArray: true,
   })
   @ApiQuery({
     name: 'page',
@@ -185,16 +184,12 @@ export class TaskController {
     description: 'Selection by passed sort',
     required: false,
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Task details',
+  @ApiOkResponse({
+    description: `Task list with status "${TaskStatus.New}" successfully received`,
     isArray: true,
-    type: TaskItemWithCustomerDataRdo,
+    type: TaskItemRdo,
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   public async findAllNewTasks(
     @Query() query: TaskQuery,
     @Req() req: Request
@@ -235,25 +230,22 @@ export class TaskController {
 
   @UseGuards(CheckAuthGuard)
   @Get('my')
+  @ApiAuth()
   @ApiOperation({
     summary: 'Getting my task list',
   })
   @ApiQuery({
     name: 'statusId',
-    enum: AvailableCityId,
+    enum: TaskStatusId,
     description: 'Selection by status id',
     required: false,
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'My task list',
+  @ApiOkResponse({
+    description: 'My task list successfully received',
     isArray: true,
     type: TaskItemRdo,
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   public async findTasksByUser(
     @Query() query: MyTaskQuery,
     @Req() req: Request
@@ -273,20 +265,18 @@ export class TaskController {
 
   @UseGuards(CheckAuthGuard)
   @Get(':taskId')
+  @ApiAuth()
   @ApiOperation({ summary: 'Getting detailed information about task' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
+  @ApiParam({
+    name: 'taskId',
+    type: Number,
   })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Task details',
+  @ApiOkResponse({
+    description: 'Task details successfully received',
     type: TaskRdo,
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiNotFoundResponse({ description: 'Not found' })
   public async findById(
     @Param('taskId') taskId: number,
     @Req() req: Request
@@ -305,20 +295,15 @@ export class TaskController {
 
   @UseGuards(CheckAuthGuard)
   @Post()
+  @ApiAuth()
   @ApiOperation({ summary: 'Creating new task' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'City not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.CREATED,
+  @ApiCreatedResponse({
     description: 'New task has been successfully created',
     type: TaskRdo,
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiNotFoundResponse({ description: 'City not found' })
   public async createTask(
     @Body() dto: CreateTaskDto,
     @Req() req: Request
@@ -338,25 +323,19 @@ export class TaskController {
 
   @UseGuards(CheckAuthGuard)
   @Patch(':taskId/status')
-  @ApiOperation({ summary: 'Update existing task' })
+  @ApiAuth()
   @ApiOperation({ summary: 'Change task status' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
+  @ApiParam({
+    name: 'taskId',
+    type: Number,
   })
-  @ApiResponse({
-    status: HttpStatus.FORBIDDEN,
-    description: 'Forbidden',
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
+  @ApiOkResponse({
     description: 'Task status has been successfully changed',
     type: TaskRdo,
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiNotFoundResponse({ description: 'Not found' })
   public async changeTaskStatus(
     @Param('taskId') taskId: number,
     @Body() dto: ChangeTaskStatusDto,
@@ -377,23 +356,19 @@ export class TaskController {
 
   @UseGuards(CheckAuthGuard)
   @Patch(':taskId/contractor')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiAuth()
   @ApiOperation({ summary: 'Select task contractor' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
+  @ApiParam({
+    name: 'taskId',
+    type: Number,
   })
-  @ApiResponse({
-    status: HttpStatus.FORBIDDEN,
-    description: 'Forbidden',
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.NO_CONTENT,
+  @ApiNoContentResponse({
     description: 'Task contractor has been successfully selected',
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiNotFoundResponse({ description: 'Not found' })
   public async selectContractor(
     @Param('taskId') taskId: number,
     @Body() dto: SelectTaskContractorDto,
@@ -412,23 +387,19 @@ export class TaskController {
 
   @UseGuards(CheckAuthGuard)
   @Patch(':taskId/responses')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiAuth()
   @ApiOperation({ summary: 'Respond to task' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
+  @ApiParam({
+    name: 'taskId',
+    type: Number,
   })
-  @ApiResponse({
-    status: HttpStatus.FORBIDDEN,
-    description: 'Forbidden',
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.NO_CONTENT,
+  @ApiNoContentResponse({
     description: 'The response to the task was successful',
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiNotFoundResponse({ description: 'Not found' })
   public async respondToTask(
     @Param('taskId') taskId: number,
     @Req() req: Request
@@ -447,19 +418,16 @@ export class TaskController {
   @UseGuards(CheckAuthGuard)
   @Delete(':taskId')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiAuth()
   @ApiOperation({ summary: 'Delete existing task' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
+  @ApiParam({
+    name: 'taskId',
+    type: Number,
   })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.NO_CONTENT,
-    description: 'Task has been successfully deleted',
-  })
+  @ApiNoContentResponse({ description: 'Task has been successfully deleted' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiNotFoundResponse({ description: 'Not found' })
   public async deleteTask(
     @Param('taskId') taskId: number,
     @Req() req: Request
@@ -473,20 +441,14 @@ export class TaskController {
 
   @UseGuards(CheckAuthGuard)
   @Post('categories')
+  @ApiAuth()
   @ApiOperation({ summary: 'Creating new category' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: HttpStatus.FORBIDDEN,
-    description: 'Forbidden',
-  })
-  @ApiResponse({
-    status: HttpStatus.CREATED,
+  @ApiCreatedResponse({
     description: 'New category has been successfully created',
     type: CategoryRdo,
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
   public async createCategory(
     @Body() dto: CreateCategoryDto,
     @Req() req: Request
@@ -506,7 +468,12 @@ export class TaskController {
 
   @UseGuards(CheckAuthGuard)
   @Get(':taskId/comments')
+  @ApiAuth()
   @ApiOperation({ summary: 'Getting task comment list' })
+  @ApiParam({
+    name: 'taskId',
+    type: Number,
+  })
   @ApiQuery({
     name: 'page',
     type: Number,
@@ -519,15 +486,13 @@ export class TaskController {
     description: 'Max limit records',
     required: false,
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Comment list',
+  @ApiOkResponse({
+    description: 'Comment list successfully received',
     type: CommentRdo,
     isArray: true,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized',
   })
   public async findAllForTask(
     @Param('taskId') taskId: number,
@@ -550,19 +515,17 @@ export class TaskController {
   @UseGuards(CheckAuthGuard)
   @Delete(':taskId/comments')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiAuth()
   @ApiOperation({ summary: 'Deleting all comments belonging to the task' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
+  @ApiParam({
+    name: 'taskId',
+    type: Number,
   })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
+  @ApiNoContentResponse({
+    description: 'All task comments has been successfully deleted',
   })
-  @ApiResponse({
-    status: HttpStatus.NO_CONTENT,
-    description: 'All comments has been successfully deleted',
-  })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiNotFoundResponse({ description: 'Not found' })
   public async deleteComments(
     @Param('taskId') taskId: number,
     @Req() req: Request
@@ -579,16 +542,14 @@ export class TaskController {
 
   @UseGuards(CheckAuthGuard)
   @Post('comments')
+  @ApiAuth()
   @ApiOperation({ summary: 'Creating new comment' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: HttpStatus.CREATED,
+  @ApiCreatedResponse({
     description: 'New comment has been successfully created',
     type: CommentRdo,
   })
+  @ApiBadRequestResponse({ description: 'Bad request' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   public async createComment(
     @Body() dto: CreateCommentDto,
     @Req() req: Request
@@ -609,19 +570,14 @@ export class TaskController {
   @UseGuards(CheckAuthGuard)
   @Delete('comments/:commentId')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiAuth()
   @ApiOperation({ summary: 'Deleting existing comment' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.NO_CONTENT,
+  @ApiNoContentResponse({
     description: 'Comment has been successfully deleted',
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiNotFoundResponse({ description: 'Not found' })
   public async deleteComment(
     @Param('commentId') commentId: number,
     @Req() req: Request
@@ -639,17 +595,12 @@ export class TaskController {
   @UseGuards(CheckAuthGuard)
   @Get('new/notification')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({
-    summary: 'Notify contractors about new tasks',
-  })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: HttpStatus.NO_CONTENT,
+  @ApiAuth()
+  @ApiOperation({ summary: 'Notify contractors about new tasks' })
+  @ApiNoContentResponse({
     description: 'All contractors have been successfully notified',
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   public async sendNewTasksToContractors(@Req() req: Request): Promise<void> {
     await this.httpService.axiosRef.get(
       `${this.baseTasksUrl}/new/notification`,
@@ -664,7 +615,8 @@ export class TaskController {
   @UseGuards(CheckAuthGuard)
   @Post('upload/image')
   @UseInterceptors(FileInterceptor('file'))
-  @ApiOperation({ summary: 'Uploading task image' })
+  @ApiAuth()
+  @ApiOperation({ summary: 'Uploading image' })
   @ApiBody({
     schema: {
       type: 'object',
@@ -676,12 +628,14 @@ export class TaskController {
       },
     },
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Image file is successfully uploaded',
+  @ApiConsumes('multipart/form-data')
+  @ApiOkResponse({
+    description: 'Image file successfully uploaded',
     type: UploadedImageFileRdo,
   })
-  @ApiConsumes('multipart/form-data')
+  @ApiBadRequestResponse({ description: 'Invalid image file size or format' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
   public async uploadImage(
     @UploadedFile() file,
     @Req() req: Request

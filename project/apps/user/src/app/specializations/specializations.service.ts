@@ -21,6 +21,10 @@ export class SpecializationsService {
     specializationList: string[],
     userId: Uuid
   ): Promise<void> {
+    if (!specializationList.length) {
+      return;
+    }
+
     const specializations = this.getSpecializations(specializationList);
 
     for (const specialization of specializations) {
@@ -32,6 +36,10 @@ export class SpecializationsService {
     specializationList: string[],
     userId: Uuid
   ): Promise<void> {
+    if (!specializationList.length) {
+      return;
+    }
+
     const existedSpecializationsModels =
       await this.findAllSpecializationsByUser(userId);
     const existedSpecializations = existedSpecializationsModels.map(

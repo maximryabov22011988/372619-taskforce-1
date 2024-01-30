@@ -1,8 +1,12 @@
-<h2>На платформе появились новые задания!</h2>
-{{#each tasks}}
-  <h3>{{this.title}}</h3>
-  <p>Описание: {{this.description}}</p>
-  <p>Цена за проект: {{this.price}}</p>
-  <p>Город выполнения задания: {{this.city}}</p>
-  {{#unless @last}}<hr>{{/unless}}
-{{/each}}
+{{#if tasks.length}}
+  <h2>На платформе появились новые задания!</h2>
+  {{#each tasks}}
+    <h3>{{this.title}}</h3>
+    <p>Описание: {{this.description}}</p>
+    <p>Цена за проект: {{this.price}}</p>
+    <p>Город выполнения задания: {{this.city}}</p>
+    {{#unless @last}}<hr>{{/unless}}
+  {{/each}}
+{{else}}
+  <h2>На платформе новые задания отсутствуют!</h2>
+{{/if}}

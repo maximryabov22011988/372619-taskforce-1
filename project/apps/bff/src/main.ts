@@ -8,14 +8,22 @@ import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
+import { ACCESS_TOKEN_NAME } from '@project/libs/decorators';
 import { AppModule } from './app/app.module';
 import { RequestIdInterceptor } from './app/interceptors/request-id.interceptor';
 import { HttpExceptionFilter } from './app/filters/http-exception.filter';
 
 const setupOpenApi = (app: INestApplication) => {
   const config = new DocumentBuilder()
-    .setTitle('API Gateway')
-    .setDescription('API Gateway')
+    .setTitle('BFF')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+      ACCESS_TOKEN_NAME
+    )
     .build();
   const document = SwaggerModule.createDocument(app, config);
 

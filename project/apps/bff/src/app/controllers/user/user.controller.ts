@@ -18,12 +18,18 @@ import { HttpService } from '@nestjs/axios';
 import { ConfigType } from '@nestjs/config';
 import { Request } from 'express';
 import {
+  ApiBadRequestResponse,
   ApiBody,
   ApiConsumes,
   ApiExtraModels,
+  ApiInternalServerErrorResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   ApiTags,
+  ApiUnauthorizedResponse,
   refs,
 } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -44,6 +50,7 @@ import { HttpExceptionFilter } from '../../filters/http-exception.filter';
 import { CheckAuthGuard } from '../../guards/check-auth.guard';
 import { ContractorUserRdo } from './rdo/contractor-user.rdo';
 import { CustomerUserRdo } from './rdo/customer-user.rdo';
+import { ApiAuth } from '@project/libs/decorators';
 
 const { microserviceConfig } = BffConfig;
 
@@ -73,21 +80,23 @@ export class UserController {
   @UseGuards(CheckAuthGuard)
   @Get('/:userId')
   @UseInterceptors(TransformCityInterceptor)
-  @ApiOperation({ summary: 'Getting detailed user information' })
+  @ApiAuth()
+  @ApiOperation({
+    summary: 'Getting contractor/customer detailed information',
+  })
+  @ApiParam({
+    name: 'userId',
+    type: String,
+    format: 'UUID',
+  })
   @ApiExtraModels(ContractorUserRdo, CustomerUserRdo)
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Contractor or customer user information',
+    description: 'Contractor/customer information successfully received',
     schema: { oneOf: refs(ContractorUserRdo, CustomerUserRdo) },
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiNotFoundResponse({ description: 'User was not found' })
   public async getUser(
     @Param('userId', ParseUUIDPipe) userId: Uuid,
     @Req() req: Request & RequestWithTokenPayload
@@ -114,21 +123,20 @@ export class UserController {
   @UseGuards(CheckAuthGuard)
   @Patch(':userId/profile')
   @UseInterceptors(TransformCityInterceptor)
-  @ApiOperation({ summary: 'Change user profile info' })
+  @ApiAuth()
+  @ApiOperation({ summary: 'Change contractor/customer profile info' })
+  @ApiParam({
+    name: 'userId',
+    type: String,
+    format: 'UUID',
+  })
   @ApiExtraModels(ContractorUserRdo, CustomerUserRdo)
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Updated contractor or customer user information',
+  @ApiOkResponse({
+    description: 'Contractor/customer information successfully updated',
     schema: { oneOf: refs(ContractorUserRdo, CustomerUserRdo) },
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiNotFoundResponse({ description: 'User was not found' })
   public async changeProfile(
     @Param('userId', ParseUUIDPipe) userId: Uuid,
     @Body() dto: ChangeProfileDto,
@@ -155,6 +163,7 @@ export class UserController {
   @Post('upload/avatar')
   @UseInterceptors(FileInterceptor('file'))
   @ApiOperation({ summary: 'Uploading user avatar' })
+  @ApiConsumes('multipart/form-data')
   @ApiBody({
     schema: {
       type: 'object',
@@ -166,12 +175,12 @@ export class UserController {
       },
     },
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Image file is successfully uploaded',
+  @ApiOkResponse({
+    description: 'User avatar file successfully uploaded',
     type: UploadedImageFileRdo,
   })
-  @ApiConsumes('multipart/form-data')
+  @ApiBadRequestResponse({ description: 'Invalid image file size or format' })
+  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
   public async uploadAvatar(@UploadedFile() file): Promise<ImageFile> {
     const form = new FormData();
     form.append('file', file.buffer, file.originalname);

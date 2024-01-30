@@ -1,56 +1,16 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { AvailableCityId, UserRoleId } from '@project/libs/shared-types';
-import {
-  IsDateString,
-  IsEmail,
-  IsISO8601,
-  IsOptional,
-  IsString,
-  Length,
-  IsNotEmpty,
-  IsEnum,
-} from 'class-validator';
-import { MinimumValidAge } from '@project/libs/validators';
-import { UserRule, PasswordRule } from './validation-rules';
+import { ApiProperty, PickType } from '@nestjs/swagger';
+import { UserRoleId } from '@project/libs/shared-types';
+import { IsOptional, IsString, IsNotEmpty, IsEnum } from 'class-validator';
+import { BaseUserDto } from './base-user.dto';
 
-export class RegisterUserDto {
-  @ApiProperty({
-    description: "User's first name",
-    example: 'John',
-  })
-  @IsNotEmpty()
-  @IsString()
-  @Length(UserRule.NameMinLength, UserRule.NameMaxLength)
-  public firstname: string;
-
-  @ApiProperty({
-    description: "User's last name",
-    example: 'Doe',
-  })
-  @IsNotEmpty()
-  @IsString()
-  @Length(UserRule.NameMinLength, UserRule.NameMaxLength)
-  public lastname: string;
-
-  @ApiProperty({
-    description: "User's birth date",
-    example: '2000-11-11',
-  })
-  @IsNotEmpty()
-  @IsDateString({ strict: true })
-  @IsISO8601({ strict: true }, { message: 'The user date birth is not valid' })
-  @MinimumValidAge(UserRule.MinAge)
-  public birthDate: string;
-
-  @ApiProperty({
-    description: "User's city id",
-    enum: AvailableCityId,
-    example: 1,
-  })
-  @IsNotEmpty()
-  @IsEnum(AvailableCityId)
-  public cityId: AvailableCityId;
-
+export class RegisterUserDto extends PickType(BaseUserDto, [
+  'firstname',
+  'lastname',
+  'birthDate',
+  'cityId',
+  'email',
+  'password',
+] as const) {
   @ApiProperty({
     description: "User's role id",
     enum: UserRoleId,
@@ -59,23 +19,6 @@ export class RegisterUserDto {
   @IsNotEmpty()
   @IsEnum(UserRoleId)
   public roleId: UserRoleId;
-
-  @ApiProperty({
-    description: "User's unique email address",
-    example: 'john.doe@yahoo.com',
-  })
-  @IsNotEmpty()
-  @IsEmail()
-  public email: string;
-
-  @ApiProperty({
-    description: "User's password",
-    example: '123456',
-  })
-  @IsNotEmpty()
-  @IsString()
-  @Length(PasswordRule.MinLength, PasswordRule.MaxLength)
-  public password: string;
 
   @ApiProperty({
     description: "User's avatar",

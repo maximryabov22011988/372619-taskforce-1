@@ -10,42 +10,42 @@ import {
   UseGuards,
   ForbiddenException,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import {
-  Comment,
-  RequestWithTokenPayload,
-  UserRoleId,
-} from '@project/libs/shared-types';
-import { JwtAuthGuard, Roles, RolesGuard } from '@project/libs/validators';
+  ApiTags,
+  ApiOperation,
+  ApiCreatedResponse,
+  ApiUnauthorizedResponse,
+  ApiBadRequestResponse,
+  ApiForbiddenResponse,
+  ApiNotFoundResponse,
+  ApiNoContentResponse,
+} from '@nestjs/swagger';
+import { Comment, RequestWithTokenPayload } from '@project/libs/shared-types';
+import { JwtAuthGuard } from '@project/libs/validators';
 import { CreateCommentDto } from '@project/libs/dto';
 import { CommentRdo } from '@project/libs/rdo';
+import { ApiAuth } from '@project/libs/decorators';
 import { mapToComment } from './comment-mapper';
 import { CommentsService } from './comments.service';
 
-@ApiTags('Comment service')
 @Controller({
   path: 'comments',
   version: '1',
 })
+@ApiTags('Comment service')
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
   @UseGuards(JwtAuthGuard)
   @Post()
+  @ApiAuth()
   @ApiOperation({ summary: 'Creating new comment' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: HttpStatus.FORBIDDEN,
-    description: 'Forbidden',
-  })
-  @ApiResponse({
-    status: HttpStatus.CREATED,
+  @ApiCreatedResponse({
     description: 'New comment has been successfully created',
     type: CommentRdo,
   })
+  @ApiBadRequestResponse({ description: 'Bad request' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   public async createComment(
     @Body() dto: CreateCommentDto,
     @Req() req: RequestWithTokenPayload
@@ -60,23 +60,14 @@ export class CommentsController {
   @UseGuards(JwtAuthGuard)
   @Delete(':commentId')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiAuth()
   @ApiOperation({ summary: 'Deleting existing comment' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: HttpStatus.FORBIDDEN,
-    description: 'Forbidden',
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.NO_CONTENT,
+  @ApiNoContentResponse({
     description: 'Comment has been successfully deleted',
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiNotFoundResponse({ description: 'Not found' })
   public async deleteComment(
     @Param('commentId') commentId: number,
     @Req() req: RequestWithTokenPayload

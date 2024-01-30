@@ -1,24 +1,21 @@
+import { Controller, Get, Inject, Param, Req } from '@nestjs/common';
 import {
-  Controller,
-  Get,
-  HttpStatus,
-  Inject,
-  Param,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { HttpService } from '@nestjs/axios';
 import { ConfigType } from '@nestjs/config';
 import { Request } from 'express';
 import { City, Role, Status } from '@project/libs/shared-types';
 import { BffConfig } from '@project/libs/config';
 import { CityRdo, RoleRdo, StatusRdo } from '@project/libs/rdo';
-import { CheckAuthGuard } from '../../guards/check-auth.guard';
 
 const { microserviceConfig } = BffConfig;
 
 @Controller('references')
+@ApiTags('References')
 export class ReferencesController {
   private readonly baseCitiesUrl: string;
   private readonly baseRolesUrl: string;
@@ -38,9 +35,8 @@ export class ReferencesController {
 
   @Get('statuses')
   @ApiOperation({ summary: 'Getting status list' })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Status list',
+  @ApiOkResponse({
+    description: 'Status list successfully received',
     isArray: true,
     type: StatusRdo,
   })
@@ -56,15 +52,11 @@ export class ReferencesController {
 
   @Get('statuses/:id')
   @ApiOperation({ summary: 'Getting status information' })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Status information',
+  @ApiOkResponse({
+    description: 'Status information successfully received',
     type: StatusRdo,
   })
+  @ApiNotFoundResponse({ description: 'Status was not found' })
   public async getStatus(
     @Param('id') id: number,
     @Req() req: Request
@@ -83,9 +75,8 @@ export class ReferencesController {
 
   @Get('cities')
   @ApiOperation({ summary: 'Getting city list' })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'City list',
+  @ApiOkResponse({
+    description: 'City list successfully received',
     isArray: true,
     type: CityRdo,
   })
@@ -101,15 +92,11 @@ export class ReferencesController {
 
   @Get('cities/:id')
   @ApiOperation({ summary: 'Getting city information' })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'City information',
+  @ApiOkResponse({
+    description: 'City information successfully received',
     type: CityRdo,
   })
+  @ApiNotFoundResponse({ description: 'City was not found' })
   public async getCity(
     @Param('id') id: number,
     @Req() req: Request
@@ -126,23 +113,16 @@ export class ReferencesController {
     return data;
   }
 
-  @Get('roles/:roleId')
-  @ApiOperation({ summary: 'Getting role information' })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Role information',
+  @Get('roles')
+  @ApiOperation({ summary: 'Getting role list' })
+  @ApiOkResponse({
+    description: 'Role list successfully received',
+    isArray: true,
     type: RoleRdo,
   })
-  public async getRole(
-    @Param('roleId') roleId: number,
-    @Req() req: Request
-  ): Promise<Role> {
+  public async getRoleList(@Req() req: Request): Promise<Role[]> {
     const { data } = await this.httpService.axiosRef.get(
-      `${this.baseRolesUrl}/${roleId}`,
+      `${this.baseRolesUrl}`,
       {
         headers: {
           Authorization: req.headers['authorization'],
@@ -153,17 +133,19 @@ export class ReferencesController {
     return data;
   }
 
-  @Get('roles')
-  @ApiOperation({ summary: 'Getting role list' })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Role information',
-    isArray: true,
+  @Get('roles/:roleId')
+  @ApiOperation({ summary: 'Getting role information' })
+  @ApiOkResponse({
+    description: 'Role information successfully received',
     type: RoleRdo,
   })
-  public async getRoleList(@Req() req: Request): Promise<Role[]> {
+  @ApiNotFoundResponse({ description: 'Role was not found' })
+  public async getRole(
+    @Param('roleId') roleId: number,
+    @Req() req: Request
+  ): Promise<Role> {
     const { data } = await this.httpService.axiosRef.get(
-      `${this.baseRolesUrl}`,
+      `${this.baseRolesUrl}/${roleId}`,
       {
         headers: {
           Authorization: req.headers['authorization'],

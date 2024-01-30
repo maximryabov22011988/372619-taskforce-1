@@ -13,3 +13,11 @@ export enum CommentValidationRule {
   TextMinLength = 10,
   TextMaxLength = 300,
 }
+
+export enum ReviewRule {
+  TextMinLength = 50,
+  TextMaxLength = 500,
+  MinRating = 1,
+  MaxRating = 5,
+  MinFailedTasks = 0,
+}

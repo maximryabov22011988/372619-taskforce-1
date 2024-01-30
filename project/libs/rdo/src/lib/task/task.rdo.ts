@@ -36,6 +36,7 @@ export class TaskRdo {
   @ApiProperty({
     description: 'Service price',
     example: 1000,
+    required: false,
   })
   @Expose()
   public price: number;
@@ -43,6 +44,7 @@ export class TaskRdo {
   @ApiProperty({
     description: 'Date of completion task',
     example: '2023-12-25T00:00:00.000Z',
+    required: false,
   })
   @Expose()
   @Transform(({ obj }) => dateTimeService.formatDate(obj.executionDate))
@@ -51,6 +53,7 @@ export class TaskRdo {
   @ApiProperty({
     description: 'Picture',
     example: '/api/static/example-1a9f2b32-7f87-490c-9c56-0c4a78b89791.jpg',
+    required: false,
   })
   @Expose()
   public imageUrl: string;
@@ -58,6 +61,7 @@ export class TaskRdo {
   @ApiProperty({
     description: 'The address where the task should be performed',
     example: 'Moscow, Presnenskaya embankment, 12, office No. 2',
+    required: false,
   })
   @Expose()
   public address: string;
@@ -67,6 +71,7 @@ export class TaskRdo {
     example: ['engineering', 'moscow'],
     isArray: true,
     type: String,
+    required: false,
   })
   @Expose()
   @Transform(({ obj }) => obj.tags.map(({ name }) => name))

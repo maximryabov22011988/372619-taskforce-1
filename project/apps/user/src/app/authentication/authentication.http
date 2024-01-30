@@ -5,7 +5,7 @@ Content-Type: application/json
 {
   "firstname": "John",
   "lastname": "Doe",
-  "email": "john11@doe.com",
+  "email": "john17@doe.com",
   "cityId": 2,
   "roleId": 1,
   "password": "123456",
@@ -19,16 +19,22 @@ POST http://localhost:3000/api/v1/auth/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "john2@doe.com",
+  "email": "john1@doe.com",
   "password": "123456"
 }
 
 
 
+### Обновление пары access/refresh токенов
+POST http://localhost:3000/api/v1/auth/refresh HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YjQzYzQ4YS01NWRhLTQzMWEtYWY5ZC1mMjNiMDg0M2E0ZjYiLCJlbWFpbCI6ImpvaG4xQGRvZS5jb20iLCJyb2xlSWQiOjEsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsInRva2VuSWQiOiJmNGFhZjYxYS01MTJkLTRmOWUtYTQ3Yy00NmZiN2RmNTYwYjUiLCJpYXQiOjE3MDY1Nzg3MzQsImV4cCI6MTcwNjY2NTEzNH0.EtpMsiDGNzPuzuMqBFlt0oGKBFOCzwr3GSxxhGklScM
+
+
+
 ### Изменение пользовательского пароля
-PATCH  http://localhost:3000/api/v1/auth/password/2a51e38a-2614-4907-ae7a-c706c00b919b HTTP/1.1
+PATCH  http://localhost:3000/api/v1/auth/password/c635ad47-ceaf-4e2b-b1a2-fd21bed67970 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyYTUxZTM4YS0yNjE0LTQ5MDctYWU3YS1jNzA2YzAwYjkxOWIiLCJlbWFpbCI6ImpvaG45NTg1NEBkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDUwNDkwMTcsImV4cCI6MTcwNTA0OTMxN30.pk80-RK_mKG18TuJHan4WP2krTk2pGIEnX0zTt70sWE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjNjM1YWQ0Ny1jZWFmLTRlMmItYjFhMi1mZDIxYmVkNjc5NzAiLCJlbWFpbCI6ImpvaG4xNEBkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDY1Nzg4MDAsImV4cCI6MTcwNjU3OTEwMH0.nisGzycndhYu2IISKgD4D7cHGMrT-R7FosMQFlAVIKY
 
 {
   "oldPassword": "123456",
@@ -38,9 +44,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyYTUxZTM4Y
 
 
 ### Получение информации о пользователе из заголовка Authorization
-POST  http://localhost:3000/api/v1/auth/check HTTP/1.1
+GET http://localhost:3000/api/v1/auth/check HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjNWU0NDEzNy1mYzA2LTQ4NTItYTcwMi1hZWRmZGRmZTE4YzIiLCJlbWFpbCI6ImpvaG4zM0Bkb2UuY29tIiwicm9sZUlkIjoyLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDU1MTIwOTEsImV4cCI6MTcwNTUxMjM5MX0.tn6zqTbk2Mdvvmu97hrrQo0SEU_1t3Q_anPMREfEzSw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWNhODUwZC0wZTQ3LTQ4MGItODcyYi04ZDIyMTllNTBiMjYiLCJlbWFpbCI6ImpvaG4xNkBkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDY1ODA1MDEsImV4cCI6MTcwNjU4MDgwMX0.HAMeyp-nBOR0nZTZc_L9YGZd0FxNUraY61mC1WBKsWk
 
 
 

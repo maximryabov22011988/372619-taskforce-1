@@ -28,10 +28,6 @@ export class EmailSubscriberController {
       this.dateTimeService.isDateAfter(lastTaskNotificationDate, task.createdAt)
     );
 
-    if (!newTasksAfterLastNotificationDate.length) {
-      return;
-    }
-
     const newTasksNotification = {
       emails,
       tasks: newTasksAfterLastNotificationDate,

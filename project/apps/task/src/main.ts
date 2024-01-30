@@ -12,15 +12,27 @@ import {
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { UniqueConstraintExceptionFilter } from '@project/libs/filters';
+import { ACCESS_TOKEN_NAME } from '@project/libs/decorators';
+import {
+  UniqueConstraintExceptionFilter,
+  ForeignKeyViolationExceptionFilter,
+  DataExceptionFilter,
+} from '@project/libs/filters';
 import { Environment } from '@project/libs/shared-types';
 import { AppModule } from './app/app.module';
 
 const setupOpenApi = (app: INestApplication) => {
   const config = new DocumentBuilder()
     .setTitle('Task service')
-    .setDescription('Task service API')
     .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+      ACCESS_TOKEN_NAME
+    )
     .build();
   const document = SwaggerModule.createDocument(app, config);
 
@@ -41,7 +53,11 @@ const bootstrap = async () => {
   app.enableVersioning({
     type: VersioningType.URI,
   });
-  app.useGlobalFilters(new UniqueConstraintExceptionFilter());
+  app.useGlobalFilters(
+    new UniqueConstraintExceptionFilter(),
+    new ForeignKeyViolationExceptionFilter(),
+    new DataExceptionFilter()
+  );
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,

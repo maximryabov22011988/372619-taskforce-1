@@ -1,8 +1,16 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
 import { BaseUserRdo } from './base-user.rdo';
 
-export class ContractorUserRdo extends BaseUserRdo {
+export class ContractorUserRdo extends PickType(BaseUserRdo, [
+  'id',
+  'firstname',
+  'lastname',
+  'info',
+  'role',
+  'email',
+  'registrationDate',
+] as const) {
   @ApiProperty({
     description: "User's city id",
     example: 1,

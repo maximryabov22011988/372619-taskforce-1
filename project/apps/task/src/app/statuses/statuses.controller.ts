@@ -1,54 +1,39 @@
-import { Controller, Get, HttpStatus, Param, UseGuards } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Param } from '@nestjs/common';
+import {
+  ApiOperation,
+  ApiTags,
+  ApiOkResponse,
+  ApiNotFoundResponse,
+} from '@nestjs/swagger';
 import { Status } from '@project/libs/shared-types';
-import { JwtAuthGuard } from '@project/libs/validators';
 import { StatusRdo } from '@project/libs/rdo';
 import { StatusesService } from './statuses.service';
 import { mapToStatus } from './status-mapper';
 
-@ApiTags('Task service')
 @Controller({
   path: 'statuses',
   version: '1',
 })
+@ApiTags('Task service')
 export class StatusesController {
   constructor(private readonly statusesService: StatusesService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Get(':id')
   @ApiOperation({ summary: 'Getting status information' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Status information',
+  @ApiOkResponse({
+    description: 'Status information successfully received',
     type: StatusRdo,
   })
+  @ApiNotFoundResponse({ description: 'Status was not found' })
   public async getStatus(@Param('id') id: number): Promise<Status> {
     const statusModel = await this.statusesService.findById(id);
     return mapToStatus(statusModel);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get()
   @ApiOperation({ summary: 'Getting status list' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Status list',
+  @ApiOkResponse({
+    description: 'Status list successfully received',
     isArray: true,
     type: StatusRdo,
   })

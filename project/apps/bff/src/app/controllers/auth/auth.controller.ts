@@ -13,7 +13,17 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiConflictResponse,
+  ApiCreatedResponse,
+  ApiOperation,
+  ApiTags,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiUnauthorizedResponse,
+  ApiParam,
+  ApiNoContentResponse,
+} from '@nestjs/swagger';
 import { HttpService } from '@nestjs/axios';
 import { ConfigType } from '@nestjs/config';
 import { Request } from 'express';
@@ -28,12 +38,13 @@ import { LoggedUserRdo, RegisteredUserRdo } from '@project/libs/rdo';
 import { TransformCityInterceptor } from '../../interceptors/transform-city.interceptor';
 import { CheckAuthGuard } from '../../guards/check-auth.guard';
 import { HttpExceptionFilter } from '../../filters/http-exception.filter';
+import { ApiAuth } from '@project/libs/decorators';
 
 const { microserviceConfig } = BffConfig;
 
 @UseFilters(HttpExceptionFilter)
 @Controller('auth')
-@ApiTags('User service')
+@ApiTags('Auth')
 export class AuthController {
   private readonly baseAuthUrl: string;
   private readonly baseCitiesUrl: string;
@@ -51,19 +62,12 @@ export class AuthController {
   @UseInterceptors(TransformCityInterceptor)
   @Post('register')
   @ApiOperation({ summary: 'Registration new user' })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'City not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.CONFLICT,
-    description: 'User has already exists',
-  })
-  @ApiResponse({
-    status: HttpStatus.CREATED,
+  @ApiCreatedResponse({
     description: 'New user has been successfully created',
     type: RegisteredUserRdo,
   })
+  @ApiNotFoundResponse({ description: 'City not found' })
+  @ApiConflictResponse({ description: 'User already exists' })
   public async register(@Body() dto: RegisterUserDto): Promise<User> {
     await this.httpService.axiosRef.get(`${this.baseCitiesUrl}/${dto.cityId}`);
 
@@ -78,19 +82,11 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Login user' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
+  @ApiOkResponse({
     description: 'User has been logged in successfully',
     type: LoggedUserRdo,
   })
+  @ApiUnauthorizedResponse({ description: 'Incorrect login or password' })
   public async login(@Body() dto: LoginUserDto): Promise<LoggedUserRdo> {
     const { data } = await this.httpService.axiosRef.post(
       `${this.baseAuthUrl}/login`,
@@ -102,16 +98,13 @@ export class AuthController {
 
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
+  @ApiAuth()
   @ApiOperation({ summary: 'Refresh tokens' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
+  @ApiOkResponse({
     description: 'New access/refresh token successfully received',
     type: LoggedUserRdo,
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   public async refresh(@Req() req: Request): Promise<LoggedUserRdo> {
     const { data } = await this.httpService.axiosRef.post(
       `${this.baseAuthUrl}/refresh`,
@@ -130,18 +123,17 @@ export class AuthController {
   @Patch('password/:userId')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Change password' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
+  @ApiAuth()
+  @ApiParam({
+    name: 'userId',
+    type: String,
+    format: 'UUID',
   })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.NO_CONTENT,
+  @ApiNoContentResponse({
     description: 'Password has been changed successfully',
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiNotFoundResponse({ description: 'User was not found' })
   public async changePassword(
     @Param('userId', ParseUUIDPipe) userId: Uuid,
     @Body() dto: ChangePasswordDto,

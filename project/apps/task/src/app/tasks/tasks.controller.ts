@@ -14,7 +14,18 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiUnauthorizedResponse,
+  ApiNotFoundResponse,
+  ApiNoContentResponse,
+  ApiForbiddenResponse,
+  ApiParam,
+} from '@nestjs/swagger';
 import {
   AvailableCityId,
   Comment,
@@ -45,12 +56,13 @@ import { isSameCustomerInterceptor } from './interceptors/is-same-customer.inter
 import { mapToTask } from './task-mapper';
 import { TasksService } from './tasks.service';
 import { mapToTaskItem } from './task-item-mapper';
+import { ApiAuth } from '@project/libs/decorators';
 
-@ApiTags('Task service')
 @Controller({
   path: 'tasks',
   version: '1',
 })
+@ApiTags('Task service')
 export class TasksController {
   constructor(
     private readonly tasksService: TasksService,
@@ -61,6 +73,7 @@ export class TasksController {
   @Roles(UserRoleId.Contractor)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('new')
+  @ApiAuth()
   @ApiOperation({
     summary: `Getting task list with status "${TaskStatus.New}"`,
   })
@@ -100,16 +113,12 @@ export class TasksController {
     description: 'Selection by passed sort',
     required: false,
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: `Task list with status "${TaskStatus.New}"`,
+  @ApiOkResponse({
+    description: `Task list with status "${TaskStatus.New}" successfully received`,
     isArray: true,
     type: TaskItemRdo,
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   public async findAllNewTasks(@Query() query: TaskQuery): Promise<Task[]> {
     const tasksModels = await this.tasksService.findAllByStatus(
       TaskStatusId.New,
@@ -120,25 +129,22 @@ export class TasksController {
 
   @UseGuards(JwtAuthGuard)
   @Get('my')
+  @ApiAuth()
   @ApiOperation({
     summary: 'Getting my task list',
   })
   @ApiQuery({
     name: 'statusId',
-    enum: AvailableCityId,
+    enum: TaskStatusId,
     description: 'Selection by status id',
     required: false,
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'My task list',
+  @ApiOkResponse({
+    description: 'My task list successfully received',
     isArray: true,
     type: TaskItemRdo,
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   public async findTasksByUser(
     @Query() query: MyTaskQuery,
     @Req() req: RequestWithTokenPayload
@@ -156,18 +162,20 @@ export class TasksController {
 
   @UseGuards(JwtAuthGuard)
   @Get('customers/:customerId')
+  @ApiAuth()
   @ApiOperation({
     summary: 'Getting published task count by customer',
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
+  @ApiParam({
+    name: 'customerId',
+    type: String,
+    format: 'UUID',
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Published task count by customer',
+  @ApiOkResponse({
+    description: 'Published task count by customer successfully received',
     type: Number,
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   public async getTaskCountByCustomer(
     @Param('customerId', ParseUUIDPipe) customerId: Uuid
   ): Promise<number> {
@@ -176,18 +184,20 @@ export class TasksController {
 
   @UseGuards(JwtAuthGuard)
   @Get('new/customers/:customerId')
+  @ApiAuth()
   @ApiOperation({
     summary: 'Getting new task count by customer',
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
+  @ApiParam({
+    name: 'customerId',
+    type: String,
+    format: 'UUID',
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'New task count by customer',
+  @ApiOkResponse({
+    description: 'New task count by customer successfully received',
     type: Number,
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   public async getNewTaskCountByCustomer(
     @Param('customerId', ParseUUIDPipe) customerId: Uuid
   ): Promise<number> {
@@ -199,18 +209,20 @@ export class TasksController {
 
   @UseGuards(JwtAuthGuard)
   @Get('done/contractors/:contractorId')
+  @ApiAuth()
   @ApiOperation({
     summary: 'Getting completed task count by contractor',
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
+  @ApiParam({
+    name: 'contractorId',
+    type: String,
+    format: 'UUID',
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Completed task count by contractor',
+  @ApiOkResponse({
+    description: 'Completed task count by contractor successfully received',
     type: Number,
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   public async getDoneTaskCountByContractor(
     @Param('contractorId', ParseUUIDPipe) contractorId: Uuid
   ): Promise<number> {
@@ -222,18 +234,20 @@ export class TasksController {
 
   @UseGuards(JwtAuthGuard)
   @Get('failed/contractors/:contractorId')
+  @ApiAuth()
   @ApiOperation({
     summary: 'Getting failed task count by contractor',
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
+  @ApiParam({
+    name: 'contractorId',
+    type: String,
+    format: 'UUID',
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Failed task count by contractor',
+  @ApiOkResponse({
+    description: 'Failed task count by contractor successfully received',
     type: Number,
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   public async getFailedTaskCountByContractor(
     @Param('contractorId', ParseUUIDPipe) contractorId: Uuid
   ): Promise<number> {
@@ -245,20 +259,18 @@ export class TasksController {
 
   @UseGuards(JwtAuthGuard)
   @Get(':taskId')
+  @ApiAuth()
   @ApiOperation({ summary: 'Getting detailed information about task' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
+  @ApiParam({
+    name: 'taskId',
+    type: Number,
   })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Task details',
+  @ApiOkResponse({
+    description: 'Task details successfully received',
     type: TaskRdo,
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiNotFoundResponse({ description: 'Not found' })
   public async findById(@Param('taskId') taskId: number): Promise<Task> {
     const taskModel = await this.tasksService.findById(taskId);
     return mapToTask(taskModel);
@@ -267,24 +279,15 @@ export class TasksController {
   @Roles(UserRoleId.Customer)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Post()
+  @ApiAuth()
   @ApiOperation({ summary: 'Creating new task' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: HttpStatus.FORBIDDEN,
-    description: 'Forbidden',
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'City not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.CREATED,
+  @ApiCreatedResponse({
     description: 'New task has been successfully created',
     type: TaskRdo,
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiNotFoundResponse({ description: 'City not found' })
   public async createTask(
     @Body() dto: CreateTaskDto,
     @Req() req: RequestWithTokenPayload
@@ -292,38 +295,25 @@ export class TasksController {
     const taskModel = await this.tasksService.createTask(dto, req.user.sub);
     const task = mapToTask(taskModel);
 
-    // await this.notifyService.registerSubscriber({
-    //   userId: task.customerId,
-    //   title: task.title,
-    //   description: task.description,
-    //   city: task.city,
-    //   price: task.price,
-    // });
-
     return task;
   }
 
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(isSameCustomerInterceptor)
   @Patch(':taskId/status')
+  @ApiAuth()
   @ApiOperation({ summary: 'Change task status' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
+  @ApiParam({
+    name: 'taskId',
+    type: Number,
   })
-  @ApiResponse({
-    status: HttpStatus.FORBIDDEN,
-    description: 'Forbidden',
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
+  @ApiOkResponse({
     description: 'Task status has been successfully changed',
     type: TaskRdo,
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiNotFoundResponse({ description: 'Not found' })
   public async changeTaskStatus(
     @Param('taskId') taskId: number,
     @Body() dto: ChangeTaskStatusDto,
@@ -342,23 +332,18 @@ export class TasksController {
   @UseInterceptors(isSameCustomerInterceptor)
   @Patch(':taskId/contractor')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiAuth()
   @ApiOperation({ summary: 'Select task contractor' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
+  @ApiParam({
+    name: 'taskId',
+    type: Number,
   })
-  @ApiResponse({
-    status: HttpStatus.FORBIDDEN,
-    description: 'Forbidden',
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.NO_CONTENT,
+  @ApiNoContentResponse({
     description: 'Task contractor has been successfully selected',
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiNotFoundResponse({ description: 'Not found' })
   public async selectTaskContractor(
     @Param('taskId') taskId: number,
     @Body() dto: SelectTaskContractorDto
@@ -370,23 +355,18 @@ export class TasksController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch(':taskId/responses')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiAuth()
   @ApiOperation({ summary: 'Respond to task' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
+  @ApiParam({
+    name: 'taskId',
+    type: Number,
   })
-  @ApiResponse({
-    status: HttpStatus.FORBIDDEN,
-    description: 'Forbidden',
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.NO_CONTENT,
+  @ApiNoContentResponse({
     description: 'The response to the task was successful',
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiNotFoundResponse({ description: 'Not found' })
   public async respondToTask(
     @Param('taskId') taskId: number,
     @Req() req: RequestWithTokenPayload
@@ -398,30 +378,28 @@ export class TasksController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete(':taskId')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiAuth()
   @ApiOperation({ summary: 'Delete existing task' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
+  @ApiParam({
+    name: 'taskId',
+    type: Number,
   })
-  @ApiResponse({
-    status: HttpStatus.FORBIDDEN,
-    description: 'Forbidden',
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.NO_CONTENT,
-    description: 'Task has been successfully deleted',
-  })
+  @ApiNoContentResponse({ description: 'Task has been successfully deleted' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiNotFoundResponse({ description: 'Not found' })
   public async deleteTask(@Param('taskId') taskId: number): Promise<void> {
     await this.tasksService.deleteTask(taskId);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get(':taskId/comments')
+  @ApiAuth()
   @ApiOperation({ summary: 'Getting task comment list' })
+  @ApiParam({
+    name: 'taskId',
+    type: Number,
+  })
   @ApiQuery({
     name: 'page',
     type: Number,
@@ -434,15 +412,13 @@ export class TasksController {
     description: 'Max limit records',
     required: false,
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Comment list',
+  @ApiOkResponse({
+    description: 'Comment list successfully received',
     type: CommentRdo,
     isArray: true,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized',
   })
   public async findAllForTask(
     @Param('taskId') taskId: number,
@@ -461,19 +437,17 @@ export class TasksController {
   @UseGuards(JwtAuthGuard)
   @Delete(':taskId/comments')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiAuth()
   @ApiOperation({ summary: 'Deleting all comments belonging to the task' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
+  @ApiParam({
+    name: 'taskId',
+    type: Number,
   })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
+  @ApiNoContentResponse({
+    description: 'All task comments has been successfully deleted',
   })
-  @ApiResponse({
-    status: HttpStatus.NO_CONTENT,
-    description: 'All comments has been successfully deleted',
-  })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiNotFoundResponse({ description: 'Not found' })
   public async deleteComments(@Param('taskId') taskId: number): Promise<void> {
     await this.tasksService.findById(taskId);
 
@@ -484,17 +458,12 @@ export class TasksController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('new/notification')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({
-    summary: 'Notify contractors about new tasks',
-  })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: HttpStatus.NO_CONTENT,
+  @ApiAuth()
+  @ApiOperation({ summary: 'Notify contractors about new tasks' })
+  @ApiNoContentResponse({
     description: 'All contractors have been successfully notified',
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   public async sendNewTasksToContractors(): Promise<void> {
     const newTasksModels = await this.tasksService.findAllByStatus(
       TaskStatusId.New

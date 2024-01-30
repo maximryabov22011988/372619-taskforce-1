@@ -2,53 +2,58 @@ import {
   Controller,
   Post,
   Body,
-  HttpStatus,
   UseGuards,
   Req,
   Get,
   Param,
+  ParseUUIDPipe,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiTags,
+  ApiCreatedResponse,
+  ApiUnauthorizedResponse,
+  ApiForbiddenResponse,
+  ApiConflictResponse,
+  ApiOkResponse,
+  ApiBadRequestResponse,
+  ApiNotFoundResponse,
+} from '@nestjs/swagger';
 import {
   RequestWithTokenPayload,
   Review,
   UserRoleId,
+  Uuid,
 } from '@project/libs/shared-types';
+import { ApiAuth } from '@project/libs/decorators';
 import { JwtAuthGuard, Roles, RolesGuard } from '@project/libs/validators';
 import { CreateReviewDto } from '@project/libs/dto';
 import { ReviewRdo } from '@project/libs/rdo';
 import { ReviewsService } from './reviews.service';
 import { mapToReview } from './review-mapper';
 
-@ApiTags('Review service')
 @Controller({
   path: 'reviews',
   version: '1',
 })
+@ApiTags('Review service')
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
   @Roles(UserRoleId.Customer)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Post()
+  @ApiAuth()
   @ApiOperation({ summary: 'Creating new review' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: HttpStatus.FORBIDDEN,
-    description: 'Forbidden',
-  })
-  @ApiResponse({
-    status: HttpStatus.CONFLICT,
-    description: 'Review already exists',
-  })
-  @ApiResponse({
-    status: HttpStatus.CREATED,
+  @ApiCreatedResponse({
     description: 'New review has been successfully created',
     type: ReviewRdo,
   })
+  @ApiBadRequestResponse({ description: 'Bad request' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiNotFoundResponse({ description: 'Task was not found' })
+  @ApiConflictResponse({ description: 'Review already exists' })
   public async createReview(
     @Body() dto: CreateReviewDto,
     @Req() req: RequestWithTokenPayload
@@ -63,36 +68,32 @@ export class ReviewsController {
 
   @UseGuards(JwtAuthGuard)
   @Get('contractors/:contractorId/rating')
+  @ApiAuth()
   @ApiOperation({ summary: 'Getting contractor rating' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Contractor rating',
+  @ApiOkResponse({
+    description: 'Contractor rating successfully received',
     type: Number,
   })
+  @ApiBadRequestResponse({ description: 'Bad request' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   public async getContractorRating(
-    @Param('contractorId') contractorId: string
+    @Param('contractorId', ParseUUIDPipe) contractorId: Uuid
   ): Promise<number> {
     return this.reviewsService.getContractorRating(contractorId);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('contractors/:contractorId/rating-level')
+  @ApiAuth()
   @ApiOperation({ summary: 'Getting contractor rating level' })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Contractor rating level',
+  @ApiOkResponse({
+    description: 'Contractor rating level successfully received',
     type: Number,
   })
+  @ApiBadRequestResponse({ description: 'Bad request' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   public async getContractorRatingLevel(
-    @Param('contractorId') contractorId: string
+    @Param('contractorId', ParseUUIDPipe) contractorId: Uuid
   ): Promise<number> {
     return this.reviewsService.getContractorRatingLevel(contractorId);
   }
