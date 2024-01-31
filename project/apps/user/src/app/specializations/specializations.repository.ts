@@ -21,13 +21,13 @@ export class SpecializationsRepository {
   }
 
   public async findAllByUser(userId: Uuid): Promise<SpecializationModel[]> {
-    const usersSpecializationsModels = await this.usersSpecializationsModel
+    const userSpecializationModels = await this.usersSpecializationsModel
       .query()
       .where({ userId })
       .returning('*')
       .execute();
 
-    const ids = usersSpecializationsModels.map(
+    const ids = userSpecializationModels.map(
       ({ specializationId }) => specializationId
     );
 
@@ -59,7 +59,7 @@ export class SpecializationsRepository {
 
   public async delete(specializationName: string, userId: Uuid): Promise<void> {
     const specializationModel = await this.findByName(specializationName);
-    const usersSpecializationsModel = await this.usersSpecializationsModel
+    const userSpecializationModels = await this.usersSpecializationsModel
       .query()
       .where({ specializationId: specializationModel.id })
       .whereNot({ userId });
@@ -69,7 +69,7 @@ export class SpecializationsRepository {
       .where({ specializationId: specializationModel.id, userId })
       .delete();
 
-    const isUsedOtherUsers = usersSpecializationsModel.length;
+    const isUsedOtherUsers = userSpecializationModels.length;
     if (!isUsedOtherUsers) {
       await this.specializationModel
         .query()

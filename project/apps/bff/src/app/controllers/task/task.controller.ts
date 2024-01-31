@@ -204,7 +204,7 @@ export class TaskController {
       }
     );
 
-    const data: TaskWithCustomer[] = [];
+    const tasksWithCustomer: TaskWithCustomer[] = [];
     for (const task of tasks) {
       const { data: customer } = await this.httpService.axiosRef.get(
         `${this.baseUsersUrl}/${task.customerId}`,
@@ -215,7 +215,7 @@ export class TaskController {
         }
       );
 
-      data.push(
+      tasksWithCustomer.push(
         fillObject(
           TaskItemWithCustomerDataRdo,
           assign(task, {
@@ -225,7 +225,7 @@ export class TaskController {
       );
     }
 
-    return data;
+    return tasksWithCustomer;
   }
 
   @UseGuards(CheckAuthGuard)

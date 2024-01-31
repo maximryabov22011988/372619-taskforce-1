@@ -70,24 +70,24 @@ export class TasksService {
     customerId: Uuid,
     statusId?: TaskStatusId
   ): Promise<number> {
-    const tasksModels = await this.tasksRepository.findAllByCustomerAndStatus(
+    const taskModels = await this.tasksRepository.findAllByCustomerAndStatus(
       customerId,
       statusId
     );
 
-    return tasksModels.length;
+    return taskModels.length;
   }
 
   public async getTaskCountByContractor(
     contractorId: Uuid,
     statusId: TaskStatusId
   ): Promise<number> {
-    const tasksModels = await this.tasksRepository.findAllByContractorAndStatus(
+    const taskModels = await this.tasksRepository.findAllByContractorAndStatus(
       contractorId,
       statusId
     );
 
-    return tasksModels.length;
+    return taskModels.length;
   }
 
   public async createTask(

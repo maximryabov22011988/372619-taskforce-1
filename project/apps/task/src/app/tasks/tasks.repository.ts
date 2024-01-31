@@ -204,8 +204,8 @@ export class TasksRepository
         .where({ tagId })
         .execute();
 
-      const tasksIds = tasksTagsModel.map(({ taskId }) => taskId);
-      queryBuilder.whereIn(`${TaskModel.tableName}.id`, tasksIds);
+      const taskIds = tasksTagsModel.map(({ taskId }) => taskId);
+      queryBuilder.whereIn(`${TaskModel.tableName}.id`, taskIds);
     }
   }
 

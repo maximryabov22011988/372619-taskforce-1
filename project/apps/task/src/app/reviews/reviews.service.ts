@@ -73,13 +73,13 @@ export class ReviewsService {
   }
 
   public async getContractorRatingLevel(contractorId: Uuid): Promise<number> {
-    const reviewsModels = await this.reviewsRepository.findAll();
-    const contractorsIds = uniq(
-      reviewsModels.map((reviewModel) => reviewModel.contractorId)
+    const reviewModels = await this.reviewsRepository.findAll();
+    const contractorIds = uniq(
+      reviewModels.map((reviewModel) => reviewModel.contractorId)
     );
 
     const contractorsRating: { id: Uuid; rating: number }[] = [];
-    for (const id of contractorsIds) {
+    for (const id of contractorIds) {
       const rating = await this.getContractorRating(id);
       contractorsRating.push({
         id,

@@ -120,11 +120,11 @@ export class TasksController {
   })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   public async findAllNewTasks(@Query() query: TaskQuery): Promise<Task[]> {
-    const tasksModels = await this.tasksService.findAllByStatus(
+    const taskModels = await this.tasksService.findAllByStatus(
       TaskStatusId.New,
       query
     );
-    return tasksModels.map(mapToTaskItem);
+    return taskModels.map(mapToTaskItem);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -151,13 +151,13 @@ export class TasksController {
   ): Promise<Task[]> {
     const { sub: userId, roleId } = req.user;
 
-    const tasksModels = await this.tasksService.findOwn({
+    const taskModels = await this.tasksService.findOwn({
       userId,
       roleId,
       query,
     });
 
-    return tasksModels.map(mapToTaskItem);
+    return taskModels.map(mapToTaskItem);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -426,12 +426,12 @@ export class TasksController {
   ): Promise<Comment[]> {
     await this.tasksService.findById(taskId);
 
-    const commentsModels = await this.commentsService.findAllForTask(
+    const commentModels = await this.commentsService.findAllForTask(
       taskId,
       query
     );
 
-    return commentsModels.map(mapToComment);
+    return commentModels.map(mapToComment);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -465,10 +465,10 @@ export class TasksController {
   })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   public async sendNewTasksToContractors(): Promise<void> {
-    const newTasksModels = await this.tasksService.findAllByStatus(
+    const newTaskModels = await this.tasksService.findAllByStatus(
       TaskStatusId.New
     );
-    const newTasks = newTasksModels.map(mapToTask);
+    const newTasks = newTaskModels.map(mapToTask);
 
     await this.notifyService.notifyNewTasks(newTasks);
   }

@@ -40,9 +40,10 @@ export class SpecializationsService {
       return;
     }
 
-    const existedSpecializationsModels =
-      await this.findAllSpecializationsByUser(userId);
-    const existedSpecializations = existedSpecializationsModels.map(
+    const existedSpecializationModels = await this.findAllSpecializationsByUser(
+      userId
+    );
+    const existedSpecializations = existedSpecializationModels.map(
       ({ name }) => name
     );
 

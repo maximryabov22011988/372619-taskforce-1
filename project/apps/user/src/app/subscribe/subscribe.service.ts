@@ -17,10 +17,10 @@ export class SubscribeService {
     queue: process.env.USER_RABBITMQ_QUEUE,
   })
   public async getContractorsEmails(): Promise<ContractorsEmails> {
-    const contractorsModels = await this.usersService.findByRole(
+    const contractorModels = await this.usersService.findByRole(
       UserRoleId.Contractor
     );
-    const emails = contractorsModels.map(({ email }) => email);
+    const emails = contractorModels.map(({ email }) => email);
 
     return { emails };
   }
