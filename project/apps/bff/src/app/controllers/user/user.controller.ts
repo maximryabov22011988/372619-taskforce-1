@@ -238,6 +238,7 @@ export class UserController {
           },
         }
       );
+
       const { data: ratingLevel } = await this.httpService.axiosRef.get(
         `${this.baseReviewsUrl}/contractors/${userId}/rating-level`,
         {

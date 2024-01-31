@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { RabbitRPC } from '@golevelup/nestjs-rabbitmq';
 import { UserRoleId } from '@project/libs/shared-types';
 import { ChangeProfileDto } from '@project/libs/dto';
 import { DateTimeService } from '@project/libs/services';

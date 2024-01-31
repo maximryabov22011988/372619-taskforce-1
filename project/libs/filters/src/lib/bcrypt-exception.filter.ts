@@ -9,17 +9,11 @@ import { Response } from 'express';
 
 @Catch()
 export class BcryptExceptionFilter implements ExceptionFilter {
-  public catch(exception: any, host: ArgumentsHost) {
+  public catch(exception: Error, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
     let message = 'Internal server error';
-
-    console.log(
-      '%c DEBUG exception.name',
-      'padding: 0.3rem 0.5rem 0.3rem 0.4rem; background: red; font: 12px/1 Arial; color: white; border-radius: 2px',
-      exception.message
-    );
 
     if (exception instanceof HttpException) {
       status = exception.getStatus();

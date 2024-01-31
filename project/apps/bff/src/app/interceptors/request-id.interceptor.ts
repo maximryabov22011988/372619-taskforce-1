@@ -4,14 +4,10 @@ import {
   NestInterceptor,
   Logger,
 } from '@nestjs/common';
-import { Observable } from 'rxjs';
 import { v4 as makeUuid } from 'uuid';
 
 export class RequestIdInterceptor implements NestInterceptor {
-  public intercept(
-    context: ExecutionContext,
-    next: CallHandler
-  ): Observable<any> {
+  public intercept(context: ExecutionContext, next: CallHandler) {
     const requestUuid = makeUuid();
     const request = context.switchToHttp().getRequest<Request>();
     request.headers['X-Request-Id'] = requestUuid;

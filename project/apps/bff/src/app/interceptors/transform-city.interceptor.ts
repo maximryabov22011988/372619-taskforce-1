@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigType } from '@nestjs/config';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { switchMap, map, catchError } from 'rxjs/operators';
 import { BffConfig } from '@project/libs/config';
 
@@ -24,10 +24,7 @@ export class TransformCityInterceptor implements NestInterceptor {
     private readonly serviceConfig: ConfigType<typeof microserviceConfig>
   ) {}
 
-  public intercept(
-    context: ExecutionContext,
-    next: CallHandler
-  ): Observable<any> {
+  public intercept(context: ExecutionContext, next: CallHandler) {
     return next.handle().pipe(
       switchMap((data) => {
         const { cityId, ...otherData } = data;
@@ -63,7 +60,7 @@ export class TransformCityInterceptor implements NestInterceptor {
         Logger.error(
           `[An error occurred when processing the request]: ${error}`
         );
-        throw error;
+        throw new Error(error);
       })
     );
   }

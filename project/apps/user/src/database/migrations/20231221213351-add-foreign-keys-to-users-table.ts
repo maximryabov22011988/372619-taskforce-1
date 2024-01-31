@@ -1,9 +1,9 @@
 import { Knex } from 'knex';
 
-const tableName = 'users';
+const TABLE_NAME = 'users';
 
 export async function up(knex: Knex) {
-  await knex.schema.alterTable(tableName, (table) => {
+  await knex.schema.alterTable(TABLE_NAME, (table) => {
     table
       .foreign('role_id')
       .references('id')
@@ -13,7 +13,7 @@ export async function up(knex: Knex) {
 }
 
 export async function down(knex: Knex) {
-  await knex.schema.alterTable(tableName, (table) => {
+  await knex.schema.alterTable(TABLE_NAME, (table) => {
     table.dropForeign('role_id');
   });
 }

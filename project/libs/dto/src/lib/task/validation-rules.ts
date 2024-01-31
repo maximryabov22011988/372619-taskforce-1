@@ -19,5 +19,4 @@ export enum ReviewRule {
   TextMaxLength = 500,
   MinRating = 1,
   MaxRating = 5,
-  MinFailedTasks = 0,
 }

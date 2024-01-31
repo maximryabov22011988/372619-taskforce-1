@@ -17,12 +17,10 @@ export class FileSizeValidationPipe implements PipeTransform {
   public transform(file: File) {
     const { size } = file;
 
-    if (this.maxSizeInKb) {
-      if (convertToKb(size) > this.maxSizeInKb) {
-        throw new BadRequestException(
-          `Invalid file size. File should not be larger than ${this.maxSizeInKb} kb`
-        );
-      }
+    if (this.maxSizeInKb && convertToKb(size) > this.maxSizeInKb) {
+      throw new BadRequestException(
+        `Invalid file size. File should not be larger than ${this.maxSizeInKb} kb`
+      );
     }
 
     return file;

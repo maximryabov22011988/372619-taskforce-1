@@ -1,9 +1,9 @@
 import { Knex } from 'knex';
 
-const tableName = 'tasks_tags';
+const TABLE_NAME = 'tasks_tags';
 
 export async function up(knex: Knex) {
-  await knex.schema.createTable(tableName, (table) => {
+  await knex.schema.createTable(TABLE_NAME, (table) => {
     table.integer('task_id').unsigned().notNullable();
     table.integer('tag_id').unsigned().notNullable();
     table.primary(['task_id', 'tag_id']);
@@ -26,9 +26,9 @@ export async function up(knex: Knex) {
 
 export async function down(knex: Knex) {
   await knex.schema
-    .table(tableName, (table) => {
+    .table(TABLE_NAME, (table) => {
       table.dropForeign('task_id');
       table.dropForeign('tag_id');
     })
-    .dropTableIfExists(tableName);
+    .dropTableIfExists(TABLE_NAME);
 }

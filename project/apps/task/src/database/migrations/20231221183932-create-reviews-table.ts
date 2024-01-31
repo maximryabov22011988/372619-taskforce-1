@@ -1,10 +1,9 @@
 import { Knex } from 'knex';
 
-const tableName = 'reviews';
+const TABLE_NAME = 'reviews';
 
-// FIXME Переименовать все файлы миграций в формат 53489573985-create-reviews-table.ts
 export async function up(knex: Knex) {
-  await knex.schema.createTable(tableName, (table) => {
+  await knex.schema.createTable(TABLE_NAME, (table) => {
     table.increments('id').primary();
     table.string('text', 500).notNullable();
     table.integer('task_id').unsigned().notNullable();
@@ -50,5 +49,5 @@ export async function down(knex: Knex) {
 
   await knex.raw('DROP FUNCTION IF EXISTS update_updated_at_column');
 
-  await knex.schema.dropTableIfExists(tableName);
+  await knex.schema.dropTableIfExists(TABLE_NAME);
 }

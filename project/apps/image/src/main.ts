@@ -36,8 +36,8 @@ const bootstrap = async () => {
   const configService = app.get(ConfigService);
   const port = configService.get('app.port');
 
-  const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix);
+  const GLOBAL_PREFIX = 'api';
+  app.setGlobalPrefix(GLOBAL_PREFIX);
   app.enableVersioning({
     type: VersioningType.URI,
   });
@@ -45,7 +45,7 @@ const bootstrap = async () => {
   await app.listen(port);
 
   Logger.log(
-    `🚀 Image microservice is running on: http://localhost:${port}/${globalPrefix}`
+    `🚀 Image microservice is running on: http://localhost:${port}/${GLOBAL_PREFIX}`
   );
 };
 

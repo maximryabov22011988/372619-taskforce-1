@@ -1,9 +1,9 @@
 import { Knex } from 'knex';
 
-const tableName = 'statuses';
+const TABLE_NAME = 'statuses';
 
 export async function up(knex: Knex) {
-  await knex.schema.createTable(tableName, (table) => {
+  await knex.schema.createTable(TABLE_NAME, (table) => {
     table.increments('id').primary();
     table
       .string('name', 15)
@@ -13,5 +13,5 @@ export async function up(knex: Knex) {
 }
 
 export async function down(knex: Knex) {
-  await knex.schema.dropTableIfExists(tableName);
+  await knex.schema.dropTableIfExists(TABLE_NAME);
 }

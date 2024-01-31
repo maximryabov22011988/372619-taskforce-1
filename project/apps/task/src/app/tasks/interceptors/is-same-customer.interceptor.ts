@@ -5,7 +5,6 @@ import {
   CallHandler,
   ForbiddenException,
 } from '@nestjs/common';
-import { Observable } from 'rxjs';
 import { TaskStatusId } from '@project/libs/shared-types';
 import { TasksService } from '../tasks.service';
 
@@ -13,10 +12,7 @@ import { TasksService } from '../tasks.service';
 export class isSameCustomerInterceptor implements NestInterceptor {
   constructor(private readonly tasksService: TasksService) {}
 
-  public async intercept(
-    context: ExecutionContext,
-    next: CallHandler
-  ): Promise<Observable<any>> {
+  public async intercept(context: ExecutionContext, next: CallHandler) {
     const request = context.switchToHttp().getRequest();
 
     const userId = request.user.sub;

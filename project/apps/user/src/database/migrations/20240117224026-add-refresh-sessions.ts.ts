@@ -1,9 +1,9 @@
 import { Knex } from 'knex';
 
-const tableName = 'refresh_sessions';
+const TABLE_NAME = 'refresh_sessions';
 
 export async function up(knex: Knex) {
-  await knex.schema.createTable(tableName, (table) => {
+  await knex.schema.createTable(TABLE_NAME, (table) => {
     table.increments('id');
     table.uuid('user_id').notNullable();
     table.uuid('token_id').notNullable();
@@ -48,5 +48,5 @@ export async function down(knex: Knex) {
 
   await knex.raw('DROP FUNCTION IF EXISTS update_updated_at_column');
 
-  await knex.schema.dropTableIfExists(tableName);
+  await knex.schema.dropTableIfExists(TABLE_NAME);
 }

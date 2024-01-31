@@ -9,7 +9,6 @@ import { AccessTokenPayload, UserRoleId } from '@project/libs/shared-types';
 
 const ROLES_IDS_METADATA_KEY = 'roles';
 
-// Сначало реализовать refresh token (в т.ч. чтобы записывалась инфа в req.user), затем расставить роли по endpoints
 export const Roles = (...rolesIds: UserRoleId[]) =>
   SetMetadata(ROLES_IDS_METADATA_KEY, rolesIds);
 

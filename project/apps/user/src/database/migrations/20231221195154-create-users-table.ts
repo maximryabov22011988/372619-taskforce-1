@@ -1,9 +1,9 @@
 import { Knex } from 'knex';
 
-const tableName = 'users';
+const TABLE_NAME = 'users';
 
 export async function up(knex: Knex) {
-  await knex.schema.createTable(tableName, (table) => {
+  await knex.schema.createTable(TABLE_NAME, (table) => {
     table.uuid('id').primary();
     table.string('firstname', 50).notNullable();
     table.string('lastname', 50).notNullable();
@@ -54,5 +54,5 @@ export async function down(knex: Knex) {
 
   await knex.raw('DROP FUNCTION IF EXISTS update_updated_at_column');
 
-  await knex.schema.dropTableIfExists(tableName);
+  await knex.schema.dropTableIfExists(TABLE_NAME);
 }

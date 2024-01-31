@@ -1,9 +1,9 @@
 import { Knex } from 'knex';
 
-const tableName = 'comments';
+const TABLE_NAME = 'comments';
 
 export async function up(knex: Knex) {
-  await knex.schema.createTable(tableName, (table) => {
+  await knex.schema.createTable(TABLE_NAME, (table) => {
     table.increments('id').primary();
     table.string('text', 300).notNullable();
     table.integer('task_id').unsigned().notNullable();
@@ -56,8 +56,8 @@ export async function down(knex: Knex) {
   await knex.raw('DROP FUNCTION IF EXISTS update_updated_at_column');
 
   await knex.schema
-    .table(tableName, (table) => {
+    .table(TABLE_NAME, (table) => {
       table.dropForeign('task_id');
     })
-    .dropTableIfExists(tableName);
+    .dropTableIfExists(TABLE_NAME);
 }

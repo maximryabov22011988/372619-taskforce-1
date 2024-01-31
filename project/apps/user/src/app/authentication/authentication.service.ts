@@ -11,7 +11,7 @@ import { v4 as makeUuid } from 'uuid';
 import { createJWTPayload } from '@project/libs/utils-core';
 import { UserConfig } from '@project/libs/config';
 import { DateTimeService } from '@project/libs/services';
-import { Tokens, AccessTokenPayload, Uuid } from '@project/libs/shared-types';
+import { Tokens, Uuid } from '@project/libs/shared-types';
 import { RegisterUserDto } from '@project/libs/dto';
 import { LoginUserDto } from '@project/libs/dto';
 import { ChangePasswordDto } from '@project/libs/dto';

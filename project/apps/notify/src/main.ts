@@ -14,12 +14,12 @@ const bootstrap = async () => {
   const configService = app.get(ConfigService);
   const port = configService.get('app.port');
 
-  const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix);
+  const GLOBAL_PREFIX = 'api';
+  app.setGlobalPrefix(GLOBAL_PREFIX);
   await app.listen(port);
 
   Logger.log(
-    `🚀 Notify microservice is running on: http://localhost:${port}/${globalPrefix}`
+    `🚀 Notify microservice is running on: http://localhost:${port}/${GLOBAL_PREFIX}`
   );
 };
 

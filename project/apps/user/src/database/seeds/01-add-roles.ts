@@ -1,11 +1,11 @@
 import { Knex } from 'knex';
 
-const tableName = 'roles';
+const TABLE_NAME = 'roles';
 
 export async function seed(knex: Knex): Promise<void> {
-  await knex(tableName).del();
+  await knex(TABLE_NAME).del();
 
-  await knex(tableName).insert([
+  await knex(TABLE_NAME).insert([
     {
       id: 1,
       name: 'customer',

@@ -47,8 +47,8 @@ const bootstrap = async () => {
   const port = configService.get('app.port');
   const env = configService.get('app.environment');
 
-  const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix);
+  const GLOBAL_PREFIX = 'api';
+  app.setGlobalPrefix(GLOBAL_PREFIX);
   app.enableVersioning({
     type: VersioningType.URI,
   });
@@ -66,7 +66,7 @@ const bootstrap = async () => {
   await app.listen(port);
 
   Logger.log(
-    `🚀 User microservice is running on: http://localhost:${port}/${globalPrefix}`
+    `🚀 User microservice is running on: http://localhost:${port}/${GLOBAL_PREFIX}`
   );
 };
 

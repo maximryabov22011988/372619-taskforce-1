@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
-import dayjs from 'dayjs';
 import { UserConfig } from '@project/libs/config';
 import { RefreshTokenPayload } from '@project/libs/shared-types';
 import { parseTime } from '@project/libs/utils-core';
