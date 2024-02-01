@@ -184,6 +184,11 @@ export class TasksService {
     accessTokenPayload: AccessTokenPayload
   ): Promise<TaskModel> {
     const taskModel = await this.findById(taskId);
+    const taskModelsWithInProgressStatus =
+      await this.tasksRepository.findAllByContractorAndStatus(
+        taskModel.contractorId,
+        TaskStatusId.InProgress
+      );
     const { statusId } = dto;
     const { sub: userId, roleId } = accessTokenPayload;
 
@@ -192,6 +197,7 @@ export class TasksService {
       newStatusId: statusId,
       contractorId: taskModel.contractorId,
       roleId,
+      hasTasksInProgress: taskModelsWithInProgressStatus.length > 0,
     });
 
     this.isSameContractor({
@@ -211,11 +217,13 @@ export class TasksService {
     newStatusId,
     contractorId,
     roleId,
+    hasTasksInProgress,
   }: {
     currentStatusId: TaskStatusId;
     newStatusId: TaskStatusId;
     contractorId: Uuid;
     roleId: UserRoleId;
+    hasTasksInProgress: boolean;
   }): void {
     const availableStatusById: { [status in TaskStatusId]?: TaskStatusId[] } = {
       [TaskStatusId.New]: [TaskStatusId.InProgress, TaskStatusId.Cancelled],
@@ -236,10 +244,29 @@ export class TasksService {
       ? availableStatusById[currentStatusId].includes(newStatusId)
       : false;
 
+    console.log(
+      '%c DEBUG isValidNewStatus',
+      'padding: 0.3rem 0.5rem 0.3rem 0.4rem; background: red; font: 12px/1 Arial; color: white; border-radius: 2px',
+      isValidNewStatus
+    );
+
     const isValidStatusByRole =
       availableStatusByRoleId[roleId].includes(newStatusId);
 
-    if (!isValidNewStatus || !isValidStatusByRole) {
+    console.log(
+      '%c DEBUG isValidStatusByRole',
+      'padding: 0.3rem 0.5rem 0.3rem 0.4rem; background: red; font: 12px/1 Arial; color: white; border-radius: 2px',
+      isValidStatusByRole
+    );
+
+    if (
+      !isValidNewStatus ||
+      !isValidStatusByRole ||
+      (isValidNewStatus &&
+        isValidStatusByRole &&
+        hasTasksInProgress &&
+        newStatusId === TaskStatusId.InProgress)
+    ) {
       throw new BadRequestException('Invalid new status');
     }
 

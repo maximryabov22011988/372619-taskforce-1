@@ -13,7 +13,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwYjMzZGJiZ
 
 
 ### Получение детальной информации о задании
-GET  http://localhost:3002/api/v1/tasks/91 HTTP/1.1
+GET  http://localhost:3002/api/v1/tasks/1 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMWIxOTk1MS01MDllLTRlMWMtOTc2ZC1iMDdhNmI1Y2E5OWMiLCJlbWFpbCI6ImpvaG44MUBkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IlJ1c3NlbCIsImZpcnN0bmFtZSI6IkphY2siLCJpYXQiOjE3MDYwNTM4MzYsImV4cCI6MTcwNjA1NDEzNn0.XO__uwkrLSLeN1qpV-PuOHeWzdB58P444YNsvWGdGz0
 
@@ -55,10 +55,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YjQzYzQ4Y
 {
   "title": "Task long long title",
   "description": "Objectively procrastinate dynamic imperatives without customer directed niches. Proactively productivate interdependent e-commerce and transparent methodologies.",
-  "category": "мебель",
+  "category": "repair",
   "cityId": 3,
   "price": 1000,
-  "tags": ["test12345"],
+  "tags": ["plaster"],
   "executionDate": "2024-02-15",
   "address": "Moscow, Presnenskaya embankment, 12, office No. 2"
 }
@@ -66,14 +66,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YjQzYzQ4Y
 
 
 ### Откликнуться на задание
-PATCH  http://localhost:3002/api/v1/tasks/12/responses HTTP/1.1
+PATCH  http://localhost:3002/api/v1/tasks/1/responses HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwYjMzZGJiZS1iYzE5LTRmZTgtYmY5Ni1kNWNkOThlNjQ2ZDMiLCJlbWFpbCI6ImpvaG4yQGRvZS5jb20iLCJyb2xlSWQiOjIsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjMxNzI2MSwiZXhwIjoxNzA2MzE3NTYxfQ.DS7fuc8CmHN5-rOhaD5wSotvlXFjBhSico4XxbgZkzM
 
 
 
 ### Выбор исполнителя для задание
-PATCH  http://localhost:3002/api/v1/tasks/12/contractor HTTP/1.1
+PATCH  http://localhost:3002/api/v1/tasks/1/contractor HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YjQzYzQ4YS01NWRhLTQzMWEtYWY5ZC1mMjNiMDg0M2E0ZjYiLCJlbWFpbCI6ImpvaG4xQGRvZS5jb20iLCJyb2xlSWQiOjEsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjMxNzMwMywiZXhwIjoxNzA2MzE3NjAzfQ.Uhk2-LNmCh0JkIKRUP-9fthx4W0cgHUyRNX-XNwS0CI
 
@@ -84,32 +84,32 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YjQzYzQ4Y
 
 
 ### Обновление статуса задания
-PATCH  http://localhost:3002/api/v1/tasks/3/status HTTP/1.1
+PATCH  http://localhost:3002/api/v1/tasks/1/status HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YjQzYzQ4YS01NWRhLTQzMWEtYWY5ZC1mMjNiMDg0M2E0ZjYiLCJlbWFpbCI6ImpvaG4xQGRvZS5jb20iLCJyb2xlSWQiOjEsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjI5NDYyMSwiZXhwIjoxNzA2Mjk0OTIxfQ.4SGCousOk0h5rUB_URzLnnRgqr-IgjR62Cb5icd-Cpg
 
 {
-  "statusId": 3
+  "statusId": 2
 }
 
 
 
 ### Удаление существующего задания
-DELETE  http://localhost:3002/api/v1/tasks/28 HTTP/1.1
+DELETE  http://localhost:3002/api/v1/tasks/2 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5MjBlMzM5My05YWJkLTQ0NmYtOTIyOS1lYmQ3MjQ5NzJlNzYiLCJlbWFpbCI6ImpvaG45QGRvZS5jb20iLCJyb2xlSWQiOjIsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNTk0OTgwOCwiZXhwIjoxNzA1OTUwMTA4fQ.4LCbgorSIrk-1YxOioJr7vJZtEETqe_WTKDDIaspKYs
 
 
 
 ### Получение списка комментариев для определенного задания
-GET  http://localhost:3002/api/v1/tasks/21/comments?page=1 HTTP/1.1
+GET  http://localhost:3002/api/v1/tasks/1/comments?page=1 HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMWIxOTk1MS01MDllLTRlMWMtOTc2ZC1iMDdhNmI1Y2E5OWMiLCJlbWFpbCI6ImpvaG44MUBkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IlJ1c3NlbCIsImZpcnN0bmFtZSI6IkphY2siLCJpYXQiOjE3MDYxMTAwNzEsImV4cCI6MTcwNjExMDM3MX0.BzOkbFwCGoCh2ycTKTpicAP80_jKzdFO7PNWBaErd3E
 
 
 
 ### Удаление всех комментариев задания
-DELETE  http://localhost:3002/api/v1/tasks/21/comments HTTP/1.1
+DELETE  http://localhost:3002/api/v1/tasks/1/comments HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMWIxOTk1MS01MDllLTRlMWMtOTc2ZC1iMDdhNmI1Y2E5OWMiLCJlbWFpbCI6ImpvaG44MUBkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IlJ1c3NlbCIsImZpcnN0bmFtZSI6IkphY2siLCJpYXQiOjE3MDYxMTAwNzEsImV4cCI6MTcwNjExMDM3MX0.BzOkbFwCGoCh2ycTKTpicAP80_jKzdFO7PNWBaErd3E
 

@@ -14,5 +14,5 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwYjMzZGJiZ
   "firstname": "Jack",
   "lastname": "Russel",
   "info": "Some text",
-  "specializations": ["t1"]
+  "specializations": ["lighting"]
 }

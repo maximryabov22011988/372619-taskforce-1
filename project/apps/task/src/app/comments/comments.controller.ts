@@ -50,6 +50,10 @@ export class CommentsController {
     @Body() dto: CreateCommentDto,
     @Req() req: RequestWithTokenPayload
   ): Promise<Comment> {
+    console.log(
+      '%c DEBUG CommentsController create',
+      'padding: 0.3rem 0.5rem 0.3rem 0.4rem; background: red; font: 12px/1 Arial; color: white; border-radius: 2px'
+    );
     const commentModel = await this.commentsService.createComment(
       dto,
       req.user.sub

@@ -3,11 +3,11 @@ POST http://localhost:3004/auth/register HTTP/1.1
 Content-Type: application/json
 
 {
-  "firstname": "John",
-  "lastname": "Doe",
-  "email": "john22@doe.com",
+  "firstname": "Max",
+  "lastname": "Ryabov",
+  "email": "max@ryabov.com",
   "cityId": 2,
-  "roleId": 2,
+  "roleId": 1,
   "password": "123456",
   "birthDate": "2004-12-29"
 }
@@ -19,18 +19,24 @@ POST http://localhost:3004/auth/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "john1@doe.com",
+  "email": "max@ryabov.com",
   "password": "123456"
 }
 
 
 
+### Обновление пары access/refresh токенов
+POST http://localhost:3004/auth/refresh HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4OGEzMDM0NS1mMWM2LTRiYTgtOGU4Mi0xYmJiMzQ0NDkxN2UiLCJlbWFpbCI6ImpvaG40QGRvZS5jb20iLCJyb2xlSWQiOjIsImxhc3RuYW1lIjoiUnVzc2VsIiwiZmlyc3RuYW1lIjoiSmFjayIsInRva2VuSWQiOiI2ODk3OTk4OC1mZTYxLTRmNjAtYWY5My0wMzE0ZDNlZmY2N2EiLCJpYXQiOjE3MDY4MjIzOTUsImV4cCI6MTcwNjkwODc5NX0.PToEJHTlv5ganBZURr7tNUbc2kiCxOw5raxy4L-5IWY
+
+
+
 ### Изменение пользовательского пароля
-PATCH  http://localhost:3004/auth/password/a85447ee-04c5-418e-89ff-2a56d72c7c63 HTTP/1.1
+PATCH  http://localhost:3004/auth/password/f4a981e3-73d0-41e9-8949-8f81dde8c16c HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhODU0NDdlZS0wNGM1LTQxOGUtODlmZi0yYTU2ZDcyYzdjNjMiLCJlbWFpbCI6ImpvaG44M0Bkb2UuY29tIiwicm9sZUlkIjoyLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDU3MDA2ODYsImV4cCI6MTcwNTcwMDk4Nn0.USDa4VosDAHIJzbPm_vJpWCddzXL23EwgXCpbD7OQo0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmNGE5ODFlMy03M2QwLTQxZTktODk0OS04ZjgxZGRlOGMxNmMiLCJlbWFpbCI6ImpvaG4zQGRvZS5jb20iLCJyb2xlSWQiOjEsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjgxMzY1NSwiZXhwIjoxNzA2ODEzOTU1fQ.kIJTjeyaQhOHUTA9CDTinZmqdpeSXd2q1zOv_t4475w
 
 {
-  "oldPassword": "123456",
-  "newPassword": "567890"
+  "oldPassword": "567890",
+  "newPassword": "123456"
 }

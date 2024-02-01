@@ -4,6 +4,6 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMWIxOTk1MS01MDllLTRlMWMtOTc2ZC1iMDdhNmI1Y2E5OWMiLCJlbWFpbCI6ImpvaG44MUBkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDU5NTA1ODEsImV4cCI6MTcwNTk1MDg4MX0.VwPNhQqDibdKiyad1xVXXwc42cseAOnt9Vd9Ohzic7c
 
 {
-  "name": "furniture52"
+  "name": "furniture"
 }
 
