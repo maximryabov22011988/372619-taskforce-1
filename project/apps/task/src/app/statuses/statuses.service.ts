@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { TaskStatusId } from '@project/libs/shared-types';
 import { StatusesRepository } from './statuses.repository';
 import { StatusModel } from '../../database/models/status.model';
 
@@ -10,11 +9,7 @@ export class StatusesService {
   public async findById(id: number): Promise<StatusModel> {
     const statusModel = await this.statusesRepository.findById(id);
     if (!statusModel) {
-      throw new NotFoundException(
-        `Status was not found. Available statuses: ${Object.values(
-          TaskStatusId
-        ).join(', ')}`
-      );
+      throw new NotFoundException('Status was not found');
     }
 
     return statusModel;

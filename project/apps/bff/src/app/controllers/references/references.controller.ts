@@ -1,4 +1,4 @@
-import { Controller, Get, Inject, Param, Req } from '@nestjs/common';
+import { Controller, Get, Inject, Param } from '@nestjs/common';
 import {
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -7,7 +7,6 @@ import {
 } from '@nestjs/swagger';
 import { HttpService } from '@nestjs/axios';
 import { ConfigType } from '@nestjs/config';
-import { Request } from 'express';
 import { City, Role, Status } from '@project/libs/shared-types';
 import { BffConfig } from '@project/libs/config';
 import { CityRdo, RoleRdo, StatusRdo } from '@project/libs/rdo';
@@ -40,12 +39,8 @@ export class ReferencesController {
     isArray: true,
     type: StatusRdo,
   })
-  public async getStatusList(@Req() req: Request): Promise<Status[]> {
-    const { data } = await this.httpService.axiosRef.get(this.baseStatusesUrl, {
-      headers: {
-        Authorization: req.headers['authorization'],
-      },
-    });
+  public async getStatusList(): Promise<Status[]> {
+    const { data } = await this.httpService.axiosRef.get(this.baseStatusesUrl);
 
     return data;
   }
@@ -57,17 +52,9 @@ export class ReferencesController {
     type: StatusRdo,
   })
   @ApiNotFoundResponse({ description: 'Status was not found' })
-  public async getStatus(
-    @Param('id') id: number,
-    @Req() req: Request
-  ): Promise<Status> {
+  public async getStatus(@Param('id') id: number): Promise<Status> {
     const { data } = await this.httpService.axiosRef.get(
-      `${this.baseStatusesUrl}/${id}`,
-      {
-        headers: {
-          Authorization: req.headers['authorization'],
-        },
-      }
+      `${this.baseStatusesUrl}/${id}`
     );
 
     return data;
@@ -80,12 +67,8 @@ export class ReferencesController {
     isArray: true,
     type: CityRdo,
   })
-  public async getCityList(@Req() req: Request): Promise<City[]> {
-    const { data } = await this.httpService.axiosRef.get(this.baseCitiesUrl, {
-      headers: {
-        Authorization: req.headers['authorization'],
-      },
-    });
+  public async getCityList(): Promise<City[]> {
+    const { data } = await this.httpService.axiosRef.get(this.baseCitiesUrl);
 
     return data;
   }
@@ -97,17 +80,9 @@ export class ReferencesController {
     type: CityRdo,
   })
   @ApiNotFoundResponse({ description: 'City was not found' })
-  public async getCity(
-    @Param('id') id: number,
-    @Req() req: Request
-  ): Promise<City> {
+  public async getCity(@Param('id') id: number): Promise<City> {
     const { data } = await this.httpService.axiosRef.get(
-      `${this.baseCitiesUrl}/${id}`,
-      {
-        headers: {
-          Authorization: req.headers['authorization'],
-        },
-      }
+      `${this.baseCitiesUrl}/${id}`
     );
 
     return data;
@@ -120,14 +95,9 @@ export class ReferencesController {
     isArray: true,
     type: RoleRdo,
   })
-  public async getRoleList(@Req() req: Request): Promise<Role[]> {
+  public async getRoleList(): Promise<Role[]> {
     const { data } = await this.httpService.axiosRef.get(
-      `${this.baseRolesUrl}`,
-      {
-        headers: {
-          Authorization: req.headers['authorization'],
-        },
-      }
+      `${this.baseRolesUrl}`
     );
 
     return data;
@@ -140,17 +110,9 @@ export class ReferencesController {
     type: RoleRdo,
   })
   @ApiNotFoundResponse({ description: 'Role was not found' })
-  public async getRole(
-    @Param('roleId') roleId: number,
-    @Req() req: Request
-  ): Promise<Role> {
+  public async getRole(@Param('roleId') roleId: number): Promise<Role> {
     const { data } = await this.httpService.axiosRef.get(
-      `${this.baseRolesUrl}/${roleId}`,
-      {
-        headers: {
-          Authorization: req.headers['authorization'],
-        },
-      }
+      `${this.baseRolesUrl}/${roleId}`
     );
 
     return data;

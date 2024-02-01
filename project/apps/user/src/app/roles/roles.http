@@ -1,11 +1,9 @@
 ### Получение списка ролей
 GET  http://localhost:3000/api/v1/roles HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MjBkOWUwMy1mMjEyLTRjNzEtYjRlZS1mYzcxZjY1MTM2OGMiLCJlbWFpbCI6ImpvaG41NDUzMkBkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ5MTgwNDEsImV4cCI6MTcwNDkxODM0MX0.WssP5E_Tw898U8HT-rE97Dzs-D_anl-PbDaPIBwDYu0
 
 
 
 ### Получение детальной информации о роли
 GET http://localhost:3000/api/v1/roles/1 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0MjBkOWUwMy1mMjEyLTRjNzEtYjRlZS1mYzcxZjY1MTM2OGMiLCJlbWFpbCI6ImpvaG41NDUzMkBkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ5MTgwNDEsImV4cCI6MTcwNDkxODM0MX0.WssP5E_Tw898U8HT-rE97Dzs-D_anl-PbDaPIBwDYu0
