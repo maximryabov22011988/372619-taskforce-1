@@ -24,9 +24,15 @@ export class EmailSubscriberController {
 
     const lastTaskNotificationDate =
       await this.emailSubscriberService.getLastTaskNotificationDate();
-    const newTasksAfterLastNotificationDate = tasks.filter((task) =>
-      this.dateTimeService.isDateAfter(lastTaskNotificationDate, task.createdAt)
-    );
+    let newTasksAfterLastNotificationDate = tasks;
+    if (lastTaskNotificationDate) {
+      newTasksAfterLastNotificationDate = tasks.filter((task) =>
+        this.dateTimeService.isDateAfter(
+          lastTaskNotificationDate,
+          task.createdAt
+        )
+      );
+    }
 
     const newTasksNotification = {
       emails,

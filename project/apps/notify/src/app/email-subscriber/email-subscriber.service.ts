@@ -15,7 +15,10 @@ export class EmailSubscriberService {
   }
 
   public async getLastTaskNotificationDate() {
-    const { createdAt } = await this.emailSubscriberRepository.findLatest();
+    const { createdAt } =
+      (await this.emailSubscriberRepository.findLatest()) ?? {
+        createdAt: null,
+      };
     return createdAt;
   }
 }
