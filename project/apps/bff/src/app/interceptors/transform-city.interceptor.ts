@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigType } from '@nestjs/config';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { switchMap, map, catchError } from 'rxjs/operators';
 import { BffConfig } from '@project/libs/config';
 
@@ -44,7 +44,7 @@ export class TransformCityInterceptor implements NestInterceptor {
               }),
               catchError((error) => {
                 Logger.error(`[Transform city id "${cityId}"]: ${error}`);
-                return of(data);
+                return of(otherData);
               })
             );
         } else if (cityId && this.cache[cityId]) {
@@ -54,13 +54,13 @@ export class TransformCityInterceptor implements NestInterceptor {
           });
         }
 
-        return of(data);
+        return of(otherData);
       }),
       catchError((error) => {
         Logger.error(
           `[An error occurred when processing the request]: ${error}`
         );
-        throw new Error(error);
+        return throwError(error);
       })
     );
   }

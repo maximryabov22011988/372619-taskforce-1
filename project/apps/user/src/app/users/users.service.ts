@@ -48,19 +48,21 @@ export class UsersService {
       avatarUrl: userModel.avatarUrl,
     });
 
+    const { specializations = [] } = dto;
+
     const existedSpecializations =
       await this.specializationsService.findAllSpecializationsByUser(
         userModel.id
       );
     if (!existedSpecializations.length) {
       await this.specializationsService.createSpecializations(
-        dto.specializations,
+        specializations,
         userModel.id
       );
     }
 
     await this.specializationsService.updateSpecializations(
-      dto.specializations,
+      specializations,
       userModel.id
     );
 

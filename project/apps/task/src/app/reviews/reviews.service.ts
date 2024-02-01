@@ -67,9 +67,11 @@ export class ReviewsService {
       TaskStatusId.Failed
     );
 
-    return parseFloat(
-      (ratingSum / (reviewsCount + failedTasksCount)).toFixed(2)
-    );
+    const rating = ratingSum / (reviewsCount + failedTasksCount);
+
+    return rating
+      ? parseFloat((ratingSum / (reviewsCount + failedTasksCount)).toFixed(2))
+      : 0;
   }
 
   public async getContractorRatingLevel(contractorId: Uuid): Promise<number> {
