@@ -61,6 +61,7 @@ export class UserController {
   private readonly baseUsersUrl: string;
   private readonly baseTasksUrl: string;
   private readonly baseReviewsUrl: string;
+  private readonly baseCitiesUrl: string;
   private readonly baseAvatarUploadUrl: string;
 
   constructor(
@@ -74,6 +75,7 @@ export class UserController {
     this.baseUsersUrl = `${userServiceUrl}/v1/users`;
     this.baseTasksUrl = `${taskServiceUrl}/v1/tasks`;
     this.baseReviewsUrl = `${taskServiceUrl}/v1/reviews`;
+    this.baseCitiesUrl = `${taskServiceUrl}/v1/cities`;
     this.baseAvatarUploadUrl = `${imageServiceUrl}/v1/image/upload/avatar`;
   }
 
@@ -142,6 +144,11 @@ export class UserController {
     @Body() dto: ChangeProfileDto,
     @Req() req: Request & RequestWithTokenPayload
   ): Promise<CustomerWithStatistics | ContractorWithStatistics> {
+    const { cityId } = dto;
+    if (cityId) {
+      await this.httpService.axiosRef.get(`${this.baseCitiesUrl}/${cityId}`);
+    }
+
     const { data } = await this.httpService.axiosRef.patch(
       `${this.baseUsersUrl}/${userId}/profile`,
       dto,
