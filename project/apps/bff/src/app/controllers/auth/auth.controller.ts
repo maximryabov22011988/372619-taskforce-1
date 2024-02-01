@@ -48,7 +48,6 @@ const { microserviceConfig } = BffConfig;
 export class AuthController {
   private readonly baseAuthUrl: string;
   private readonly baseCitiesUrl: string;
-  private readonly baseRolesUrl: string;
 
   constructor(
     private readonly httpService: HttpService,
@@ -58,7 +57,6 @@ export class AuthController {
     const { userServiceUrl, taskServiceUrl } = this.serviceConfig;
     this.baseAuthUrl = `${userServiceUrl}/v1/auth`;
     this.baseCitiesUrl = `${taskServiceUrl}/v1/cities`;
-    this.baseRolesUrl = `${userServiceUrl}/v1/roles`;
   }
 
   @UseInterceptors(TransformCityInterceptor)
@@ -71,7 +69,6 @@ export class AuthController {
   @ApiNotFoundResponse({ description: 'City not found' })
   @ApiConflictResponse({ description: 'User already exists' })
   public async register(@Body() dto: RegisterUserDto): Promise<User> {
-    await this.httpService.axiosRef.get(`${this.baseRolesUrl}/${dto.roleId}`);
     await this.httpService.axiosRef.get(`${this.baseCitiesUrl}/${dto.cityId}`);
 
     const { data } = await this.httpService.axiosRef.post(

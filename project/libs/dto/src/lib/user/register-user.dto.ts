@@ -1,6 +1,12 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { UserRoleId } from '@project/libs/shared-types';
-import { IsOptional, IsString, IsNotEmpty, IsEnum } from 'class-validator';
+import {
+  IsOptional,
+  IsString,
+  IsNotEmpty,
+  IsInt,
+  IsPositive,
+} from 'class-validator';
 import { BaseUserDto } from './base-user.dto';
 
 export class RegisterUserDto extends PickType(BaseUserDto, [
@@ -13,11 +19,12 @@ export class RegisterUserDto extends PickType(BaseUserDto, [
 ] as const) {
   @ApiProperty({
     description: "User's role id",
-    enum: UserRoleId,
+    type: Number,
     example: UserRoleId.Customer,
   })
   @IsNotEmpty()
-  @IsEnum(UserRoleId)
+  @IsInt()
+  @IsPositive()
   public roleId: UserRoleId;
 
   @ApiProperty({

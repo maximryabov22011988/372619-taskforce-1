@@ -37,6 +37,7 @@ import {
 import { ApiAuth } from '@project/libs/decorators';
 import { LoggedUserRdo, RegisteredUserRdo } from '@project/libs/rdo';
 import { RequestWithUser } from '@project/libs/shared-types';
+import { RolesService } from '../roles/roles.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 import { AuthenticationService } from './authentication.service';
@@ -48,7 +49,10 @@ import { TokenPayloadRdo } from './rdo/token-payload.rdo';
 })
 @ApiTags('Authentication service')
 export class AuthenticationController {
-  constructor(private readonly authService: AuthenticationService) {}
+  constructor(
+    private readonly authService: AuthenticationService,
+    private readonly rolesService: RolesService
+  ) {}
 
   @Post('register')
   @ApiOperation({ summary: 'Registration new user' })
@@ -58,6 +62,8 @@ export class AuthenticationController {
   })
   @ApiConflictResponse({ description: 'User already exists' })
   public async register(@Body() dto: RegisterUserDto): Promise<User> {
+    await this.rolesService.findById(dto.roleId);
+
     const userModel = await this.authService.register(dto);
     return fillObject(RegisteredUserRdo, userModel);
   }
