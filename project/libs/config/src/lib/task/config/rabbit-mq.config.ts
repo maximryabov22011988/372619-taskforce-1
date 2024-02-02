@@ -16,15 +16,15 @@ export interface RabbitMqConfig {
 
 export default registerAs('rabbitMq', (): RabbitMqConfig => {
   const config: RabbitMqConfig = {
-    host: process.env.RABBITMQ_HOST,
+    host: process.env.TASK_RABBITMQ_HOST,
     port: parseInt(
-      process.env.RABBITMQ_PORT ?? DEFAULT_RABBIT_MQ_PORT.toString(),
+      process.env.TASK_RABBITMQ_PORT ?? DEFAULT_RABBIT_MQ_PORT.toString(),
       10
     ),
-    user: process.env.RABBITMQ_USER,
-    password: process.env.RABBITMQ_PASSWORD,
-    queue: process.env.RABBITMQ_QUEUE,
-    exchange: process.env.RABBITMQ_EXCHANGE,
+    user: process.env.TASK_RABBITMQ_USER,
+    password: process.env.TASK_RABBITMQ_PASSWORD,
+    queue: process.env.TASK_RABBITMQ_QUEUE,
+    exchange: process.env.TASK_RABBITMQ_EXCHANGE,
   };
 
   const rabbitMqEnv = plainToInstance(RabbitMqEnv, config, {
@@ -36,7 +36,7 @@ export default registerAs('rabbitMq', (): RabbitMqConfig => {
   });
 
   if (errors.length) {
-    throw new Error(`[RabbitMq config]: Environments validation failed. Please check .user.env file.
+    throw new Error(`[RabbitMq config]: Environments validation failed. Please check .task.env file.
       Error message: ${errors.toString()}`);
   }
 

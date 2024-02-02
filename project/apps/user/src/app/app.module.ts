@@ -4,18 +4,22 @@ import { JwtModule } from '@project/libs/modules';
 import { DatabaseModule } from '../database/database.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { UsersModule } from './users/users.module';
-import { ReviewsModule } from './reviews/reviews.module';
+import { RolesModule } from './roles/roles.module';
+import { RefreshTokenModule } from './refresh-token/refresh-token.module';
+import { SubscribeModule } from './subscribe/subscribe.module';
 
 const { UserConfigModule: ConfigModule } = UserConfig;
 
 @Module({
   imports: [
     ConfigModule,
+    SubscribeModule,
     JwtModule,
     UsersModule,
     AuthenticationModule,
-    ReviewsModule,
     DatabaseModule,
+    RolesModule,
+    RefreshTokenModule,
   ],
   controllers: [],
   providers: [],

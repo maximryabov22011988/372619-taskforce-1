@@ -1,3 +1,4 @@
 import { User } from './user.interface';
 
-export type Customer = User;
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface Customer extends User {}

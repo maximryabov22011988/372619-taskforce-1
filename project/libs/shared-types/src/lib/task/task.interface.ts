@@ -1,15 +1,13 @@
 import { AvailableCity } from '../shared';
 import { TaskStatus } from './task-status.enum';
 
-export type Category = string;
-
 export type Tag = string;
 
 export interface Task {
   id: number;
   title: string;
   description: string;
-  category: Category;
+  category: string;
   price: number;
   executionDate: string;
   imageUrl: string;
@@ -18,6 +16,7 @@ export interface Task {
   city: AvailableCity;
   status: TaskStatus;
   customerId: string;
-  commentsCount: number;
   createdAt: number;
+  commentsCount?: number;
+  responsesCount?: number;
 }

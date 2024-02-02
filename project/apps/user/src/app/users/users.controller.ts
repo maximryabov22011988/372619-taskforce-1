@@ -1,53 +1,56 @@
 import {
+  Body,
   Controller,
   Get,
   Param,
-  HttpStatus,
-  Patch,
-  Body,
   ParseUUIDPipe,
+  Patch,
   UseGuards,
 } from '@nestjs/common';
 import {
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
   ApiExtraModels,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+  ApiUnauthorizedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
   refs,
 } from '@nestjs/swagger';
 import { Contractor, Customer, Uuid } from '@project/libs/shared-types';
 import { JwtAuthGuard } from '@project/libs/validators';
-import { mapToUserByRole } from './users.mapper';
+import { ApiAuth } from '@project/libs/decorators';
+import { ChangeProfileDto } from '@project/libs/dto';
+import { ContractorUserRdo, CustomerUserRdo } from '@project/libs/rdo';
+import { mapToUserByRole } from './user-mapper';
 import { UsersService } from './users.service';
-import { ChangeProfileDto } from './dto/change-profile.dto';
-import { ContractorUserRdo } from './rdo/contractor-user.rdo';
-import { CustomerUserRdo } from './rdo/customer-user.rdo';
 
-@ApiTags('User service')
 @Controller({
   path: 'users',
   version: '1',
 })
+@ApiTags('User service')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Get('/:userId')
-  @ApiOperation({ summary: 'Getting detailed information' })
+  @Get(':userId')
+  @ApiAuth()
+  @ApiOperation({
+    summary: 'Getting contractor/customer detailed information',
+  })
+  @ApiParam({
+    name: 'userId',
+    type: String,
+    format: 'UUID',
+  })
   @ApiExtraModels(ContractorUserRdo, CustomerUserRdo)
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Contractor or customer user information',
+  @ApiOkResponse({
+    description: 'Contractor/customer information successfully received',
     schema: { oneOf: refs(ContractorUserRdo, CustomerUserRdo) },
   })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiNotFoundResponse({ description: 'User was not found' })
   public async getUser(
     @Param('userId', ParseUUIDPipe) userId: Uuid
   ): Promise<Customer | Contractor> {
@@ -56,22 +59,21 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Patch('/:userId/profile')
-  @ApiOperation({ summary: 'Change profile info' })
+  @Patch(':userId/profile')
+  @ApiAuth()
+  @ApiOperation({ summary: 'Change contractor/customer profile info' })
+  @ApiParam({
+    name: 'userId',
+    type: String,
+    format: 'UUID',
+  })
   @ApiExtraModels(ContractorUserRdo, CustomerUserRdo)
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Contractor or customer user information',
+  @ApiOkResponse({
+    description: 'Contractor/customer information successfully updated',
     schema: { oneOf: refs(ContractorUserRdo, CustomerUserRdo) },
   })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: 'Not found',
-  })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Unauthorized',
-  })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiNotFoundResponse({ description: 'User was not found' })
   public async changeProfile(
     @Param('userId', ParseUUIDPipe) userId: Uuid,
     @Body() dto: ChangeProfileDto

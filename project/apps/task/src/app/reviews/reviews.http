@@ -1,0 +1,26 @@
+### Создание отзыва
+POST http://localhost:3002/api/v1/reviews HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YjQzYzQ4YS01NWRhLTQzMWEtYWY5ZC1mMjNiMDg0M2E0ZjYiLCJlbWFpbCI6ImpvaG4xQGRvZS5jb20iLCJyb2xlSWQiOjEsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjI5NDYyMSwiZXhwIjoxNzA2Mjk0OTIxfQ.4SGCousOk0h5rUB_URzLnnRgqr-IgjR62Cb5icd-Cpg
+
+{
+  "text": "This is great work. I am very glad. Everything is high quality.",
+  "taskId": 3,
+  "rating": 5,
+  "customerId": "4b43c48a-55da-431a-af9d-f23b0843a4f6",
+  "contractorId": "0b33dbbe-bc19-4fe8-bf96-d5cd98e646d3"
+}
+
+
+
+### Получение рейтинга исполнителя
+GET  http://localhost:3002/api/v1/reviews/contractors/0b33dbbe-bc19-4fe8-bf96-d5cd98e646d3/rating HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YjQzYzQ4YS01NWRhLTQzMWEtYWY5ZC1mMjNiMDg0M2E0ZjYiLCJlbWFpbCI6ImpvaG4xQGRvZS5jb20iLCJyb2xlSWQiOjEsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjMwOTkxNywiZXhwIjoxNzA2MzEwMjE3fQ.4jW9Rj5johFnQjMQNSXWR7kCUeKMpTrWjoRhb83OGeY
+
+
+
+### Получение места в рейтинге исполнителя
+GET  http://localhost:3002/api/v1/reviews/contractors/0b33dbbe-bc19-4fe8-bf96-d5cd98e646d3/rating-level HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YjQzYzQ4YS01NWRhLTQzMWEtYWY5ZC1mMjNiMDg0M2E0ZjYiLCJlbWFpbCI6ImpvaG4xQGRvZS5jb20iLCJyb2xlSWQiOjEsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjMxMTk5MywiZXhwIjoxNzA2MzEyMjkzfQ.yJayWbnkA0IZBIOP73SpIgCb5WkPbqvggDNeRBeKBwA

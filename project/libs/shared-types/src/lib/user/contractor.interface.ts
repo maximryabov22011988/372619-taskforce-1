@@ -5,6 +5,4 @@ export type Specialization = string;
 export interface Contractor extends User {
   age: number;
   specializations: Specialization[];
-  rating: number;
-  ratingLevel: number;
 }

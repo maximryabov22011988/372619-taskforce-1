@@ -1,0 +1,9 @@
+### Получение списка статусов заданий
+GET  http://localhost:3002/api/v1/statuses HTTP/1.1
+Content-Type: application/json
+
+
+
+### Получение детальной информации о статусе
+GET http://localhost:3002/api/v1/statuses/1 HTTP/1.1
+Content-Type: application/json

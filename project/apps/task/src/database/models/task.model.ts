@@ -6,6 +6,7 @@ import { CommentModel } from './comment.model';
 import { CityModel } from './city.model';
 import { StatusModel } from './status.model';
 import { CategoryModel } from './category.model';
+import { ReviewModel } from './review.model';
 
 export type TaskModelProperties = Pick<
   TaskModel,
@@ -20,6 +21,7 @@ export type TaskModelProperties = Pick<
   | 'statusId'
   | 'contractorId'
   | 'customerId'
+  | 'responses'
 >;
 
 export class TaskModel extends BaseModel {
@@ -42,6 +44,7 @@ export class TaskModel extends BaseModel {
   public readonly statusId: number;
   public readonly contractorId: Uuid;
   public readonly customerId: Uuid;
+  public readonly responses: Uuid[];
   public readonly createdAt: number;
   public readonly updatedAt: number;
 
@@ -109,6 +112,14 @@ export class TaskModel extends BaseModel {
           type: 'string',
           format: 'uuid',
         },
+        responses: {
+          type: 'array',
+          items: {
+            type: 'string',
+            format: 'uuid',
+          },
+          uniqueItems: true,
+        },
         createdAt: {
           type: 'integer',
         },
@@ -142,6 +153,14 @@ export class TaskModel extends BaseModel {
       join: {
         from: 'tasks.cityId',
         to: 'cities.id',
+      },
+    },
+    review: {
+      relation: Model.HasOneRelation,
+      modelClass: ReviewModel,
+      join: {
+        from: 'tasks.id',
+        to: 'reviews.taskId',
       },
     },
     comments: {

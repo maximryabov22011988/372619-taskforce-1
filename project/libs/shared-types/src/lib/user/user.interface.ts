@@ -9,9 +9,9 @@ export interface User {
   id?: Uuid;
   firstname: string;
   lastname: string;
-  registrationDate?: string;
   cityId: number;
   role: UserRole;
   email: Email;
   info?: string;
+  registrationDate?: string;
 }

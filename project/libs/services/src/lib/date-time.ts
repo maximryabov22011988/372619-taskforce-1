@@ -5,6 +5,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import 'dayjs/locale/ru';
+import { TimeAndUnit } from '@project/libs/utils-core';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -16,6 +17,10 @@ export class DateTimeService {
   public static UTC_FORMAT = 'YYYY-MM-DDTHH:mm:ss.SSS[Z]';
 
   public static DATE_FORMAT = 'YYYY-MM-DD';
+
+  public add(timeValue: TimeAndUnit): Dayjs {
+    return dayjs().add(timeValue.value, timeValue.unit);
+  }
 
   public getDate(date?: Date | string): Dayjs {
     const dayJsDate = date ? dayjs(date) : dayjs();
@@ -30,7 +35,10 @@ export class DateTimeService {
     return this.getDate(date).format(format);
   }
 
-  public formatDate(date: Date | string | number, format?: string): string {
+  public formatDate(
+    date: Dayjs | Date | string | number,
+    format?: string
+  ): string {
     return dayjs(date).format(format ?? DateTimeService.UTC_FORMAT);
   }
 
@@ -41,6 +49,13 @@ export class DateTimeService {
     }
 
     return dayjs().diff(date, unit);
+  }
+
+  public isDateAfter(date: Date, dateToCheck: number | Date): boolean {
+    const lastDispatchDayjs = dayjs(date);
+    const dateToCheckDayjs = dayjs(dateToCheck);
+
+    return dateToCheckDayjs.isAfter(lastDispatchDayjs);
   }
 }
 

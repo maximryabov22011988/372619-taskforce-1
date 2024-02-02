@@ -12,14 +12,26 @@ import {
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ACCESS_TOKEN_NAME } from '@project/libs/decorators';
+import {
+  UniqueConstraintExceptionFilter,
+  BcryptExceptionFilter,
+} from '@project/libs/filters';
 import { Environment } from '@project/libs/shared-types';
 import { AppModule } from './app/app.module';
 
 const setupOpenApi = (app: INestApplication) => {
   const config = new DocumentBuilder()
     .setTitle('User service')
-    .setDescription('User service API')
     .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+      ACCESS_TOKEN_NAME
+    )
     .build();
   const document = SwaggerModule.createDocument(app, config);
 
@@ -28,18 +40,22 @@ const setupOpenApi = (app: INestApplication) => {
   });
 };
 
-async function bootstrap() {
+const bootstrap = async () => {
   const app = await NestFactory.create(AppModule);
 
   const configService = app.get(ConfigService);
   const port = configService.get('app.port');
   const env = configService.get('app.environment');
 
-  const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix);
+  const GLOBAL_PREFIX = 'api';
+  app.setGlobalPrefix(GLOBAL_PREFIX);
   app.enableVersioning({
     type: VersioningType.URI,
   });
+  app.useGlobalFilters(
+    new UniqueConstraintExceptionFilter(),
+    new BcryptExceptionFilter()
+  );
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -50,8 +66,8 @@ async function bootstrap() {
   await app.listen(port);
 
   Logger.log(
-    `🚀 User microservice is running on: http://localhost:${port}/${globalPrefix}`
+    `🚀 User microservice is running on: http://localhost:${port}/${GLOBAL_PREFIX}`
   );
-}
+};
 
 bootstrap();

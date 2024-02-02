@@ -1,16 +1,16 @@
 ### Создание нового комментария
-POST  http://localhost:3002/api/v1/comments HTTP/1.1
+POST http://localhost:3002/api/v1/comments HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZGJkN2UwYy03Zjg4LTQ3YmQtYjE4My1lNjE5NGFlNWM0MTkiLCJlbWFpbCI6ImpvaG45M0Bkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ3MTQ2MTcsImV4cCI6MTcwNDcxODIxN30.jfPH-QXRLxNborqWBgWUj0xy4rTFeaF1vxGvpihn1cw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmNGE5ODFlMy03M2QwLTQxZTktODk0OS04ZjgxZGRlOGMxNmMiLCJlbWFpbCI6ImpvaG4zQGRvZS5jb20iLCJyb2xlSWQiOjEsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjgyMDk4OSwiZXhwIjoxNzA2ODIxMjg5fQ.nnKSg7tiD0bk0_O2EbyjgIxA2My4Z1APo1XolUjK6L8
 
 {
   "text": "Some comment text",
-  "taskId": 1
+  "taskId": 2
 }
 
 
 
 ### Удаление комментария
-DELETE  http://localhost:3002/api/v1/comments/5 HTTP/1.1
+DELETE http://localhost:3002/api/v1/comments/4 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZGJkN2UwYy03Zjg4LTQ3YmQtYjE4My1lNjE5NGFlNWM0MTkiLCJlbWFpbCI6ImpvaG45M0Bkb2UuY29tIiwicm9sZUlkIjoxLCJsYXN0bmFtZSI6IkRvZSIsImZpcnN0bmFtZSI6IkpvaG4iLCJpYXQiOjE3MDQ3MTQ2MTcsImV4cCI6MTcwNDcxODIxN30.jfPH-QXRLxNborqWBgWUj0xy4rTFeaF1vxGvpihn1cw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmNGE5ODFlMy03M2QwLTQxZTktODk0OS04ZjgxZGRlOGMxNmMiLCJlbWFpbCI6ImpvaG4zQGRvZS5jb20iLCJyb2xlSWQiOjEsImxhc3RuYW1lIjoiRG9lIiwiZmlyc3RuYW1lIjoiSm9obiIsImlhdCI6MTcwNjgxOTU1MywiZXhwIjoxNzA2ODE5ODUzfQ.-FNXv8z0E7YdwR9i-vW4N3AUG2UsmikVuFxszuceT9w

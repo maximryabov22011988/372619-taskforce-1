@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CRUDRepository } from '@project/libs/utils-types';
+import { UserRoleId } from '@project/libs/shared-types';
 import { UserModel } from '../../database/models/user.model';
 import { UserEntity } from './users.entity';
 
@@ -11,12 +12,16 @@ export class UsersRepository
     @Inject(UserModel) private readonly userModel: typeof UserModel
   ) {}
 
+  public async findByRole(roleId: UserRoleId): Promise<UserModel[]> {
+    return this.userModel.query().where({ roleId }).returning('*').execute();
+  }
+
   public async findById(id: string): Promise<UserModel> {
     return this.userModel
       .query()
       .where({ id })
       .withGraphFetched('role')
-      .withGraphFetched('reviews')
+      .withGraphFetched('specializations')
       .returning('*')
       .first();
   }
@@ -26,7 +31,7 @@ export class UsersRepository
       .query()
       .where({ email })
       .withGraphFetched('role')
-      .withGraphFetched('reviews')
+      .withGraphFetched('specializations')
       .returning('*')
       .first();
   }
@@ -36,7 +41,6 @@ export class UsersRepository
       .query()
       .insert(item.toObject())
       .withGraphFetched('role')
-      .withGraphFetched('reviews')
       .returning('*');
   }
 
@@ -45,7 +49,7 @@ export class UsersRepository
       .query()
       .patchAndFetchById(id, item.toObject())
       .withGraphFetched('role')
-      .withGraphFetched('reviews')
+      .withGraphFetched('specializations')
       .returning('*');
   }
 

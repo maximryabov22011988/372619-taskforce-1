@@ -16,15 +16,15 @@ export interface RabbitMqConfig {
 
 export default registerAs('rabbitMq', (): RabbitMqConfig => {
   const config: RabbitMqConfig = {
-    host: process.env.RABBITMQ_HOST,
+    host: process.env.NOTIFY_RABBITMQ_HOST,
     port: parseInt(
-      process.env.RABBITMQ_PORT ?? DEFAULT_RABBIT_MQ_PORT.toString(),
+      process.env.NOTIFY_RABBITMQ_PORT ?? DEFAULT_RABBIT_MQ_PORT.toString(),
       10
     ),
-    user: process.env.RABBITMQ_USER,
-    password: process.env.RABBITMQ_PASSWORD,
-    queue: process.env.RABBITMQ_QUEUE,
-    exchange: process.env.RABBITMQ_EXCHANGE,
+    user: process.env.NOTIFY_RABBITMQ_USER,
+    password: process.env.NOTIFY_RABBITMQ_PASSWORD,
+    queue: process.env.NOTIFY_RABBITMQ_QUEUE,
+    exchange: process.env.NOTIFY_RABBITMQ_EXCHANGE,
   };
 
   const rabbitMqEnv = plainToInstance(RabbitMqEnv, config, {

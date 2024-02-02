@@ -8,4 +8,12 @@ export class JwtEnv {
   @IsNotEmpty()
   @IsString()
   public accessTokenExpiresIn: string;
+
+  @IsNotEmpty()
+  @IsString()
+  public refreshTokenSecret: string;
+
+  @IsNotEmpty()
+  @IsString()
+  public refreshTokenExpiresIn: string;
 }

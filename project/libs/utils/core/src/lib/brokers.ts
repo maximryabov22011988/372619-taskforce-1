@@ -6,7 +6,7 @@ export const getRabbitMqOptions = () => ({
   useFactory: async (config: ConfigService) => ({
     exchanges: [
       {
-        name: config.get<string>('rabbitMq.queue'),
+        name: config.get<string>('rabbitMq.exchange'),
         type: 'direct',
       },
     ],
