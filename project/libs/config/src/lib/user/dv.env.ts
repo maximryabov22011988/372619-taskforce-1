@@ -1,7 +1,5 @@
 import { IsNumber, IsString, Max, Min } from 'class-validator';
-
-const MIN_PORT = 0;
-const MAX_PORT = 65535;
+import { Port } from '@project/libs/shared-types';
 
 export class DbEnv {
   @IsString({
@@ -20,8 +18,8 @@ export class DbEnv {
       message: 'PostgreSQL port is required',
     }
   )
-  @Min(MIN_PORT)
-  @Max(MAX_PORT)
+  @Min(Port.Min)
+  @Max(Port.Max)
   public port: number;
 
   @IsString({

@@ -1,6 +1,7 @@
 import { registerAs } from '@nestjs/config';
 import { validateSync } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
+import { Radix } from '@project/libs/shared-types';
 import { AppEnv } from '../app.env';
 
 const DEFAULT_PORT = 3000;
@@ -13,7 +14,7 @@ export interface AppConfig {
 export default registerAs('app', (): AppConfig => {
   const config: AppConfig = {
     environment: process.env.NODE_ENV,
-    port: parseInt(process.env.PORT || DEFAULT_PORT.toString(), 10),
+    port: parseInt(process.env.PORT || DEFAULT_PORT.toString(), Radix.Decimal),
   };
 
   const appEnv = plainToInstance(AppEnv, config, {

@@ -1,6 +1,7 @@
 import { registerAs } from '@nestjs/config';
 import { validateSync } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
+import { Radix } from '@project/libs/shared-types';
 import { DbEnv } from '../dv.env';
 
 const DEFAULT_POSTGRESQL_PORT = 5433;
@@ -19,7 +20,7 @@ export default registerAs('db', (): DbConfig => {
     host: process.env.USER_DB_HOST,
     port: parseInt(
       process.env.USER_DB_PORT ?? DEFAULT_POSTGRESQL_PORT.toString(),
-      10
+      Radix.Decimal
     ),
     user: process.env.USER_DB_USER,
     password: process.env.USER_DB_PASSWORD,

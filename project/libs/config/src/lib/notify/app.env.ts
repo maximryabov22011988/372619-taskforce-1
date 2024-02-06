@@ -1,8 +1,5 @@
 import { IsNumber, IsString, Max, Min, IsEnum } from 'class-validator';
-import { Environment } from '@project/libs/shared-types';
-
-const MIN_PORT = 0;
-const MAX_PORT = 65535;
+import { Environment, Port } from '@project/libs/shared-types';
 
 export class AppEnv {
   @IsString({
@@ -19,7 +16,7 @@ export class AppEnv {
       message: 'App port is required',
     }
   )
-  @Min(MIN_PORT)
-  @Max(MAX_PORT)
+  @Min(Port.Min)
+  @Max(Port.Max)
   public port: number;
 }

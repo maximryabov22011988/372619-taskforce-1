@@ -1,8 +1,3 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
-
 import {
   Logger,
   INestApplication,
@@ -20,6 +15,8 @@ import {
 } from '@project/libs/filters';
 import { Environment } from '@project/libs/shared-types';
 import { AppModule } from './app/app.module';
+
+const GLOBAL_PREFIX = 'api';
 
 const setupOpenApi = (app: INestApplication) => {
   const config = new DocumentBuilder()
@@ -48,7 +45,6 @@ const bootstrap = async () => {
   const port = configService.get('app.port');
   const env = configService.get('app.environment');
 
-  const GLOBAL_PREFIX = 'api';
   app.setGlobalPrefix(GLOBAL_PREFIX);
   app.enableVersioning({
     type: VersioningType.URI,

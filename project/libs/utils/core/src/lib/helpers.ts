@@ -1,4 +1,5 @@
 import { plainToInstance, ClassConstructor } from 'class-transformer';
+import { Radix } from '@project/libs/shared-types';
 
 export const fillObject = <T, V>(
   someDto: ClassConstructor<T>,
@@ -6,7 +7,8 @@ export const fillObject = <T, V>(
 ) => plainToInstance(someDto, plainObject, { excludeExtraneousValues: true });
 
 export const transform = {
-  numericStringToNumber: ({ value }: { value: string }) => parseInt(value, 10),
+  numericStringToNumber: ({ value }: { value: string }) =>
+    parseInt(value, Radix.Decimal),
 };
 
 type GetMongoConnectionParams = {
@@ -55,7 +57,7 @@ export const parseTime = (time: string): TimeAndUnit => {
   }
 
   const [, valueRaw, unitRaw] = match;
-  const value = parseInt(valueRaw, 10);
+  const value = parseInt(valueRaw, Radix.Decimal);
   const unit = unitRaw as DateTimeUnit;
 
   if (isNaN(value)) {

@@ -1,6 +1,7 @@
 import { registerAs } from '@nestjs/config';
 import { validateSync } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
+import { Radix } from '@project/libs/shared-types';
 import { RabbitMqEnv } from '../rabbit-mq.env';
 
 const DEFAULT_RABBIT_MQ_PORT = 5672;
@@ -19,7 +20,7 @@ export default registerAs('rabbitMq', (): RabbitMqConfig => {
     host: process.env.TASK_RABBITMQ_HOST,
     port: parseInt(
       process.env.TASK_RABBITMQ_PORT ?? DEFAULT_RABBIT_MQ_PORT.toString(),
-      10
+      Radix.Decimal
     ),
     user: process.env.TASK_RABBITMQ_USER,
     password: process.env.TASK_RABBITMQ_PASSWORD,

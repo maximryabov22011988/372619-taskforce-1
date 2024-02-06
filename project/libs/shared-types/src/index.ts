@@ -7,3 +7,5 @@ export * from './lib/image-file.interface';
 export * from './lib/comment.interface';
 export * from './lib/new-tasks-selection.interface';
 export * from './lib/contractors-emails.interface';
+export * from './lib/shared/validation';
+export * from './lib/shared/radix.enum';

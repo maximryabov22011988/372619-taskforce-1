@@ -1,6 +1,7 @@
 import { registerAs } from '@nestjs/config';
 import { validateSync } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
+import { Radix } from '@project/libs/shared-types';
 import { MailEnv } from '../mail.env';
 
 const DEFAULT_SMTP_PORT = 25;
@@ -18,7 +19,7 @@ export default registerAs('mail', (): MailConfig => {
     host: process.env.MAIL_SMTP_HOST,
     port: parseInt(
       process.env.MAIL_SMTP_PORT ?? DEFAULT_SMTP_PORT.toString(),
-      10
+      Radix.Decimal
     ),
     user: process.env.MAIL_SMTP_USER,
     password: process.env.MAIL_SMTP_PASSWORD,

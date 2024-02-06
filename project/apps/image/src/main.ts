@@ -1,14 +1,11 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
-
 import { Logger, INestApplication, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { ACCESS_TOKEN_NAME } from '@project/libs/decorators';
 import { AppModule } from './app/app.module';
+
+const GLOBAL_PREFIX = 'api';
 
 const setupOpenApi = (app: INestApplication) => {
   const config = new DocumentBuilder()
@@ -36,7 +33,6 @@ const bootstrap = async () => {
   const configService = app.get(ConfigService);
   const port = configService.get('app.port');
 
-  const GLOBAL_PREFIX = 'api';
   app.setGlobalPrefix(GLOBAL_PREFIX);
   app.enableVersioning({
     type: VersioningType.URI,

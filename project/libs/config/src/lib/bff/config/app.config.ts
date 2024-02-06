@@ -1,6 +1,7 @@
 import { registerAs } from '@nestjs/config';
 import { validateSync } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
+import { Radix } from '@project/libs/shared-types';
 import { AppEnv } from '../app.env';
 
 const DEFAULT_PORT = 3004;
@@ -20,17 +21,17 @@ export interface AppConfig {
 export default registerAs('app', (): AppConfig => {
   const config: AppConfig = {
     environment: process.env.NODE_ENV,
-    port: parseInt(process.env.PORT || DEFAULT_PORT.toString(), 10),
+    port: parseInt(process.env.PORT || DEFAULT_PORT.toString(), Radix.Decimal),
     userServiceUrl: process.env.USER_SERVICE_URL,
     imageServiceUrl: process.env.IMAGE_SERVICE_URL,
     taskServiceUrl: process.env.TASK_SERVICE_URL,
     httpClientMaxRedirects: parseInt(
       process.env.HTTP_CLIENT_MAX_REDIRECTS || DEFAULT_MAX_REDIRECTS.toString(),
-      10
+      Radix.Decimal
     ),
     httpClientTimeout: parseInt(
       process.env.HTTP_CLIENT_TIMEOUT || DEFAULT_TIMEOUT.toString(),
-      10
+      Radix.Decimal
     ),
   };
 
