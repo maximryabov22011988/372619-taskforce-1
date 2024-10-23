@@ -16,11 +16,21 @@
         "tsConfig": "apps/notify/tsconfig.app.json",
         "assets": ["apps/notify/src/assets"],
         "isolatedConfig": true,
-        "webpackConfig": "apps/notify/webpack.config.js"
+        "webpackConfig": "apps/notify/webpack.config.js",
+        "generatePackageJson": true
       },
       "configurations": {
         "development": {},
         "production": {}
+      }
+    },
+    "buildImage": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "nx run notify:build",
+          "docker build --file ./apps/notify/Dockerfile --tag taskforce.notify:latest ."
+        ]
       }
     },
     "serve": {

@@ -31,7 +31,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmNGE5ODFlM
   "cityId": 3,
   "price": 1000,
   "tags": ["plaster"],
-  "executionDate": "2024-02-22",
+  "executionDate": "2024-12-15",
   "address": "Moscow, Presnenskaya embankment, 12, office No. 2"
 }
 

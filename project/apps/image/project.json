@@ -16,11 +16,21 @@
         "tsConfig": "apps/image/tsconfig.app.json",
         "assets": ["apps/image/src/assets"],
         "isolatedConfig": true,
-        "webpackConfig": "apps/image/webpack.config.js"
+        "webpackConfig": "apps/image/webpack.config.js",
+        "generatePackageJson": true
       },
       "configurations": {
         "development": {},
         "production": {}
+      }
+    },
+    "buildImage": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "nx run image:build",
+          "docker build --file ./apps/image/Dockerfile --tag taskforce.image:latest ."
+        ]
       }
     },
     "serve": {

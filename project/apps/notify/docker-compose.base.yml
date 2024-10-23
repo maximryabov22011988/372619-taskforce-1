@@ -1,0 +1,28 @@
+version: '3.5'
+services:
+  taskforce.notify.rabbitmq:
+    container_name: taskforce.notify.rabbitmq
+    image: rabbitmq:3.11-management
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+
+  taskforce.notify.fakesmtp:
+    container_name: taskforce.notify.fakesmtp
+    image: gessnerfl/fake-smtp-server
+    hostname: fakesmtp
+    ports:
+      - '8025:8025'
+      - '1083:8080'
+
+  taskforce.notify.mongo:
+    container_name: taskforce.notify.mongo
+    image: mongo
+    ports:
+      - '27020:27017'
+    volumes:
+      - taskforce-notify:/data/db
+    restart: always
+
+volumes:
+  taskforce-notify:

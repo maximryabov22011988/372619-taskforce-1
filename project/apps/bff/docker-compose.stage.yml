@@ -1,0 +1,15 @@
+version: '3.5'
+services:
+  taskforce.bff:
+    container_name: taskforce.bff
+    image: taskforce.bff:latest
+    env_file:
+      - env/.stage.env
+    ports:
+      - '3004:3004'
+    networks:
+      - taskforce
+
+networks:
+  taskforce:
+    external: true

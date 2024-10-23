@@ -1,0 +1,30 @@
+version: '3.5'
+services:
+  taskforce.user:
+    container_name: taskforce.user
+    depends_on:
+      - taskforce.user.postgres
+    image: taskforce.user:latest
+    env_file:
+      - env/.stage.env
+    ports:
+      - '3000:3000'
+    networks:
+      - taskforce-user
+      - taskforce
+    restart: always
+
+  taskforce.user.postgres:
+    env_file:
+      - env/.stage.env
+    healthcheck:
+      test: [ 'CMD-SHELL', 'pg_isready -U admin -d taskforce-user' ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+networks:
+  taskforce:
+    external: true
+

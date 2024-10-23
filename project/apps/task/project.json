@@ -16,11 +16,27 @@
         "tsConfig": "apps/task/tsconfig.app.json",
         "assets": ["apps/task/src/assets"],
         "isolatedConfig": true,
-        "webpackConfig": "apps/task/webpack.config.js"
+        "webpackConfig": "apps/task/webpack.config.js",
+        "generatePackageJson": true,
+        "additionalEntryPoints": [
+          {
+            "entryName": "import",
+            "entryPath": "apps/task/src/import.ts"
+          }
+        ]
       },
       "configurations": {
         "development": {},
         "production": {}
+      }
+    },
+    "buildImage": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "nx run task:build",
+          "docker build --file ./apps/task/Dockerfile --tag taskforce.task:latest ."
+        ]
       }
     },
     "serve": {
@@ -52,11 +68,18 @@
         "cwd": "apps/task"
       }
     },
-    "db:migrate:run": {
+    "db:migrate:run:dev": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} knex migrate:latest --knexfile ./src/database/knexfile.ts",
-        "cwd": "apps/task",
+        "command": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} NODE_ENV=development knex migrate:latest --knexfile ./src/database/knexfile.ts",
+        "cwd": "apps/task"
+      }
+    },
+    "db:migrate:run:stage": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} NODE_ENV=production knex migrate:latest --knexfile ./src/database/knexfile.ts",
+        "cwd": "apps/task"
       }
     },
     "db:migrate:up": {
@@ -87,13 +110,20 @@
         "cwd": "apps/task"
       }
     },
-    "db:seed:run": {
+    "db:seed:run:dev": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} knex seed:run --knexfile ./src/database/knexfile.ts",
+        "command": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} NODE_ENV=development knex seed:run --knexfile ./src/database/knexfile.ts",
+        "cwd": "apps/task"
+      }
+    },
+    "db:seed:run:stage": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} NODE_ENV=production knex seed:run --knexfile ./src/database/knexfile.ts",
         "cwd": "apps/task"
       }
     }
   },
-  "tags": [],
+  "tags": []
 }

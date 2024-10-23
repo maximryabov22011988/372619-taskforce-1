@@ -1,0 +1,49 @@
+version: '3.5'
+services:
+  taskforce.notify:
+    container_name: taskforce.notify
+    depends_on:
+      - taskforce.notify.mongo
+    image: taskforce.notify:latest
+    env_file:
+      - env/.stage.env
+    ports:
+      - '3003:3003'
+    networks:
+      - taskforce-notify
+      - taskforce
+    restart: always
+
+  taskforce.notify.rabbitmq:
+    env_file:
+      - env/.stage.env
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - taskforce-notify
+      - taskforce
+
+  taskforce.notify.fakesmtp:
+    networks:
+      - taskforce-notify
+
+  taskforce.notify.mongo:
+    env_file:
+      - env/.stage.env
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/taskforce-notify --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    networks:
+      - taskforce-notify
+    restart: always
+
+networks:
+  taskforce-notify:
+    driver: bridge
+  taskforce:
+    external: true

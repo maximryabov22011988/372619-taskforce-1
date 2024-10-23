@@ -1,7 +1,11 @@
 import { Knex } from 'knex';
 import { config } from 'dotenv';
 
-config({ path: '../../.task.env' });
+config({
+  path: `../../env/.${
+    process.env.NODE_ENV === 'development' ? 'dev' : 'stage'
+  }.env`,
+});
 
 const baseConfig: Knex.Config = {
   client: 'pg',

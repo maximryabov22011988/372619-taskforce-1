@@ -1,40 +1,16 @@
-version: '3.5'
 services:
   taskforce.image.mongo:
-    container_name: taskforce.image.mongo
-    image: mongo
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: test
-      MONGO_INITDB_DATABASE: taskforce-image
-    ports:
-      - '27017:27017'
-    volumes:
-      - taskforce-image:/data/db
-
-    healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/taskforce-image --quiet
-      interval: 10s
-      timeout: 10s
-      retries: 5
-
-    restart: always
+    env_file:
+      - env/.dev.env
 
   taskforce.image.mongo.ui:
     container_name: taskforce.image.mongo.ui
     image: mongo-express
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
-      ME_CONFIG_MONGODB_ADMINPASSWORD: test
-      ME_CONFIG_MONGODB_URL: mongodb://admin:test@taskforce.image.mongo:27017/
-      ME_CONFIG_BASICAUTH_USERNAME: admin
-      ME_CONFIG_BASICAUTH_PASSWORD: test
     ports:
       - '8081:8081'
+    env_file:
+      - env/.dev.env
     depends_on:
       - taskforce.image.mongo
-
     restart: always
 
-volumes:
-  taskforce-image:

@@ -1,64 +1,19 @@
-version: '3.5'
 services:
-  taskforce.notify.fakesmtp:
-    container_name: taskforce.notify.fakesmtp
-    image: gessnerfl/fake-smtp-server
-    hostname: fakesmtp
-    ports:
-      - '8025:8025'
-      - '1083:8080'
-
   taskforce.notify.rabbitmq:
-    container_name: taskforce.notify.rabbitmq
-    image: rabbitmq:3.11-management
-    environment:
-      RABBITMQ_DEFAULT_USER: admin
-      RABBITMQ_DEFAULT_PASS: test
-    ports:
-      - '5672:5672'
-      - '15672:15672'
-
-    healthcheck:
-      test: rabbitmq-diagnostics -q ping
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    env_file:
+      - env/.dev.env
 
   taskforce.notify.mongo:
-    container_name: taskforce.notify.mongo
-    image: mongo
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: test
-      MONGO_INITDB_DATABASE: taskforce-notify
-    ports:
-      - '27020:27017'
-    volumes:
-      - taskforce-notify:/data/db
-
-    healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/taskforce-notify --quiet
-      interval: 10s
-      timeout: 10s
-      retries: 5
-
-    restart: always
+    env_file:
+      - env/.dev.env
 
   taskforce.notify.mongo.ui:
     container_name: taskforce.notify.mongo.ui
     image: mongo-express
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
-      ME_CONFIG_MONGODB_ADMINPASSWORD: test
-      ME_CONFIG_MONGODB_URL: mongodb://admin:test@taskforce.notify.mongo:27017/
-      ME_CONFIG_BASICAUTH_USERNAME: admin
-      ME_CONFIG_BASICAUTH_PASSWORD: test
     ports:
       - '8084:8081'
+    env_file:
+      - env/.dev.env
     depends_on:
       - taskforce.notify.mongo
-
     restart: always
-
-volumes:
-  taskforce-notify:

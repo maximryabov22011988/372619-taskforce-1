@@ -1,0 +1,19 @@
+version: '3.5'
+services:
+  taskforce.user.postgres:
+    container_name: taskforce.user.postgres
+    image: postgres:14-alpine
+    ports:
+      - '5433:5432'
+    volumes:
+      - taskforce-user:/var/lib/postgresql/data
+    networks:
+      - taskforce-user
+    restart: unless-stopped
+
+networks:
+  taskforce-user:
+    driver: bridge
+
+volumes:
+  taskforce-user:

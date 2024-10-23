@@ -1,0 +1,13 @@
+version: '3.5'
+services:
+  taskforce.image.mongo:
+    container_name: taskforce.image.mongo
+    image: mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - taskforce-image:/data/db
+    restart: always
+
+volumes:
+  taskforce-image:

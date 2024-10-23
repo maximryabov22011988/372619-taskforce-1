@@ -1,0 +1,32 @@
+version: '3.5'
+services:
+  taskforce.image:
+    container_name: taskforce.image
+    depends_on:
+      - taskforce.image.mongo
+    image: taskforce.image:latest
+    env_file:
+      - env/.stage.env
+    ports:
+      - '3001:3001'
+    networks:
+      - taskforce-image
+      - taskforce
+    restart: always
+
+  taskforce.image.mongo:
+    env_file:
+      - env/.stage.env
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    networks:
+      - taskforce-image
+
+networks:
+  taskforce-image:
+    driver: bridge
+  taskforce:
+    external: true
