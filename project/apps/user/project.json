@@ -4,7 +4,7 @@
   "sourceRoot": "apps/user/src",
   "projectType": "application",
   "targets": {
-    "build": {
+    "buildApp": {
       "executor": "@nx/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
@@ -28,6 +28,35 @@
       "configurations": {
         "development": {},
         "production": {}
+      }
+    },
+    "buildKnexFile": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --project apps/user/tsconfig.knexfile.json"
+      }
+    },
+    "buildMigrations": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --project apps/user/tsconfig.migrations.json"
+      }
+    },
+    "buildSeeds": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --project apps/user/tsconfig.seeds.json"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "nx run user:buildKnexFile",
+          "nx run user:buildMigrations",
+          "nx run user:buildSeeds",
+          "nx run user:buildApp"
+        ]
       }
     },
     "buildImage": {

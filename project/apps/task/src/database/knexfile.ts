@@ -1,11 +1,12 @@
 import { Knex } from 'knex';
 import { config } from 'dotenv';
 
+const isDev = process.env.NODE_ENV === 'development';
+
 config({
-  path: `../../env/.${
-    process.env.NODE_ENV === 'development' ? 'dev' : 'stage'
-  }.env`,
+  path: `../../env/.${isDev ? 'dev' : 'stage'}.env`,
 });
+const extension = isDev ? 'ts' : 'js';
 
 const baseConfig: Knex.Config = {
   client: 'pg',
@@ -17,13 +18,13 @@ const baseConfig: Knex.Config = {
     password: process.env.TASK_DB_PASSWORD || 'postgres',
   },
   migrations: {
-    extension: 'ts',
+    extension,
     tableName: 'migrations',
     directory: 'migrations',
     stub: './migration.stub',
   },
   seeds: {
-    extension: 'ts',
+    extension,
     directory: 'seeds',
     stub: './seed.stub',
   },

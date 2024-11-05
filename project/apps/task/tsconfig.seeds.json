@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "outDir": "../../dist/apps/task/database/seeds",
+    "rootDir": "./src/database/seeds",
+    "module": "CommonJS"
+  },
+  "include": ["./src/database/seeds/**/*.ts"]
+}
